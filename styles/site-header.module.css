@@ -1,0 +1,57 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  width: min(calc(100% - 48px), var(--max-width));
+  margin: 0 auto;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(244, 240, 232, 0.82), rgba(244, 240, 232, 0.35));
+  backdrop-filter: blur(10px);
+}
+
+.wordmark {
+  display: inline-flex;
+  gap: 0.1em;
+  align-items: baseline;
+  font-family: var(--font-display), serif;
+  font-size: 1.56rem;
+  letter-spacing: 0.08em;
+}
+
+.wordmark em {
+  color: var(--terracotta);
+  font-style: italic;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cta {
+  color: var(--ink);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(184, 137, 106, 0.42);
+  border-radius: 999px;
+}
+
+@media (max-width: 720px) {
+  .header {
+    width: min(calc(100% - 32px), var(--max-width));
+  }
+
+  .nav {
+    gap: 14px;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+}

@@ -1,0 +1,102 @@
+.shell {
+  width: min(100%, 440px);
+  display: grid;
+  place-items: center;
+  gap: 18px;
+  user-select: none;
+}
+
+.mark {
+  width: 100%;
+  aspect-ratio: 1;
+  transition: transform 180ms ease-out;
+  transform-style: preserve-3d;
+  animation: slowRotate 34s linear infinite;
+}
+
+.mark svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.grid path {
+  stroke: rgba(44, 44, 40, 0.08);
+  stroke-width: 0.8;
+}
+
+.rings path {
+  fill: none;
+  stroke: var(--terracotta);
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  stroke-dasharray: 700;
+  stroke-dashoffset: 120;
+}
+
+.rings path:nth-child(2) {
+  stroke: var(--sea);
+  stroke-dasharray: 430;
+  stroke-dashoffset: 96;
+}
+
+.rings path:nth-child(3) {
+  stroke: var(--sage);
+  stroke-dasharray: 220;
+  stroke-dashoffset: 40;
+}
+
+.axes path {
+  stroke: rgba(44, 44, 40, 0.18);
+  stroke-width: 0.8;
+}
+
+.core {
+  fill: var(--terracotta);
+}
+
+.label {
+  position: relative;
+  min-height: 2.4rem;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display), serif;
+  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  letter-spacing: 0.12em;
+}
+
+.fm,
+.name {
+  grid-area: 1 / 1;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.fm {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.name {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes slowRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

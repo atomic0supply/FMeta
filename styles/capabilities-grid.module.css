@@ -1,0 +1,71 @@
+.section {
+  padding: 44px 0 96px;
+}
+
+.heading {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.label {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.heading h2 {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--font-display), serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.08;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  background: transparent;
+}
+
+.card {
+  min-height: 220px;
+  padding: 0;
+  background: transparent;
+  border-top: 1px solid var(--line);
+}
+
+.index {
+  display: inline-block;
+  margin: 22px 0 28px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  color: var(--sea);
+}
+
+.card h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-display), serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.card p {
+  margin: 0;
+  max-width: 55ch;
+  color: var(--muted);
+  line-height: 1.85;
+}
+
+@media (max-width: 900px) {
+  .heading,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

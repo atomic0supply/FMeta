@@ -1,0 +1,58 @@
+.section {
+  padding: 88px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 48px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.label {
+  margin: 0 0 20px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sea);
+}
+
+.intro h2 {
+  margin: 0;
+  max-width: 12ch;
+  font-family: var(--font-display), serif;
+  font-size: clamp(2.2rem, 4vw, 4rem);
+  line-height: 1.08;
+}
+
+.layout {
+  display: grid;
+  gap: 24px;
+}
+
+.copy {
+  margin: 0;
+  max-width: 55ch;
+  font-size: 1.1rem;
+  color: var(--muted);
+  line-height: 1.95;
+}
+
+.pillars {
+  display: grid;
+  gap: 16px;
+}
+
+.pillar {
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(44, 44, 40, 0.08);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 920px) {
+  .section {
+    grid-template-columns: 1fr;
+  }
+}
