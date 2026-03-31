@@ -2,14 +2,17 @@ import styles from "@/styles/scenarios-section.module.css";
 
 const scenarios = [
   {
+    index: "A",
     title: "Operaciones dispersas",
     text: "Unificar datos, decisiones y acciones en un sistema legible para el equipo y útil para la dirección.",
   },
   {
+    index: "B",
     title: "Procesos expertos",
     text: "Modelar criterio interno para que el software pueda asistir, proponer y ejecutar con contexto real.",
   },
   {
+    index: "C",
     title: "Herramientas internas",
     text: "Sustituir hojas, mensajes y tareas invisibles por una intranet que consolide operación y memoria.",
   },
@@ -25,6 +28,7 @@ export function ScenariosSection() {
       <div className={styles.stack}>
         {scenarios.map((scenario) => (
           <article key={scenario.title} className={styles.item}>
+            <span className={styles.index}>{scenario.index}</span>
             <h3>{scenario.title}</h3>
             <p>{scenario.text}</p>
           </article>

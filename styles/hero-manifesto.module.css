@@ -42,14 +42,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 0;
-  border-bottom: 1px solid rgba(184, 137, 106, 0.48);
-  color: var(--ink);
+  min-height: 44px;
+  padding: 0 22px;
+  background: var(--terracotta);
+  border-radius: var(--radius-sm);
+  color: var(--sand);
   font-family: var(--font-mono), monospace;
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  transition: background 200ms ease, transform 160ms ease;
+}
+
+.primary:hover {
+  background: #a67860;
+  transform: translateY(-1px);
 }
 
 .meta {

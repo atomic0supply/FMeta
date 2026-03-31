@@ -14,6 +14,11 @@
   animation: slowRotate 34s linear infinite;
 }
 
+.shell:hover .mark,
+.shell:focus .mark {
+  animation-play-state: paused;
+}
+
 .mark svg {
   width: 100%;
   height: 100%;

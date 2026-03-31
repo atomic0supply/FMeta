@@ -15,7 +15,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--sea);
 }
 
 .heading h2 {
@@ -38,6 +38,12 @@
   padding: 0;
   background: transparent;
   border-top: 1px solid var(--line);
+  transition: border-top-color 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  border-top-color: var(--terracotta);
+  transform: translateY(-3px);
 }
 
 .index {

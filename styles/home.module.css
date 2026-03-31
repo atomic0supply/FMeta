@@ -46,6 +46,9 @@
   font-size: clamp(1.04rem, 1.24vw, 1.24rem);
   line-height: 1.95;
   color: var(--muted);
+  padding-left: 20px;
+  border-left: 2px solid var(--terracotta);
+  font-style: italic;
 }
 
 @media (max-width: 980px) {

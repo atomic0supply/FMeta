@@ -19,6 +19,11 @@
   font-family: var(--font-display), serif;
   font-size: 1.56rem;
   letter-spacing: 0.08em;
+  transition: opacity 180ms ease;
+}
+
+.wordmark:hover {
+  opacity: 0.8;
 }
 
 .wordmark em {
@@ -37,11 +42,25 @@
   color: var(--muted);
 }
 
+.nav a {
+  transition: color 180ms ease;
+}
+
+.nav a:hover {
+  color: var(--ink);
+}
+
 .cta {
   color: var(--ink);
   padding: 8px 0;
   border-bottom: 1px solid rgba(184, 137, 106, 0.42);
   border-radius: 999px;
+  transition: border-bottom-color 180ms ease, color 180ms ease;
+}
+
+.cta:hover {
+  color: var(--terracotta);
+  border-bottom-color: var(--terracotta);
 }
 
 @media (max-width: 720px) {

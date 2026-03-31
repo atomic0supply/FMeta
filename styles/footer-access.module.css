@@ -35,8 +35,10 @@
 
 .lema {
   font-family: var(--font-display), serif;
-  color: rgba(44, 44, 40, 0.3);
-  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
 }
 
 .access {

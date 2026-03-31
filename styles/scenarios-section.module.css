@@ -11,7 +11,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--sage);
+  color: var(--sea);
 }
 
 .side h2 {
@@ -28,14 +28,32 @@
 }
 
 .item {
-  padding: 0 0 22px;
+  padding: 18px 0 22px;
   border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0 16px;
+  align-items: start;
+  transition: border-bottom-color 200ms ease;
+}
+
+.item:hover {
+  border-bottom-color: rgba(122, 154, 170, 0.4);
+}
+
+.index {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--sea);
+  padding-top: 0.5em;
 }
 
 .item h3 {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   font-family: var(--font-display), serif;
   font-size: 1.75rem;
+  grid-column: 2;
 }
 
 .item p {
@@ -43,6 +61,7 @@
   max-width: 55ch;
   color: var(--muted);
   line-height: 1.82;
+  grid-column: 2;
 }
 
 @media (max-width: 900px) {
