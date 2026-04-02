@@ -1,20 +1,21 @@
 import Link from "next/link";
 
+import { BrandWordmark } from "@/components/BrandWordmark";
 import styles from "@/styles/footer-access.module.css";
 
 export function FooterAccess() {
   return (
     <footer className={styles.footer}>
-      <div>
-        <p className={styles.kicker}>ForMeta · Mallorca · 2026</p>
-        <p className={styles.note}>Software específico, sistemas AI-first e infraestructura sobria.</p>
-      </div>
-      <div className={styles.right}>
-        <span className={styles.lema}>Forma Latente</span>
+      <p className={styles.kicker}>© 2025 ForMeta · Mallorca, Illes Balears</p>
+      <span className={styles.brandWrap}>
+        <BrandWordmark small />
+      </span>
+      <p className={styles.note}>
+        Software &amp; AI · formeta.es ·{" "}
         <Link href="/login" className={styles.access}>
           FM/INT
         </Link>
-      </div>
+      </p>
     </footer>
   );
 }

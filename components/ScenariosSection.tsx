@@ -1,17 +1,18 @@
+import { Reveal } from "@/components/Reveal";
 import styles from "@/styles/scenarios-section.module.css";
 
-const scenarios = [
+const layers = [
   {
-    title: "Operaciones dispersas",
-    text: "Unificar datos, decisiones y acciones en un sistema legible para el equipo y útil para la dirección.",
+    title: "context / lectura",
+    lines: ["model.perceive(userContext)", "model.reason(domainKnowledge)"],
   },
   {
-    title: "Procesos expertos",
-    text: "Modelar criterio interno para que el software pueda asistir, proponer y ejecutar con contexto real.",
+    title: "action / decisión",
+    lines: ["agent.plan(objective)", "agent.execute(steps)"],
   },
   {
-    title: "Herramientas internas",
-    text: "Sustituir hojas, mensajes y tareas invisibles por una intranet que consolide operación y memoria.",
+    title: "output / entrega",
+    lines: ["result.deliver(precision: max)", "loop.improve()"],
   },
 ];
 
@@ -19,15 +20,39 @@ export function ScenariosSection() {
   return (
     <section className={styles.section} id="iapps">
       <div className={styles.side}>
-        <p className={styles.label}>03 — IApps</p>
-        <h2>Aplicaciones donde la inteligencia no se añade: organiza la lógica.</h2>
+        <Reveal>
+          <p className={styles.label}>04 — IApps</p>
+        </Reveal>
+        <Reveal as="h2" delay={80}>
+          Cuando la inteligencia
+          <br />
+          organiza la interfaz.
+        </Reveal>
+        <Reveal as="p" className={styles.copy} delay={160}>
+          Una IApp sirve para casos donde el valor no está solo en automatizar,
+          sino en leer contexto, proponer acciones y devolver una respuesta útil
+          dentro del flujo de trabajo. La interfaz puede verse simple porque la
+          lógica ya está ordenada por debajo.
+        </Reveal>
+        <Reveal as="p" className={styles.bridge} delay={220}>
+          Primero se define qué debe entender y decidir el sistema. Después se
+          diseña la experiencia alrededor de esa capacidad.
+        </Reveal>
       </div>
-      <div className={styles.stack}>
-        {scenarios.map((scenario) => (
-          <article key={scenario.title} className={styles.item}>
-            <h3>{scenario.title}</h3>
-            <p>{scenario.text}</p>
-          </article>
+
+      <div className={styles.visual}>
+        {layers.map((layer, index) => (
+          <Reveal
+            as="article"
+            key={layer.title}
+            className={styles.block}
+            delay={index * 80}
+          >
+            <span className={styles.highlight}>{layer.title}</span>
+            {layer.lines.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </Reveal>
         ))}
       </div>
     </section>

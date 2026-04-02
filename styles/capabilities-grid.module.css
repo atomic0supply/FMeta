@@ -1,71 +1,135 @@
 .section {
-  padding: 44px 0 96px;
+  padding: 5.5rem var(--section-inset) 7rem;
 }
 
 .heading {
-  display: grid;
-  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
-  gap: 24px;
-  margin-bottom: 32px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3.4rem;
 }
 
 .label {
   margin: 0;
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--terracotta);
 }
 
 .heading h2 {
   margin: 0;
-  max-width: 14ch;
-  font-family: var(--font-display), serif;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1.08;
+  max-width: 18ch;
+  font-size: clamp(2rem, 3.2vw, 3.1rem);
+  line-height: 1.14;
+  font-weight: 300;
+  text-align: right;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
-  background: transparent;
+  gap: 1px;
+  background: var(--panel-border);
+  border: 1px solid var(--panel-border-strong);
 }
 
 .card {
-  min-height: 220px;
-  padding: 0;
-  background: transparent;
-  border-top: 1px solid var(--line);
+  min-height: 320px;
+  padding: 2.8rem 2.2rem;
+  background: rgba(248, 244, 237, 0.72);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--panel-shadow);
+  transition:
+    background var(--motion-base) var(--ease-smooth),
+    transform var(--motion-fast) ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 42%),
+    radial-gradient(circle at top right, rgba(122, 154, 170, 0.06), transparent 34%);
+  opacity: 0;
+  transition: opacity var(--motion-base) var(--ease-smooth);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--terracotta), var(--sea));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-base) var(--ease-smooth);
+}
+
+.card:hover {
+  background: rgba(248, 244, 237, 0.82);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover::after {
+  transform: scaleX(1);
 }
 
 .index {
   display: inline-block;
-  margin: 22px 0 28px;
+  margin-bottom: 1.8rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.66rem;
-  letter-spacing: 0.2em;
-  color: var(--sea);
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sage);
 }
 
 .card h3 {
-  margin: 0 0 14px;
-  font-family: var(--font-display), serif;
-  font-size: 1.8rem;
-  font-weight: 400;
+  position: relative;
+  margin: 0 0 0.9rem;
+  font-size: 1.52rem;
+  line-height: 1.2;
+  font-weight: 300;
 }
 
 .card p {
+  position: relative;
   margin: 0;
-  max-width: 55ch;
   color: var(--muted);
-  line-height: 1.85;
+  font-size: 0.98rem;
+  line-height: 1.84;
 }
 
 @media (max-width: 900px) {
-  .heading,
+  .heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section {
+    padding-top: 4.5rem;
+    padding-bottom: 5.5rem;
+  }
+
+  .heading h2 {
+    text-align: left;
+  }
+
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: auto;
   }
 }

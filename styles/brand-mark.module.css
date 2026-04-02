@@ -1,17 +1,55 @@
 .shell {
-  width: min(100%, 440px);
+  width: min(100%, 460px);
+  position: relative;
   display: grid;
   place-items: center;
-  gap: 18px;
+  gap: 24px;
   user-select: none;
+  perspective: 1400px;
+}
+
+.shell[data-size="header"] {
+  width: 94px;
+  gap: 0;
+  perspective: 1200px;
+}
+
+.shell[data-size="header"] .rings path {
+  stroke-width: 1.35;
+}
+
+.shell[data-size="header"]:hover .rings path,
+.shell[data-size="header"]:focus-visible .rings path {
+  stroke-width: 2.7;
+}
+
+.halo {
+  position: absolute;
+  inset: 12% 10%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(226, 221, 212, 0.5), transparent 54%),
+    radial-gradient(circle at center, rgba(122, 154, 170, 0.08), transparent 70%);
+  filter: blur(18px);
+  animation: haloPulse 7.4s ease-in-out infinite;
+}
+
+.shell[data-size="header"] .halo {
+  inset: 10%;
+  filter: blur(10px);
 }
 
 .mark {
   width: 100%;
   aspect-ratio: 1;
-  transition: transform 180ms ease-out;
+  position: relative;
+  transition: transform 220ms ease-out;
   transform-style: preserve-3d;
-  animation: slowRotate 34s linear infinite;
+}
+
+.orbit {
+  width: 100%;
+  height: 100%;
 }
 
 .mark svg {
@@ -20,39 +58,47 @@
   overflow: visible;
 }
 
-.grid path {
-  stroke: rgba(44, 44, 40, 0.08);
-  stroke-width: 0.8;
-}
-
 .rings path {
   fill: none;
-  stroke: var(--terracotta);
-  stroke-width: 1.05;
+  stroke: rgba(44, 44, 40, 0.96);
+  stroke-width: 1;
   stroke-linecap: round;
-  stroke-dasharray: 700;
-  stroke-dashoffset: 120;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0.24;
+  transition:
+    stroke var(--motion-base) var(--ease-smooth),
+    stroke-width var(--motion-fast) var(--ease-smooth),
+    stroke-dashoffset var(--motion-base) var(--ease-smooth);
 }
 
 .rings path:nth-child(2) {
-  stroke: var(--sea);
-  stroke-dasharray: 430;
-  stroke-dashoffset: 96;
+  stroke: rgba(44, 44, 40, 0.78);
 }
 
 .rings path:nth-child(3) {
-  stroke: var(--sage);
-  stroke-dasharray: 220;
-  stroke-dashoffset: 40;
+  stroke: rgba(44, 44, 40, 0.9);
 }
 
-.axes path {
-  stroke: rgba(44, 44, 40, 0.18);
-  stroke-width: 0.8;
+.mark[data-intro="running"] .rings path:nth-child(1) {
+  animation: drawArc 920ms var(--ease-smooth) forwards 300ms;
 }
 
-.core {
-  fill: var(--terracotta);
+.mark[data-intro="running"] .rings path:nth-child(2) {
+  animation: drawArc 860ms var(--ease-smooth) forwards 520ms;
+}
+
+.mark[data-intro="running"] .rings path:nth-child(3) {
+  animation: drawArc 760ms var(--ease-smooth) forwards 740ms;
+}
+
+.mark[data-intro="running"] .orbit {
+  animation: settleAngle 980ms var(--ease-smooth) both 1300ms;
+}
+
+.mark[data-intro="done"] .rings path {
+  stroke-dashoffset: 0;
+  opacity: 1;
 }
 
 .label {
@@ -61,19 +107,26 @@
   display: grid;
   place-items: center;
   font-family: var(--font-display), serif;
-  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  font-size: clamp(2.2rem, 3.6vw, 3rem);
   letter-spacing: 0.12em;
 }
 
 .fm,
 .name {
   grid-area: 1 / 1;
-  transition: opacity 220ms ease, transform 220ms ease;
+  transition:
+    opacity var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
 }
 
 .fm {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 0.58;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58em;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  transform: translateY(1px);
 }
 
 .name {
@@ -87,16 +140,108 @@
 }
 
 .visible {
-  opacity: 1;
+  opacity: 0.92;
   transform: translateY(0);
 }
 
-@keyframes slowRotate {
+@keyframes drawArc {
   from {
-    transform: rotate(0deg);
+    opacity: 0.24;
+    stroke-dashoffset: 100;
   }
 
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes settleAngle {
+  0% {
+    transform: rotate(-7deg);
+  }
+
+  62% {
+    transform: rotate(2deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes haloPulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.985);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halo {
+    animation: none;
+  }
+
+  .mark svg {
+    animation: none;
+  }
+
+  .mark,
+  .mark * {
+    transition: none !important;
+  }
+
+  .mark[data-intro="running"] .rings path,
+  .mark[data-intro="running"] .orbit {
+    animation: none;
+  }
+
+  .rings path {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 980px) {
+  .shell {
+    width: min(100%, 380px);
+  }
+
+  .shell[data-size="header"] {
+    width: 84px;
+  }
+
+  .mark[data-intro="running"] .orbit {
+    animation-name: settleAngleMobile;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    width: min(100%, 300px);
+  }
+
+  .shell[data-size="header"] {
+    width: 74px;
+  }
+}
+
+@keyframes settleAngleMobile {
+  0% {
+    transform: rotate(-4deg);
+  }
+
+  62% {
+    transform: rotate(1.25deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
   }
 }

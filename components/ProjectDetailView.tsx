@@ -1,0 +1,444 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
+import { subscribeToClients, type Client } from "@/lib/clients";
+import {
+  createEndpoint,
+  deleteEndpoint,
+  type ApiEndpoint,
+  type ApiEndpointInput,
+  type EndpointMethod,
+  subscribeToEndpoints,
+  updateEndpoint,
+} from "@/lib/endpoints";
+import {
+  deleteProject,
+  getProject,
+  type Project,
+  type ProjectInput,
+  type ProjectStatus,
+  updateProject,
+} from "@/lib/projects";
+import { ProjectTimeTab } from "@/components/ProjectTimeTab";
+import styles from "@/styles/intranet-projects.module.css";
+
+type Tab = "info" | "endpoints" | "tareas" | "tiempo";
+
+const STATUS_LABELS: Record<ProjectStatus, string> = {
+  activo: "Activo",
+  pausado: "Pausado",
+  cerrado: "Cerrado",
+};
+
+const METHOD_LIST: EndpointMethod[] = ["GET", "POST", "PUT", "PATCH", "DELETE"];
+
+const emptyEndpoint: ApiEndpointInput = {
+  name: "",
+  url: "",
+  method: "GET",
+  notes: "",
+};
+
+export function ProjectDetailView({ id }: { id: string }) {
+  const router = useRouter();
+  const [project, setProject] = useState<Project | null>(null);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<Tab>("info");
+
+  // Edit project state
+  const [editingProject, setEditingProject] = useState(false);
+  const [projectForm, setProjectForm] = useState<ProjectInput | null>(null);
+  const [tagsInput, setTagsInput] = useState("");
+  const [savingProject, setSavingProject] = useState(false);
+  const [confirmDeleteProject, setConfirmDeleteProject] = useState(false);
+
+  // Endpoints state
+  const [endpoints, setEndpoints] = useState<ApiEndpoint[]>([]);
+  const [endpointDrawerOpen, setEndpointDrawerOpen] = useState(false);
+  const [editingEndpoint, setEditingEndpoint] = useState<ApiEndpoint | null>(null);
+  const [endpointForm, setEndpointForm] = useState<ApiEndpointInput>(emptyEndpoint);
+  const [savingEndpoint, setSavingEndpoint] = useState(false);
+  const [confirmDeleteEndpoint, setConfirmDeleteEndpoint] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const endpointNameRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    void getProject(id).then((data) => {
+      setProject(data);
+      setLoading(false);
+    });
+    const unsubClients = subscribeToClients(setClients);
+    const unsubEndpoints = subscribeToEndpoints(id, setEndpoints);
+    return () => {
+      unsubClients();
+      unsubEndpoints();
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (endpointDrawerOpen) setTimeout(() => endpointNameRef.current?.focus(), 120);
+  }, [endpointDrawerOpen]);
+
+  // Project edit
+  function openEditProject() {
+    if (!project) return;
+    setProjectForm({
+      name: project.name,
+      clientId: project.clientId,
+      clientName: project.clientName,
+      status: project.status,
+      description: project.description,
+      tags: project.tags,
+      notes: project.notes,
+    });
+    setTagsInput(project.tags.join(", "));
+    setEditingProject(true);
+  }
+
+  function handleProjectField(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) {
+    setProjectForm((prev) => prev ? { ...prev, [e.target.name]: e.target.value } : prev);
+  }
+
+  function handleClientSelect(e: React.ChangeEvent<HTMLSelectElement>) {
+    const selected = clients.find((c) => c.id === e.target.value);
+    setProjectForm((prev) =>
+      prev ? { ...prev, clientId: selected?.id ?? "", clientName: selected?.name ?? "" } : prev,
+    );
+  }
+
+  async function handleSaveProject(e: React.FormEvent) {
+    e.preventDefault();
+    if (!projectForm || !project) return;
+    setSavingProject(true);
+    const tags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
+    try {
+      await updateProject(project.id, { ...projectForm, tags });
+      setProject({ ...project, ...projectForm, tags });
+      setEditingProject(false);
+    } finally {
+      setSavingProject(false);
+    }
+  }
+
+  async function handleDeleteProject() {
+    if (!confirmDeleteProject) { setConfirmDeleteProject(true); return; }
+    await deleteProject(id);
+    router.push("/intranet/proyectos");
+  }
+
+  // Endpoint CRUD
+  function openNewEndpoint() {
+    setEditingEndpoint(null);
+    setEndpointForm(emptyEndpoint);
+    setEndpointDrawerOpen(true);
+  }
+
+  function openEditEndpoint(endpoint: ApiEndpoint) {
+    setEditingEndpoint(endpoint);
+    setEndpointForm({ name: endpoint.name, url: endpoint.url, method: endpoint.method, notes: endpoint.notes });
+    setEndpointDrawerOpen(true);
+  }
+
+  function closeEndpointDrawer() {
+    setEndpointDrawerOpen(false);
+    setEditingEndpoint(null);
+    setEndpointForm(emptyEndpoint);
+  }
+
+  function handleEndpointField(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) {
+    setEndpointForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSaveEndpoint(e: React.FormEvent) {
+    e.preventDefault();
+    if (!endpointForm.name.trim() || !endpointForm.url.trim()) return;
+    setSavingEndpoint(true);
+    try {
+      if (editingEndpoint) {
+        await updateEndpoint(id, editingEndpoint.id, endpointForm);
+      } else {
+        await createEndpoint(id, endpointForm);
+      }
+      closeEndpointDrawer();
+    } finally {
+      setSavingEndpoint(false);
+    }
+  }
+
+  async function handleDeleteEndpoint(endpointId: string) {
+    if (confirmDeleteEndpoint !== endpointId) { setConfirmDeleteEndpoint(endpointId); return; }
+    await deleteEndpoint(id, endpointId);
+    setConfirmDeleteEndpoint(null);
+  }
+
+  async function copyUrl(endpoint: ApiEndpoint) {
+    await navigator.clipboard.writeText(endpoint.url);
+    setCopiedId(endpoint.id);
+    setTimeout(() => setCopiedId(null), 1800);
+  }
+
+  if (loading) {
+    return <main className={styles.page}><p className={styles.empty}>Cargando…</p></main>;
+  }
+
+  if (!project) {
+    return (
+      <main className={styles.page}>
+        <p className={styles.empty}>Proyecto no encontrado.</p>
+        <Link href="/intranet/proyectos" className={styles.backLink}>← Volver a proyectos</Link>
+      </main>
+    );
+  }
+
+  return (
+    <main className={styles.page}>
+      {/* Nav */}
+      <div className={styles.detailNav}>
+        <Link href="/intranet/proyectos" className={styles.backLink}>← Proyectos</Link>
+        <div className={styles.detailActions}>
+          <button type="button" onClick={openEditProject} className={styles.btnAction}>Editar</button>
+          <button
+            type="button"
+            onClick={() => void handleDeleteProject()}
+            className={`${styles.btnAction} ${confirmDeleteProject ? styles.btnDanger : ""}`}
+            onBlur={() => setConfirmDeleteProject(false)}
+          >
+            {confirmDeleteProject ? "¿Eliminar?" : "Eliminar"}
+          </button>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className={styles.detailHeader}>
+        <div className={styles.detailHeaderMeta}>
+          <span className={styles.statusBadge} data-status={project.status}>
+            {STATUS_LABELS[project.status]}
+          </span>
+          {project.clientName && (
+            <span className={styles.clientChip}>{project.clientName}</span>
+          )}
+        </div>
+        <h1 className={styles.title}>{project.name}</h1>
+        {project.tags.length > 0 && (
+          <div className={styles.tagList}>
+            {project.tags.map((tag) => (
+              <span key={tag} className={styles.tag}>{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Tabs */}
+      <div className={styles.tabs}>
+        {(["info", "endpoints", "tareas", "tiempo"] as Tab[]).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ""}`}
+          >
+            {tab === "info" && "Info"}
+            {tab === "endpoints" && `Endpoints${endpoints.length > 0 ? ` (${endpoints.length})` : ""}`}
+            {tab === "tareas" && "Tareas"}
+            {tab === "tiempo" && "Tiempo"}
+          </button>
+        ))}
+      </div>
+
+      {/* Info tab */}
+      {activeTab === "info" && (
+        <div className={styles.tabContent}>
+          {project.description && (
+            <div className={styles.detailBlock}>
+              <span className={styles.detailFieldLabel}>Descripción</span>
+              <p className={styles.notesText}>{project.description}</p>
+            </div>
+          )}
+          {project.notes && (
+            <div className={styles.detailBlock}>
+              <span className={styles.detailFieldLabel}>Notas internas</span>
+              <p className={styles.notesText}>{project.notes}</p>
+            </div>
+          )}
+          {!project.description && !project.notes && (
+            <p className={styles.empty}>Sin descripción ni notas.</p>
+          )}
+        </div>
+      )}
+
+      {/* Endpoints tab */}
+      {activeTab === "endpoints" && (
+        <div className={styles.tabContent}>
+          <div className={styles.tabActions}>
+            <button type="button" onClick={openNewEndpoint} className={styles.btnNew}>
+              Añadir endpoint
+            </button>
+          </div>
+
+          {endpoints.length === 0 && (
+            <p className={styles.empty}>No hay endpoints registrados en este proyecto.</p>
+          )}
+
+          {endpoints.length > 0 && (
+            <div className={styles.endpointList}>
+              {endpoints.map((ep) => (
+                <div key={ep.id} className={styles.endpointRow}>
+                  <span className={styles.methodBadge} data-method={ep.method}>
+                    {ep.method}
+                  </span>
+                  <div className={styles.endpointInfo}>
+                    <span className={styles.endpointName}>{ep.name}</span>
+                    <span className={styles.endpointUrl}>{ep.url}</span>
+                    {ep.notes && <span className={styles.endpointNotes}>{ep.notes}</span>}
+                  </div>
+                  <div className={styles.endpointActions}>
+                    <button
+                      type="button"
+                      onClick={() => void copyUrl(ep)}
+                      className={`${styles.btnAction} ${copiedId === ep.id ? styles.btnCopied : ""}`}
+                    >
+                      {copiedId === ep.id ? "Copiado" : "Copiar"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openEditEndpoint(ep)}
+                      className={styles.btnAction}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void handleDeleteEndpoint(ep.id)}
+                      className={`${styles.btnAction} ${confirmDeleteEndpoint === ep.id ? styles.btnDanger : ""}`}
+                      onBlur={() => setConfirmDeleteEndpoint(null)}
+                    >
+                      {confirmDeleteEndpoint === ep.id ? "¿Seguro?" : "Eliminar"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Endpoint drawer */}
+          {endpointDrawerOpen && (
+            <div className={styles.backdrop} onClick={closeEndpointDrawer} aria-hidden="true" />
+          )}
+          <aside className={`${styles.drawer} ${endpointDrawerOpen ? styles.drawerOpen : ""}`}>
+            <div className={styles.drawerHeader}>
+              <span className={styles.drawerLabel}>
+                {editingEndpoint ? "Editar endpoint" : "Nuevo endpoint"}
+              </span>
+              <button type="button" onClick={closeEndpointDrawer} className={styles.drawerClose}>✕</button>
+            </div>
+            <form onSubmit={(e) => void handleSaveEndpoint(e)} className={styles.form}>
+              <div className={styles.field}>
+                <label htmlFor="epName" className={styles.label}>Nombre *</label>
+                <input ref={endpointNameRef} id="epName" name="name" type="text" value={endpointForm.name} onChange={handleEndpointField} className={styles.input} required autoComplete="off" />
+              </div>
+              <div className={styles.fieldRow}>
+                <div className={styles.field}>
+                  <label htmlFor="epMethod" className={styles.label}>Método</label>
+                  <select id="epMethod" name="method" value={endpointForm.method} onChange={handleEndpointField} className={styles.input}>
+                    {METHOD_LIST.map((m) => <option key={m} value={m}>{m}</option>)}
+                  </select>
+                </div>
+                <div className={`${styles.field} ${styles.fieldWide}`}>
+                  <label htmlFor="epUrl" className={styles.label}>URL *</label>
+                  <input id="epUrl" name="url" type="text" value={endpointForm.url} onChange={handleEndpointField} className={styles.input} required autoComplete="off" placeholder="https://…" />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="epNotes" className={styles.label}>Notas</label>
+                <textarea id="epNotes" name="notes" value={endpointForm.notes} onChange={handleEndpointField} className={`${styles.input} ${styles.textarea}`} rows={3} />
+              </div>
+              <div className={styles.formActions}>
+                <button type="button" onClick={closeEndpointDrawer} className={styles.btnCancel}>Cancelar</button>
+                <button type="submit" disabled={savingEndpoint || !endpointForm.name.trim() || !endpointForm.url.trim()} className={styles.btnSave}>
+                  {savingEndpoint ? "Guardando…" : editingEndpoint ? "Guardar cambios" : "Añadir endpoint"}
+                </button>
+              </div>
+            </form>
+          </aside>
+        </div>
+      )}
+
+      {/* Tareas tab — fase 5 */}
+      {activeTab === "tareas" && (
+        <div className={styles.tabContent}>
+          <p className={styles.empty}>El módulo de tareas se construirá en la fase 5.</p>
+        </div>
+      )}
+
+      {/* Tiempo tab */}
+      {activeTab === "tiempo" && (
+        <div className={styles.tabContent}>
+          <ProjectTimeTab projectId={project.id} projectName={project.name} />
+        </div>
+      )}
+
+      {/* Edit project drawer */}
+      {editingProject && projectForm && (
+        <>
+          <div className={styles.backdrop} onClick={() => setEditingProject(false)} aria-hidden="true" />
+          <aside className={`${styles.drawer} ${styles.drawerOpen}`}>
+            <div className={styles.drawerHeader}>
+              <span className={styles.drawerLabel}>Editar proyecto</span>
+              <button type="button" onClick={() => setEditingProject(false)} className={styles.drawerClose}>✕</button>
+            </div>
+            <form onSubmit={(e) => void handleSaveProject(e)} className={styles.form}>
+              <div className={styles.field}>
+                <label htmlFor="pname" className={styles.label}>Nombre *</label>
+                <input id="pname" name="name" type="text" value={projectForm.name} onChange={handleProjectField} className={styles.input} required />
+              </div>
+              <div className={styles.fieldRow}>
+                <div className={styles.field}>
+                  <label htmlFor="pclient" className={styles.label}>Cliente</label>
+                  <select id="pclient" value={projectForm.clientId} onChange={handleClientSelect} className={styles.input}>
+                    <option value="">Sin cliente</option>
+                    {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="pstatus" className={styles.label}>Estado</label>
+                  <select id="pstatus" name="status" value={projectForm.status} onChange={handleProjectField} className={styles.input}>
+                    <option value="activo">Activo</option>
+                    <option value="pausado">Pausado</option>
+                    <option value="cerrado">Cerrado</option>
+                  </select>
+                </div>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="pdesc" className={styles.label}>Descripción</label>
+                <textarea id="pdesc" name="description" value={projectForm.description} onChange={handleProjectField} className={`${styles.input} ${styles.textarea}`} rows={3} />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="ptags" className={styles.label}>Tags (separados por coma)</label>
+                <input id="ptags" type="text" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} className={styles.input} />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="pnotes" className={styles.label}>Notas internas</label>
+                <textarea id="pnotes" name="notes" value={projectForm.notes} onChange={handleProjectField} className={`${styles.input} ${styles.textarea}`} rows={4} />
+              </div>
+              <div className={styles.formActions}>
+                <button type="button" onClick={() => setEditingProject(false)} className={styles.btnCancel}>Cancelar</button>
+                <button type="submit" disabled={savingProject} className={styles.btnSave}>
+                  {savingProject ? "Guardando…" : "Guardar cambios"}
+                </button>
+              </div>
+            </form>
+          </aside>
+        </>
+      )}
+    </main>
+  );
+}

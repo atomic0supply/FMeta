@@ -1,32 +1,27 @@
+import { Reveal } from "@/components/Reveal";
 import styles from "@/styles/method-section.module.css";
-
-const pillars = [
-  "Reducción antes que exceso.",
-  "Estructura antes que decoración.",
-  "Claridad operativa antes que espectáculo.",
-];
 
 export function MethodSection() {
   return (
     <section className={styles.section} id="identidad">
-      <div className={styles.intro}>
+      <Reveal className={styles.intro}>
         <p className={styles.label}>01 — Identidad</p>
-        <h2>La forma no es ornamento. Es estructura.</h2>
-      </div>
+        <div className={styles.number}>01</div>
+      </Reveal>
+
       <div className={styles.layout}>
-        <p className={styles.copy}>
-          ForMeta nace de “formita”: dar forma con precisión. El término aparece
-          una sola vez porque basta para explicar la idea central de la marca:
-          reducir hasta dejar solo lo necesario y convertir esa claridad en
-          software mantenible.
-        </p>
-        <div className={styles.pillars}>
-          {pillars.map((pillar) => (
-            <div key={pillar} className={styles.pillar}>
-              {pillar}
-            </div>
-          ))}
-        </div>
+        <Reveal as="h2">
+          Para equipos que han
+          <br />
+          superado el <em>parche</em>.
+        </Reveal>
+        <Reveal as="p" className={styles.copy} delay={120}>
+          ForMeta trabaja con organizaciones que ya sienten la fricción de sus
+          procesos: hojas dispersas, herramientas que no se hablan, criterios
+          expertos difíciles de escalar y decisiones que dependen de demasiado
+          trabajo manual. Ahí es donde una estructura propia empieza a tener
+          sentido.
+        </Reveal>
       </div>
     </section>
   );

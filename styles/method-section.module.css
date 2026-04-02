@@ -1,58 +1,63 @@
 .section {
-  padding: 88px 0;
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: 48px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: minmax(180px, 0.78fr) minmax(0, 1.62fr);
+  gap: clamp(3rem, 5vw, 5rem);
+  padding: 7.25rem var(--section-inset);
+  align-items: start;
+}
+
+.intro {
+  display: grid;
+  gap: 0.65rem;
 }
 
 .label {
-  margin: 0 0 20px;
+  margin: 0;
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--sea);
+  color: var(--terracotta);
 }
 
-.intro h2 {
-  margin: 0;
-  max-width: 12ch;
-  font-family: var(--font-display), serif;
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  line-height: 1.08;
+.number {
+  font-size: clamp(5rem, 8vw, 7rem);
+  color: rgba(226, 221, 212, 0.86);
+  line-height: 0.92;
+  font-style: italic;
 }
 
 .layout {
   display: grid;
-  gap: 24px;
+  gap: 1.65rem;
+}
+
+.layout h2 {
+  margin: 0;
+  max-width: 17ch;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.14;
+  font-weight: 300;
+}
+
+.layout h2 em {
+  color: var(--sea);
+  font-style: italic;
 }
 
 .copy {
   margin: 0;
-  max-width: 55ch;
-  font-size: 1.1rem;
-  color: var(--muted);
+  max-width: 48ch;
+  font-size: 1.08rem;
   line-height: 1.95;
+  color: var(--muted);
 }
 
-.pillars {
-  display: grid;
-  gap: 16px;
-}
-
-.pillar {
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(44, 44, 40, 0.08);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-@media (max-width: 920px) {
+@media (max-width: 900px) {
   .section {
     grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
   }
 }

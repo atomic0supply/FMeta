@@ -1,26 +1,29 @@
+import { Reveal } from "@/components/Reveal";
 import styles from "@/styles/hero-manifesto.module.css";
 
 export function HeroManifesto() {
   return (
     <div className={styles.hero}>
-      <p className={styles.eyebrow}>Mallorca · Software a medida · AI aplicada</p>
-      <h1>
-        Dar forma
-        <br />
-        a sistemas
-        <br />
-        bien resueltos.
-      </h1>
-      <p className={styles.copy}>
-        Software específico, estructura clara e inteligencia aplicada para
-        organizaciones que no encajan en herramientas genéricas.
-      </p>
-      <div className={styles.actions}>
-        <a href="#contacto" className={styles.primary}>
-          Hablar de un proyecto
-        </a>
-        <span className={styles.meta}>Forma Latente · calma técnica</span>
+      <div className={styles.intro}>
+        <p className={styles.eyebrow}>Mallorca · Software a medida · AI aplicada</p>
+        <h1>
+          Software con <em>forma</em>
+          <br />propia para
+          <br />operaciones reales.
+        </h1>
+        <p className={styles.copy}>
+          Diseñamos sistemas digitales para empresas que necesitan claridad
+          operativa, integración real y una herramienta hecha para su manera de
+          trabajar, no para una media de mercado.
+        </p>
       </div>
+
+      <Reveal className={styles.actions} delay={240}>
+        <a href="#contacto" className={styles.primary}>
+          Explicar vuestro caso
+        </a>
+        <span className={styles.meta}>Software, estructura e IA sin ruido</span>
+      </Reveal>
     </div>
   );
 }

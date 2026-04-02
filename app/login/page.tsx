@@ -2,8 +2,8 @@ import { LoginPanel } from "@/components/LoginPanel";
 import styles from "@/styles/auth.module.css";
 
 export const metadata = {
-  title: "Acceso — ForMeta",
-  description: "Acceso privado a la intranet de ForMeta.",
+  title: "Acceso - Roqueta",
+  description: "Acceso privado a la intranet Roqueta de ForMeta.",
 };
 
 export default async function LoginPage({

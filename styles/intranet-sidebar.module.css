@@ -1,0 +1,187 @@
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  background: rgba(226, 221, 212, 0.42);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Brand */
+.brand {
+  padding: 28px 24px 24px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.suiteName {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+/* Nav */
+.nav {
+  flex: 1;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navItem {
+  display: block;
+  padding: 10px 24px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-left: 2px solid transparent;
+  transition:
+    color var(--motion-fast) var(--ease-smooth),
+    background var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.navItem:hover {
+  color: var(--ink);
+  background: rgba(44, 44, 40, 0.04);
+}
+
+.navActive {
+  color: var(--ink);
+  border-left-color: var(--terracotta);
+  background: rgba(184, 137, 106, 0.07);
+}
+
+/* Timer slot */
+.timerSlot {
+  margin: 0 16px 16px;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(244, 240, 232, 0.6);
+  transition: border-color var(--motion-fast) var(--ease-smooth),
+    background var(--motion-fast) var(--ease-smooth);
+}
+
+.timerActive {
+  border-color: rgba(90, 138, 94, 0.35);
+  background: rgba(143, 168, 146, 0.1);
+}
+
+.timerLabel {
+  display: block;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 8px;
+}
+
+.timerIdle {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.timerProject {
+  margin: 0 0 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.timerElapsed {
+  font-family: var(--font-mono), monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.timerStop {
+  background: none;
+  border: 1px solid rgba(184, 90, 74, 0.4);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b85a4a;
+  transition:
+    background var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.timerStop:hover {
+  background: rgba(184, 90, 74, 0.08);
+  border-color: #b85a4a;
+}
+
+/* Footer */
+.footer {
+  padding: 16px 24px 28px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footerLink {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color var(--motion-fast) var(--ease-smooth);
+}
+
+.footerLink:hover {
+  color: var(--ink);
+}
+
+.signOut {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition:
+    color var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth),
+    background var(--motion-fast) var(--ease-smooth);
+}
+
+.signOut:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: rgba(44, 44, 40, 0.04);
+}

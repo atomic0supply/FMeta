@@ -1,0 +1,99 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.46rem;
+  color: var(--ink);
+}
+
+.mark {
+  width: 1.3rem;
+  height: 1.3rem;
+  overflow: visible;
+  flex: 0 0 auto;
+  transform-origin: center;
+}
+
+.outer,
+.middle,
+.inner {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+}
+
+.outer {
+  stroke-width: 1.15;
+}
+
+.middle {
+  stroke-width: 0.8;
+  opacity: 0.86;
+}
+
+.inner {
+  stroke-width: 1;
+}
+
+.text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.06em;
+  font-family: var(--font-display), serif;
+  font-size: 1.28rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+.text em {
+  color: var(--terracotta);
+  font-style: italic;
+}
+
+.wordmark[data-size="small"] .mark {
+  width: 1.14rem;
+  height: 1.14rem;
+}
+
+.wordmark[data-size="small"] .text {
+  font-size: 1.06rem;
+  letter-spacing: 0.075em;
+}
+
+.wordmark[data-icon-only="true"] {
+  gap: 0;
+}
+
+.wordmark[data-icon-only="true"] .mark {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.wordmark[data-size="small"][data-icon-only="true"] .mark {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.animated {
+  animation: headerMarkOrbit 11.5s linear infinite;
+}
+
+@keyframes headerMarkOrbit {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  45% {
+    transform: rotate(14deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .wordmark[data-size="small"][data-icon-only="true"] .mark {
+    width: 1.86rem;
+    height: 1.86rem;
+  }
+}

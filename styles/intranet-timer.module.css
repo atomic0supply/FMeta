@@ -1,0 +1,318 @@
+/* Timer tab container */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 760px;
+}
+
+/* Timer control block */
+.timerControl {
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(140deg, rgba(248, 244, 237, 0.9), rgba(244, 240, 232, 0.7));
+}
+
+.runningBlock {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.runningDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5a8a5e;
+  flex-shrink: 0;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.runningLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #5a8a5e;
+}
+
+.runningElapsed {
+  font-family: var(--font-mono), monospace;
+  font-size: 2rem;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  margin-left: auto;
+}
+
+.btnStop {
+  padding: 9px 20px;
+  border: 1px solid rgba(44, 44, 40, 0.3);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--sand);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.btnStop:hover {
+  background: #b85a4a;
+  border-color: #b85a4a;
+}
+
+.idleBlock {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.otherActive {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.otherActive strong {
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.btnPlay {
+  padding: 11px 28px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--sand);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition:
+    background var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.btnPlay:hover:not(:disabled) {
+  background: #5a8a5e;
+  border-color: #5a8a5e;
+}
+
+.btnPlay:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Summary cards */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 24px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(244, 240, 232, 0.5);
+}
+
+.summaryLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.summaryValue {
+  font-family: var(--font-display), serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Weekly chart */
+.chartBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chartTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.chart {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  height: 100px;
+}
+
+.chartBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.barTrack {
+  flex: 1;
+  width: 100%;
+  border-radius: 3px;
+  background: rgba(44, 44, 40, 0.06);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.barFill {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: var(--stone-strong);
+  transition: height 600ms var(--ease-smooth);
+  min-height: 0;
+}
+
+.barFill[data-active="true"] {
+  background: var(--terracotta);
+  opacity: 0.7;
+}
+
+.barLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.barValue {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.56rem;
+  color: var(--terracotta);
+  letter-spacing: 0.04em;
+}
+
+/* History */
+.historyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.historyTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dayGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dayLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.sessionList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.sessionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.sessionRow:last-of-type {
+  border-bottom: none;
+}
+
+.sessionTime {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.sessionDuration {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.dayTotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: rgba(226, 221, 212, 0.4);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dayTotal span:last-child {
+  color: var(--ink);
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 640px) {
+  .summaryGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .runningElapsed {
+    font-size: 1.5rem;
+    margin-left: 0;
+    width: 100%;
+  }
+}

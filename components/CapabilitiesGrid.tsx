@@ -1,20 +1,21 @@
+import { Reveal } from "@/components/Reveal";
 import styles from "@/styles/capabilities-grid.module.css";
 
 const items = [
   {
-    index: "01",
-    title: "Software específico",
-    body: "Aplicaciones diseñadas para un problema concreto, sin capas heredadas de producto genérico.",
+    index: "001",
+    title: "Software a medida",
+    body: "Cuando el proceso ya no cabe en una herramienta estándar, diseñamos una aplicación propia que reduce pasos, errores y dependencia de atajos.",
   },
   {
-    index: "02",
+    index: "002",
     title: "Integración con AI",
-    body: "Modelos conectados al flujo real de trabajo, con utilidad operativa desde el inicio.",
+    body: "Si el equipo ya acumula contexto, documentos o decisiones repetidas, conectamos modelos al flujo real para asistir con criterio y utilidad operativa.",
   },
   {
-    index: "03",
-    title: "Infraestructura sobria",
-    body: "Google Cloud y Firebase como base ligera para operar con continuidad, seguridad y criterio.",
+    index: "003",
+    title: "IApps AI-first",
+    body: "Cuando la inteligencia debe formar parte de la lógica central, diseñamos productos donde el modelo organiza la experiencia y no se añade al final.",
   },
 ];
 
@@ -22,16 +23,26 @@ export function CapabilitiesGrid() {
   return (
     <section className={styles.section} id="servicios">
       <div className={styles.heading}>
-        <p className={styles.label}>02 — Servicios</p>
-        <h2>Servicios pensados para problemas que no admiten plantilla.</h2>
+        <Reveal>
+          <p className={styles.label}>02 — Servicios</p>
+        </Reveal>
+        <Reveal as="h2" delay={80}>
+          Qué resolvemos cuando una herramienta genérica ya no basta.
+        </Reveal>
       </div>
+
       <div className={styles.grid}>
-        {items.map((item) => (
-          <article key={item.index} className={styles.card}>
+        {items.map((item, index) => (
+          <Reveal
+            as="article"
+            key={item.index}
+            className={styles.card}
+            delay={index * 90}
+          >
             <span className={styles.index}>{item.index}</span>
             <h3>{item.title}</h3>
             <p>{item.body}</p>
-          </article>
+          </Reveal>
         ))}
       </div>
     </section>

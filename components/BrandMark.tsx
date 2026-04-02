@@ -1,18 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "@/styles/brand-mark.module.css";
 
-export function BrandMark() {
+type BrandMarkProps = {
+  size?: "hero" | "header";
+  showLabel?: boolean;
+};
+
+export function BrandMark({ size = "hero", showLabel = true }: BrandMarkProps) {
   const [hovered, setHovered] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [introDone, setIntroDone] = useState(false);
+
+  useEffect(() => {
+    let timer = 0;
+
+    const runIntro = () => {
+      setIntroDone(false);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        setIntroDone(true);
+      }, 2400);
+    };
+
+    const replayIntro = () => runIntro();
+
+    runIntro();
+    window.addEventListener("formeta:loader-hidden", replayIntro);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("formeta:loader-hidden", replayIntro);
+    };
+  }, []);
 
   function updateTilt(event: React.PointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: x * 10, y: y * -10 });
+    const factor = size === "header" ? 5 : 8;
+    setTilt({ x: x * factor, y: y * -factor });
   }
 
   function resetTilt() {
@@ -22,6 +51,7 @@ export function BrandMark() {
   return (
     <div
       className={styles.shell}
+      data-size={size}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
@@ -33,40 +63,35 @@ export function BrandMark() {
         resetTilt();
       }}
       onPointerMove={updateTilt}
-      tabIndex={0}
+      tabIndex={showLabel ? 0 : -1}
       aria-label="Logotipo interactivo de ForMeta"
     >
+      <div className={styles.halo} />
       <div
         className={styles.mark}
+        data-intro={introDone ? "done" : "running"}
         style={{
           transform: `rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
         }}
       >
-        <svg viewBox="0 0 440 440" aria-hidden="true">
-          <g className={styles.grid}>
-            <path d="M44 220H396" />
-            <path d="M220 44V396" />
-            <path d="M98 98L342 342" />
-            <path d="M342 98L98 342" />
-          </g>
-          <g className={styles.rings}>
-            <path d="M220 68a152 152 0 1 1-107.48 44.52" />
-            <path d="M220 116a104 104 0 1 1-73.54 30.46" />
-            <path d="M220 162a58 58 0 1 1-41 17" />
-          </g>
-          <g className={styles.axes}>
-            <path d="M220 76V364" />
-            <path d="M76 220H364" />
-          </g>
-          <circle cx="220" cy="220" r="6" className={styles.core} />
-        </svg>
+        <div className={styles.orbit}>
+          <svg viewBox="0 0 320 296" aria-hidden="true">
+            <g className={styles.rings}>
+              <path pathLength="100" d="M 160,68.1 A 80 80 0 1 1 237.1,188.0" />
+              <path pathLength="100" d="M 160,95.1 A 53 53 0 1 1 205.9,184.5" />
+              <path pathLength="100" d="M 160,120.1 A 28 28 0 1 1 183.8,162.0" />
+            </g>
+          </svg>
+        </div>
       </div>
-      <div className={styles.label}>
-        <span className={`${styles.fm} ${hovered ? styles.hidden : ""}`}>FM</span>
-        <span className={`${styles.name} ${hovered ? styles.visible : ""}`}>
-          ForMeta
-        </span>
-      </div>
+      {showLabel && (
+        <div className={styles.label}>
+          <span className={`${styles.fm} ${hovered ? styles.hidden : ""}`}>FM</span>
+          <span className={`${styles.name} ${hovered ? styles.visible : ""}`}>
+            ForMeta
+          </span>
+        </div>
+      )}
     </div>
   );
 }

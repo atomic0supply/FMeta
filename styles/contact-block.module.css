@@ -1,15 +1,15 @@
 .section {
-  padding: 88px 0 120px;
+  padding: 7rem var(--section-inset) 5.5rem;
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.8fr);
-  gap: 40px;
-  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.88fr);
+  gap: 5rem;
+  align-items: start;
 }
 
 .label {
-  margin: 0 0 18px;
+  margin: 0 0 1rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--terracotta);
@@ -17,40 +17,87 @@
 
 .section h2 {
   margin: 0;
-  max-width: 12ch;
-  font-family: var(--font-display), serif;
-  font-size: clamp(2.6rem, 5vw, 4.8rem);
-  line-height: 1.04;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  font-weight: 300;
+  line-height: 1.03;
+  max-width: 11ch;
+}
+
+.section h2 em {
+  color: var(--terracotta);
+  font-style: italic;
 }
 
 .panel {
-  padding: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+  padding-top: 0.4rem;
 }
 
 .panel p {
-  margin: 0 0 28px;
-  max-width: 55ch;
+  margin: 0 0 2.2rem;
+  max-width: 38ch;
   color: var(--muted);
-  line-height: 1.9;
+  font-size: 1.02rem;
+  line-height: 1.92;
+}
+
+.closing {
+  display: grid;
+  gap: 1.45rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--panel-border-strong);
+}
+
+.note {
+  color: var(--ink);
+  font-size: 0.98rem;
+  margin-bottom: 0;
+  max-width: 36ch;
+}
+
+.contactRow {
+  display: grid;
+  justify-items: start;
+  gap: 0.55rem;
+}
+
+.contactLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sage);
 }
 
 .link {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  border-bottom: 1px solid var(--terracotta);
+  min-height: 36px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(184, 137, 106, 0.62);
   font-family: var(--font-mono), monospace;
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  transition:
+    color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
+}
+
+.link:hover {
+  color: var(--terracotta);
+  border-color: var(--terracotta);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 900px) {
   .section {
     grid-template-columns: 1fr;
-    padding-bottom: 96px;
+    gap: 2rem;
+    padding-top: 5.5rem;
+  }
+
+  .panel {
+    padding-top: 0;
   }
 }

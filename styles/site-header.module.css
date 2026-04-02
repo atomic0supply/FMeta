@@ -1,57 +1,93 @@
 .header {
   position: sticky;
   top: 0;
-  z-index: 20;
-  width: min(calc(100% - 48px), var(--max-width));
+  z-index: 40;
+  width: var(--frame-width);
   margin: 0 auto;
   height: var(--nav-height);
+  padding: 0 var(--section-inset);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(180deg, rgba(244, 240, 232, 0.82), rgba(244, 240, 232, 0.35));
-  backdrop-filter: blur(10px);
+  transition:
+    background var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    backdrop-filter var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
+}
+
+.header[data-scrolled="true"] {
+  background: linear-gradient(180deg, rgba(248, 244, 237, 0.84), rgba(248, 244, 237, 0.46));
+  border-bottom: 1px solid rgba(212, 205, 193, 0.64);
+  backdrop-filter: blur(12px);
 }
 
 .wordmark {
   display: inline-flex;
-  gap: 0.1em;
-  align-items: baseline;
-  font-family: var(--font-display), serif;
-  font-size: 1.56rem;
-  letter-spacing: 0.08em;
-}
-
-.wordmark em {
-  color: var(--terracotta);
-  font-style: italic;
+  align-items: center;
+  transform: translateY(6px);
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 2rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
+.nav a {
+  position: relative;
+  padding: 0.15rem 0;
+  transition: color var(--motion-fast) ease;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: rgba(184, 137, 106, 0.56);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-fast) ease;
+}
+
+.nav a:hover::after,
+.nav a:focus-visible::after,
+.nav a[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+.nav a[data-active="true"] {
+  color: var(--ink);
+}
+
 .cta {
   color: var(--ink);
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(184, 137, 106, 0.42);
-  border-radius: 999px;
 }
 
 @media (max-width: 720px) {
   .header {
-    width: min(calc(100% - 32px), var(--max-width));
+    padding: 0;
+  }
+
+  .wordmark {
+    transform: translateY(5px);
   }
 
   .nav {
-    gap: 14px;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
+    gap: 0.82rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+  }
+
+  .nav a:nth-child(3) {
+    display: none;
   }
 }
