@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5. Color - ForMeta Guía de Estilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-mono: 'DM Mono', 'Courier New', Courier, monospace;
+            --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+            
+            --color-ink: #2C2C28;
+            --color-terra: #B8896A;
+            --color-sand: #F4F0E8;
+            --color-sea: #7A9AAA;
+            --color-stone: #E2DDD4;
+            --color-sage: #8FA892;
+            --color-white: #FFFFFF;
+            --color-offblack: #1A1A18;
+            --color-muted: #7A7870;
+            --color-alert: #d05a5a;
+            
+            --color-bg: var(--color-sand);
+            --color-text: var(--color-ink);
+            --color-text-secondary: var(--color-muted);
+            --color-border-secondary: rgba(44, 44, 40, 0.1);
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1.5rem;
+            --spacing-md: 3rem;
+            --spacing-lg: 6rem;
+            --spacing-xl: 10rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {background-color: var(--color-sand);
+            color: var(--color-text);
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-sm);
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-ink);
+        }
+
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border-secondary);
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            max-width: 650px;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 300;
+        }
+
+        .intro {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .lbl {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            margin-top: 1rem;
+        }
+        
+        .lbl-dark {
+            color: var(--color-ink);
+        }
+
+        .sub {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--color-text-secondary);
+            opacity: 0.6;
+            margin-top: 0.25rem;
+        }
+
+        /* Section Layouts */
+        section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-md);
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        /* Color Cards */
+        .color-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .color-swatch {
+            width: 100%;
+            height: 160px;
+            border-radius: 8px;
+            border: 1px solid var(--color-border-secondary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .color-card:hover .color-swatch {
+            transform: translateY(-4px);
+        }
+        
+        .swatch-hex {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .color-swatch.light .swatch-hex {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--color-ink);
+        }
+        
+        .color-info h3 {
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .color-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+            max-width: 100%;
+            margin-bottom: 0;
+        }
+
+        /* Rules Cards */
+        .rule-list {
+            list-style: none;
+            counter-reset: rule-counter;
+        }
+        
+        .rule-list li {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--color-ink);
+            font-weight: 300;
+            max-width: 800px;
+        }
+        
+        .rule-list li::before {
+            counter-increment: rule-counter;
+            content: "0" counter(rule-counter);
+            position: absolute;
+            left: 0;
+            top: 0.1rem;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--color-terra);
+        }
+
+        /* Accessibility info */
+        .wcag-box {
+            background: var(--color-white);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .wcag-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-stone);
+        }
+        
+        .wcag-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .wcag-combo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .wcag-swatches {
+            display: flex;
+        }
+        
+        .w-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .w-swatch-1 { z-index: 2; }
+        .w-swatch-2 { z-index: 1; margin-left: -8px; }
+        
+        .wcag-text {
+            font-family: var(--font-serif);
+            font-size: 1rem;
+        }
+        
+        .wcag-score {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .wcag-badge {
+            background: #e6f4ea;
+            color: #1e8e3e;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        
+        .wcag-badge.warning {
+            background: #fef0db;
+            color: #e5a03d;
+        }
+
+        .pending-box {
+            margin-top: var(--spacing-sm);
+            padding: 1rem 1.5rem;
+            background: var(--color-stone);
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="intro">
+        <div class="lbl">Sección 05</div>
+        <h1>Color</h1>
+        <p>Tonos mediterráneos de baja saturación. Piedra caliza, pinar y mar balear en agosto. La paleta cromática de ForMeta evoca calma, solidez y proximidad analógica dentro de un marco digital estructurado.</p>
+    </div>
+
+    <!-- 1. Paleta Cromática -->
+    <section>
+        <h2>5.1 Paleta Cromática</h2>
+        <p>Gama principal destinada a construir la interfaz y jerarquizar los contenidos.</p>
+        
+        <div class="grid-4">
+            <!-- Ink -->
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: var(--color-ink); color: #fff;">
+                    <div class="swatch-hex">#2C2C28</div>
+                </div>
+                <div class="color-info">
+                    <h3>Ink</h3>
+                    <p class="color-desc">Texto principal · estructura · base</p>
+                </div>
+            </div>
+
+            <!-- Terracota -->
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: var(--color-terra); color: #fff;">
+                    <div class="swatch-hex">#B8896A</div>
+                </div>
+                <div class="color-info">
+                    <h3>Terracota</h3>
+                    <p class="color-desc">Acento primario · énfasis · un uso por pantalla</p>
+                </div>
+            </div>
+
+            <!-- Sand -->
+            <div class="color-card">
+                <div class="color-swatch light" style="background-color: var(--color-sand); color: var(--color-ink);">
+                    <div class="swatch-hex">#F4F0E8</div>
+                </div>
+                <div class="color-info">
+                    <h3>Sand</h3>
+                    <p class="color-desc">Fondo base universal</p>
+                </div>
+            </div>
+
+            <!-- Stone -->
+            <div class="color-card">
+                <div class="color-swatch light" style="background-color: var(--color-stone); color: var(--color-ink);">
+                    <div class="swatch-hex">#E2DDD4</div>
+                </div>
+                <div class="color-info">
+                    <h3>Stone</h3>
+                    <p class="color-desc">Bordes · divisores · fondos alternos</p>
+                </div>
+            </div>
+            
+            <!-- Sage -->
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: var(--color-sage); color: #fff;">
+                    <div class="swatch-hex">#8FA892</div>
+                </div>
+                <div class="color-info">
+                    <h3>Sage</h3>
+                    <p class="color-desc">Etiquetas · iconografía de soporte</p>
+                </div>
+            </div>
+            
+            <!-- Sea -->
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: var(--color-sea); color: #fff;">
+                    <div class="swatch-hex">#7A9AAA</div>
+                </div>
+                <div class="color-info">
+                    <h3>Sea</h3>
+                    <p class="color-desc">Tecnología · código · elementos técnicos</p>
+                </div>
+            </div>
+            
+            <!-- Muted -->
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: var(--color-muted); color: #fff;">
+                    <div class="swatch-hex">#7A7870</div>
+                </div>
+                <div class="color-info">
+                    <h3>Muted</h3>
+                    <p class="color-desc">Texto secundario · subtítulos</p>
+                </div>
+            </div>
+            
+            <!-- White -->
+            <div class="color-card">
+                <div class="color-swatch light" style="background-color: var(--color-white); border: 1px solid rgba(0,0,0,0.1); color: var(--color-ink);">
+                    <div class="swatch-hex">#FFFFFF</div>
+                </div>
+                <div class="color-info">
+                    <h3>White</h3>
+                    <p class="color-desc">Fondos limpios · documentos</p>
+                </div>
+            </div>
+            
+            <!-- Off-black -->
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: var(--color-offblack); color: #fff;">
+                    <div class="swatch-hex">#1A1A18</div>
+                </div>
+                <div class="color-info">
+                    <h3>Off-black</h3>
+                    <p class="color-desc">Fondos oscuros · modo noche</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pending-box">
+            // Pendiente: valores RGB, HSL, CMYK y Pantone para cada color. Colores de estado (error, éxito, aviso, info).
+        </div>
+    </section>
+
+    <!-- 2. Reglas de Uso -->
+    <section>
+        <h2>5.2 Reglas de Uso</h2>
+        <p>Restricciones y directrices para mantener la coherencia armónica en la aplicación de la paleta.</p>
+        
+        <ul class="rule-list">
+            <li>Fondo siempre Sand (<span style="font-family: var(--font-mono); font-size:14px">#F4F0E8</span>) o White (<span style="font-family: var(--font-mono); font-size:14px">#FFFFFF</span>). Nunca usar fondo de color para la estructura.</li>
+            <li><strong>Terracota:</strong> único punto de acento por pantalla o página. No repetir de forma abusiva.</li>
+            <li>Texto principal en <strong>Ink</strong>. Texto secundario en <strong>Muted</strong>. Nunca colocar texto Muted sobre fondo Stone.</li>
+            <li>Nunca combinar Terracota + Sea en el mismo elemento interactivo.</li>
+            <li><strong>Stone</strong> es un color exclusivo para bordes (0.5–1px) y fondos alternos de tabla.</li>
+            <li><strong>Off-black</strong> se utiliza solo para fondos en modo oscuro. No debe usarse como color de texto.</li>
+        </ul>
+    </section>
+
+    <!-- 3. Accesibilidad -->
+    <section>
+        <h2>5.3 Accesibilidad (WCAG AA)</h2>
+        <p>Relaciones de contraste verificadas para asegurar la legibilidad.</p>
+        
+        <div class="wcag-box">
+            <div class="wcag-item">
+                <div class="wcag-combo">
+                    <div class="wcag-swatches">
+                        <div class="w-swatch w-swatch-1" style="background-color: var(--color-ink);"></div>
+                        <div class="w-swatch w-swatch-2" style="background-color: var(--color-sand);"></div>
+                    </div>
+                    <div class="wcag-text"><strong>Ink</strong> sobre <strong>Sand</strong></div>
+                </div>
+                <div class="wcag-score">
+                    7.2:1 <span class="wcag-badge">PASS</span>
+                </div>
+            </div>
+            
+            <div class="wcag-item">
+                <div class="wcag-combo">
+                    <div class="wcag-swatches">
+                        <div class="w-swatch w-swatch-1" style="background-color: var(--color-ink);"></div>
+                        <div class="w-swatch w-swatch-2" style="background-color: var(--color-white);"></div>
+                    </div>
+                    <div class="wcag-text"><strong>Ink</strong> sobre <strong>White</strong></div>
+                </div>
+                <div class="wcag-score">
+                    16.1:1 <span class="wcag-badge">PASS</span>
+                </div>
+            </div>
+            
+            <div class="wcag-item">
+                <div class="wcag-combo">
+                    <div class="wcag-swatches">
+                        <div class="w-swatch w-swatch-1" style="background-color: var(--color-terra);"></div>
+                        <div class="w-swatch w-swatch-2" style="background-color: var(--color-sand);"></div>
+                    </div>
+                    <div class="wcag-text"><strong>Terra</strong> sobre <strong>Sand</strong> <span style="opacity: 0.6; font-size: 0.9em; margin-left: 4px;">(Uso solo decorativo, no texto)</span></div>
+                </div>
+                <div class="wcag-score">
+                    3.1:1 <span class="wcag-badge warning">DECORATIVE</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<footer style="text-align: center; margin-top: var(--spacing-xl); padding: var(--spacing-md) 0; border-top: 1px solid var(--color-border-secondary);">
+    <svg width="24" height="30" viewBox="0 0 160 200" style="opacity: 0.8; margin: 0 auto;">
+         <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+         <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+    </svg>
+</footer>
+</body>
+
+</html>

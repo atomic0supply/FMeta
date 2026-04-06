@@ -16,21 +16,27 @@ const STORAGE_KEY = "roqueta_timer";
 type ActiveTimer = {
   projectId: string;
   projectName: string;
-  startedAt: number; // Date.now() ms
+  startedAt: number;
 };
 
 type TimerContextValue = {
   activeTimer: ActiveTimer | null;
-  elapsed: number; // seconds
-  start: (projectId: string, projectName: string) => void;
-  stop: () => Promise<void>;
+  elapsed: number;
+  pendingStop: boolean;
+  start: (projectId?: string, projectName?: string) => void;
+  stop: () => void;
+  confirmStop: (notes: string, projectId: string, projectName: string) => Promise<void>;
+  cancelStop: () => void;
 };
 
 const TimerContext = createContext<TimerContextValue>({
   activeTimer: null,
   elapsed: 0,
+  pendingStop: false,
   start: () => {},
-  stop: async () => {},
+  stop: () => {},
+  confirmStop: async () => {},
+  cancelStop: () => {},
 });
 
 export function useTimer() {
@@ -40,64 +46,69 @@ export function useTimer() {
 export function TimerProvider({ children }: { children: React.ReactNode }) {
   const [activeTimer, setActiveTimer] = useState<ActiveTimer | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [pendingStop, setPendingStop] = useState(false);
+  const pendingTimerRef = useRef<ActiveTimer | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Restore from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as ActiveTimer;
-        if (parsed.projectId && parsed.startedAt) {
-          setActiveTimer(parsed);
-        }
+        if (parsed.projectId && parsed.startedAt) setActiveTimer(parsed);
       }
     } catch {
       localStorage.removeItem(STORAGE_KEY);
     }
   }, []);
 
-  // Tick every second when active
   useEffect(() => {
     if (!activeTimer) {
       if (intervalRef.current) clearInterval(intervalRef.current);
       setElapsed(0);
       return;
     }
-
     setElapsed(Math.floor((Date.now() - activeTimer.startedAt) / 1000));
-
     intervalRef.current = setInterval(() => {
       setElapsed(Math.floor((Date.now() - activeTimer.startedAt) / 1000));
     }, 1000);
-
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [activeTimer]);
 
-  const start = useCallback((projectId: string, projectName: string) => {
+  const start = useCallback((projectId = "", projectName = "") => {
     const timer: ActiveTimer = { projectId, projectName, startedAt: Date.now() };
     setActiveTimer(timer);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(timer));
   }, []);
 
-  const stop = useCallback(async () => {
+  const stop = useCallback(() => {
     if (!activeTimer) return;
-    const endedAt = Date.now();
-    const snapshot = { ...activeTimer };
-    setActiveTimer(null);
-    localStorage.removeItem(STORAGE_KEY);
-    await saveTimeEntry(
-      snapshot.projectId,
-      snapshot.projectName,
-      snapshot.startedAt,
-      endedAt,
-    );
+    pendingTimerRef.current = { ...activeTimer };
+    setPendingStop(true);
   }, [activeTimer]);
 
+  const confirmStop = useCallback(async (notes: string, projectId: string, projectName: string) => {
+    const snapshot = pendingTimerRef.current;
+    if (!snapshot) return;
+    const endedAt = Date.now();
+    setPendingStop(false);
+    pendingTimerRef.current = null;
+    setActiveTimer(null);
+    localStorage.removeItem(STORAGE_KEY);
+    await saveTimeEntry(projectId, projectName, snapshot.startedAt, endedAt, notes);
+  }, []);
+
+  const cancelStop = useCallback(() => {
+    pendingTimerRef.current = null;
+    setPendingStop(false);
+  }, []);
+
   return (
-    <TimerContext.Provider value={{ activeTimer, elapsed, start, stop }}>
+    <TimerContext.Provider
+      value={{ activeTimer, elapsed, pendingStop, start, stop, confirmStop, cancelStop }}
+    >
       {children}
     </TimerContext.Provider>
   );
@@ -107,9 +118,7 @@ export function formatElapsed(seconds: number): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
-  if (h > 0) {
-    return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-  }
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 

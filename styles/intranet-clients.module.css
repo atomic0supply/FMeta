@@ -30,6 +30,9 @@
 /* Buttons */
 .btnNew {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 9px 20px;
   border: 1px solid var(--ink);
   border-radius: 999px;
@@ -70,13 +73,13 @@
 }
 
 .btnDanger {
-  color: #b85a4a;
-  border-color: rgba(184, 90, 74, 0.4);
+  color: var(--danger);
+  border-color: rgba(208, 90, 90, 0.4);
 }
 
 .btnDanger:hover {
-  color: #b85a4a;
-  border-color: #b85a4a;
+  color: var(--danger);
+  border-color: var(--danger);
 }
 
 /* List */
@@ -97,7 +100,7 @@
   grid-template-columns: 1.6fr 1fr 1fr 1.4fr 160px;
   gap: 16px;
   padding: 10px 20px;
-  background: rgba(226, 221, 212, 0.5);
+  background: rgba(244, 240, 232, 0.9);
   border-bottom: 1px solid var(--line);
   font-family: var(--font-mono), monospace;
   font-size: 0.6rem;

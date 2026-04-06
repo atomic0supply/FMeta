@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { formatDuration, formatElapsed, useTimer } from "@/lib/timerContext";
 import {
+  deleteTimeEntry,
   subscribeToTimeEntries,
   type TimeEntry,
 } from "@/lib/timeEntries";
@@ -40,6 +41,7 @@ function timeLabel(ts: { seconds: number }): string {
 export function ProjectTimeTab({ projectId, projectName }: Props) {
   const { activeTimer, elapsed, start, stop } = useTimer();
   const [entries, setEntries] = useState<TimeEntry[]>([]);
+  const [confirmDeleteEntry, setConfirmDeleteEntry] = useState<string | null>(null);
 
   const isThisProject = activeTimer?.projectId === projectId;
   const otherProjectActive =
@@ -193,6 +195,22 @@ export function ProjectTimeTab({ projectId, projectName }: Props) {
                     <span className={styles.sessionDuration}>
                       {formatDuration(entry.durationSeconds)}
                     </span>
+                    <button
+                      type="button"
+                      className={`${styles.btnDeleteEntry} ${confirmDeleteEntry === entry.id ? styles.btnDeleteEntryConfirm : ""}`}
+                      onClick={() => {
+                        if (confirmDeleteEntry === entry.id) {
+                          void deleteTimeEntry(entry.id);
+                          setConfirmDeleteEntry(null);
+                        } else {
+                          setConfirmDeleteEntry(entry.id);
+                        }
+                      }}
+                      onBlur={() => setConfirmDeleteEntry(null)}
+                      title="Eliminar sesión"
+                    >
+                      {confirmDeleteEntry === entry.id ? "¿Seguro?" : "×"}
+                    </button>
                   </div>
                 ))}
                 <div className={styles.dayTotal}>

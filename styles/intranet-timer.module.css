@@ -68,8 +68,8 @@
 }
 
 .btnStop:hover {
-  background: #b85a4a;
-  border-color: #b85a4a;
+  background: var(--danger);
+  border-color: var(--danger);
 }
 
 .idleBlock {
@@ -259,7 +259,7 @@
 .sessionRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   padding: 10px 16px;
   border-bottom: 1px solid var(--line-soft);
 }
@@ -273,6 +273,7 @@
   font-size: 0.7rem;
   color: var(--muted);
   letter-spacing: 0.04em;
+  flex: 1;
 }
 
 .sessionDuration {
@@ -280,6 +281,35 @@
   font-size: 0.7rem;
   color: var(--ink);
   letter-spacing: 0.04em;
+}
+
+.btnDeleteEntry {
+  background: none;
+  border: none;
+  padding: 2px 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  opacity: 0;
+  transition:
+    opacity var(--motion-fast) var(--ease-smooth),
+    color var(--motion-fast) var(--ease-smooth);
+  border-radius: 4px;
+}
+
+.sessionRow:hover .btnDeleteEntry {
+  opacity: 1;
+}
+
+.btnDeleteEntry:hover {
+  color: var(--danger);
+}
+
+.btnDeleteEntryConfirm {
+  opacity: 1 !important;
+  color: var(--danger);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
 }
 
 .dayTotal {

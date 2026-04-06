@@ -27,6 +27,11 @@ export type Project = {
   description: string;
   tags: string[];
   notes: string;
+  githubUrl: string;
+  firebaseUrl: string;
+  localPath: string;
+  devUrl: string;
+  externalUrl: string;
   createdAt: Timestamp | null;
 };
 

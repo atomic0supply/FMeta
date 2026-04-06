@@ -66,7 +66,7 @@
   right: 0;
   bottom: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--terracotta), var(--sea));
+  background: linear-gradient(90deg, var(--terracotta), rgba(184, 137, 106, 0));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--motion-base) var(--ease-smooth);

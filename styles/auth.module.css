@@ -115,13 +115,13 @@
 }
 
 .error {
-  background: rgba(184, 137, 106, 0.12);
-  color: #7b4124;
+  background: rgba(208, 90, 90, 0.1);
+  color: var(--danger);
 }
 
 .message {
   background: rgba(143, 168, 146, 0.15);
-  color: #365343;
+  color: #4a7a4e;
 }
 
 .metaRow {

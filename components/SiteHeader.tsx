@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import { BrandMark } from "@/components/BrandMark";
 import styles from "@/styles/site-header.module.css";
 
 const sections = [
@@ -59,7 +58,14 @@ export function SiteHeader() {
       data-scrolled={scrolled ? "true" : "false"}
     >
       <a className={styles.wordmark} href="#top" aria-label="ForMeta - inicio">
-        <BrandMark size="header" showLabel={false} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/brand/formeta_01_sand.svg"
+          alt="ForMeta"
+          className={styles.wordmarkImg}
+          width={170}
+          height={80}
+        />
       </a>
       <nav className={styles.nav} aria-label="Principal">
         {sections.map((section) => (

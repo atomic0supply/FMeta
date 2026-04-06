@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForMeta Guía de Estilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-mono: 'DM Mono', 'Courier New', Courier, monospace;
+            --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+            
+            --color-ink: #2C2C28;
+            --color-terra: #B8896A;
+            --color-sand: #F4F0E8;
+            --color-sea: #7A9AAA;
+            --color-stone: #E2DDD4;
+            --color-sage: #8FA892;
+            --color-white: #FFFFFF;
+            --color-offblack: #1A1A18;
+            --color-muted: #7A7870;
+            
+            --color-bg: var(--color-sand);
+            --color-text: var(--color-ink);
+            --color-text-secondary: var(--color-muted);
+            --color-border-secondary: rgba(44, 44, 40, 0.1);
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1.5rem;
+            --spacing-md: 3rem;
+            --spacing-lg: 6rem;
+            --spacing-xl: 10rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-sand);
+            color: var(--color-text);
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-sm) var(--spacing-md);
+            flex: 1;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 4.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-ink);
+            letter-spacing: -0.02em;
+        }
+
+        p.lead {
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        .index-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .index-list a {
+            display: flex;
+            align-items: baseline;
+            text-decoration: none;
+            color: var(--color-ink);
+            padding: 1.5rem;
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 8px;
+            background: var(--color-white);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s, border-color 0.4s;
+        }
+
+        .index-list a:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+            border-color: var(--color-terra);
+        }
+
+        .chapter-num {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--color-terra);
+            width: 40px;
+            flex-shrink: 0;
+            padding-right: 1rem;
+        }
+
+        .chapter-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
+
+        .chapter-desc {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-left: auto;
+            padding-left: 2rem;
+            text-align: right;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-md) 0;
+            border-top: 1px solid var(--color-border-secondary);
+        }
+
+        @media(max-width: 600px) {
+            .index-list a { flex-direction: column; }
+            .chapter-desc { margin-left: 0; padding-left: 40px; text-align: left; margin-top: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ForMeta</h1>
+    <p class="lead">Guía de Estilo & Identidad</p>
+
+    <ul class="index-list">
+        <li><a href="01_introduccion.html">
+            <span class="chapter-num">01</span><span class="chapter-title">Introducción</span><span class="chapter-desc">Propósito y alcance</span>
+        </a></li>
+        <li><a href="02_marca.html">
+            <span class="chapter-num">02</span><span class="chapter-title">Marca</span><span class="chapter-desc">Manifiesto IApp y Tono</span>
+        </a></li>
+        <li><a href="03_logo.html">
+            <span class="chapter-num">03</span><span class="chapter-title">Logo</span><span class="chapter-desc">Construcción y usos</span>
+        </a></li>
+        <li><a href="04_tipografia.html">
+            <span class="chapter-num">04</span><span class="chapter-title">Tipografía</span><span class="chapter-desc">Escala y sistema</span>
+        </a></li>
+        <li><a href="05_color.html">
+            <span class="chapter-num">05</span><span class="chapter-title">Color</span><span class="chapter-desc">Paleta y contrastes</span>
+        </a></li>
+        <li><a href="06_iconos.html">
+            <span class="chapter-num">06</span><span class="chapter-title">Iconografía</span><span class="chapter-desc">Sistema de 5 capas</span>
+        </a></li>
+        <li><a href="07_ilustracion.html">
+            <span class="chapter-num">07</span><span class="chapter-title">Ilustración / Gráficos</span><span class="chapter-desc">Texturas y fotografía</span>
+        </a></li>
+        <li><a href="08_animacion.html">
+            <span class="chapter-num">08</span><span class="chapter-title">Animación y Motion</span><span class="chapter-desc">Interacciones</span>
+        </a></li>
+        <li><a href="09_espaciado.html">
+            <span class="chapter-num">09</span><span class="chapter-title">Espaciado y Grid</span><span class="chapter-desc">Sistemas y columnas</span>
+        </a></li>
+        <li><a href="10_componentes.html">
+            <span class="chapter-num">10</span><span class="chapter-title">Componentes UI</span><span class="chapter-desc">Botones e inputs</span>
+        </a></li>
+        <li><a href="11_voz.html">
+            <span class="chapter-num">11</span><span class="chapter-title">Voz y Tono</span><span class="chapter-desc">Principios de copy</span>
+        </a></li>
+        <li><a href="12_aplicaciones.html">
+            <span class="chapter-num">12</span><span class="chapter-title">Aplicaciones</span><span class="chapter-desc">Digital e imprenta</span>
+        </a></li>
+        <li><a href="13_recursos.html">
+            <span class="chapter-num">13</span><span class="chapter-title">Recursos</span><span class="chapter-desc">Assets y librerías</span>
+        </a></li>
+    </ul>
+</div>
+
+<footer>
+    <svg width="24" height="30" viewBox="0 0 160 200" style="opacity: 0.8; margin: 0 auto;">
+         <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+         <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+    </svg>
+</footer>
+
+</body>
+</html>

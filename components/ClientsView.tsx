@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Plus, X } from "lucide-react";
 
 import {
   createClient,
@@ -111,6 +112,7 @@ export function ClientsView() {
           <h1 className={styles.title}>Clientes</h1>
         </div>
         <button type="button" onClick={openNew} className={styles.btnNew}>
+          <Plus width={14} height={14} strokeWidth={2} />
           Nuevo cliente
         </button>
       </div>
@@ -186,7 +188,7 @@ export function ClientsView() {
             className={styles.drawerClose}
             aria-label="Cerrar"
           >
-            ✕
+            <X width={16} height={16} strokeWidth={1.5} />
           </button>
         </div>
 

@@ -14,22 +14,13 @@
   perspective: 1200px;
 }
 
-.shell[data-size="header"] .rings path {
-  stroke-width: 1.35;
-}
-
-.shell[data-size="header"]:hover .rings path,
-.shell[data-size="header"]:focus-visible .rings path {
-  stroke-width: 2.7;
-}
-
 .halo {
   position: absolute;
   inset: 12% 10%;
   border-radius: 50%;
   background:
     radial-gradient(circle at center, rgba(226, 221, 212, 0.5), transparent 54%),
-    radial-gradient(circle at center, rgba(122, 154, 170, 0.08), transparent 70%);
+    radial-gradient(circle at center, rgba(184, 137, 106, 0.06), transparent 70%);
   filter: blur(18px);
   animation: haloPulse 7.4s ease-in-out infinite;
 }
@@ -41,66 +32,44 @@
 
 .mark {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   position: relative;
+  display: grid;
+  place-items: center;
   transition: transform 220ms ease-out;
   transform-style: preserve-3d;
 }
 
-.orbit {
+.symbol,
+.ecoOverlay {
   width: 100%;
   height: 100%;
 }
 
-.mark svg {
-  width: 100%;
-  height: 100%;
+.symbol {
+  object-fit: contain;
+}
+
+.ecoOverlay {
+  position: absolute;
+  inset: 0;
   overflow: visible;
 }
 
-.rings path {
+/* Eco ripple ring */
+.ecoRing {
   fill: none;
-  stroke: rgba(44, 44, 40, 0.96);
-  stroke-width: 1;
-  stroke-linecap: round;
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  opacity: 0.24;
-  transition:
-    stroke var(--motion-base) var(--ease-smooth),
-    stroke-width var(--motion-fast) var(--ease-smooth),
-    stroke-dashoffset var(--motion-base) var(--ease-smooth);
+  stroke: var(--terracotta);
+  stroke-width: 0.6;
+  opacity: 0;
+  transform-origin: 80px 130px;
 }
 
-.rings path:nth-child(2) {
-  stroke: rgba(44, 44, 40, 0.78);
+.ecoActive {
+  animation: ecoRipple 900ms var(--ease-smooth) forwards;
 }
 
-.rings path:nth-child(3) {
-  stroke: rgba(44, 44, 40, 0.9);
-}
-
-.mark[data-intro="running"] .rings path:nth-child(1) {
-  animation: drawArc 920ms var(--ease-smooth) forwards 300ms;
-}
-
-.mark[data-intro="running"] .rings path:nth-child(2) {
-  animation: drawArc 860ms var(--ease-smooth) forwards 520ms;
-}
-
-.mark[data-intro="running"] .rings path:nth-child(3) {
-  animation: drawArc 760ms var(--ease-smooth) forwards 740ms;
-}
-
-.mark[data-intro="running"] .orbit {
-  animation: settleAngle 980ms var(--ease-smooth) both 1300ms;
-}
-
-.mark[data-intro="done"] .rings path {
-  stroke-dashoffset: 0;
-  opacity: 1;
-}
-
+/* Label */
 .label {
   position: relative;
   min-height: 2.4rem;
@@ -109,6 +78,11 @@
   font-family: var(--font-display), serif;
   font-size: clamp(2.2rem, 3.6vw, 3rem);
   letter-spacing: 0.12em;
+}
+
+.label em {
+  font-style: italic;
+  color: var(--terracotta);
 }
 
 .fm,
@@ -144,29 +118,14 @@
   transform: translateY(0);
 }
 
-@keyframes drawArc {
-  from {
-    opacity: 0.24;
-    stroke-dashoffset: 100;
-  }
-
-  to {
-    opacity: 1;
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes settleAngle {
+@keyframes ecoRipple {
   0% {
-    transform: rotate(-7deg);
+    opacity: 0.72;
+    transform: scale(1);
   }
-
-  62% {
-    transform: rotate(2deg);
-  }
-
   100% {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: scale(2.4);
   }
 }
 
@@ -176,7 +135,6 @@
     opacity: 0.72;
     transform: scale(0.985);
   }
-
   50% {
     opacity: 1;
     transform: scale(1.02);
@@ -188,23 +146,14 @@
     animation: none;
   }
 
-  .mark svg {
-    animation: none;
-  }
-
   .mark,
   .mark * {
     transition: none !important;
+    animation: none !important;
   }
 
-  .mark[data-intro="running"] .rings path,
-  .mark[data-intro="running"] .orbit {
-    animation: none;
-  }
-
-  .rings path {
-    stroke-dashoffset: 0;
-    opacity: 1;
+  .ecoRing {
+    opacity: 0;
   }
 }
 
@@ -216,10 +165,6 @@
   .shell[data-size="header"] {
     width: 84px;
   }
-
-  .mark[data-intro="running"] .orbit {
-    animation-name: settleAngleMobile;
-  }
 }
 
 @media (max-width: 720px) {
@@ -229,19 +174,5 @@
 
   .shell[data-size="header"] {
     width: 74px;
-  }
-}
-
-@keyframes settleAngleMobile {
-  0% {
-    transform: rotate(-4deg);
-  }
-
-  62% {
-    transform: rotate(1.25deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
   }
 }

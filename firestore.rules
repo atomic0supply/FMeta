@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Solo usuarios autenticados pueden acceder a todo
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Clientes
+    match /clients/{clientId} {
+      allow read, write: if isAuth();
+    }
+
+    // Proyectos y sus subcolecciones
+    match /projects/{projectId} {
+      allow read, write: if isAuth();
+
+      // Endpoints del proyecto
+      match /endpoints/{endpointId} {
+        allow read, write: if isAuth();
+      }
+
+      // Tareas del proyecto (kanban)
+      match /tasks/{taskId} {
+        allow read, write: if isAuth();
+      }
+
+      // APIs externas del proyecto
+      match /externalApis/{apiId} {
+        allow read, write: if isAuth();
+      }
+    }
+
+    // Entradas de tiempo
+    match /timeEntries/{entryId} {
+      allow read, write: if isAuth();
+    }
+
+    // Links globales (bookmarks)
+    match /links/{linkId} {
+      allow read, write: if isAuth();
+    }
+
+    // Perfiles de usuario — solo el propio usuario o admins
+    match /users/{uid} {
+      allow read, write: if isAuth() && request.auth.uid == uid;
+    }
+  }
+}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 
 import {
   deleteClient,
@@ -165,7 +166,7 @@ export function ClientDetailView({ id }: { id: string }) {
                 onClick={() => setEditing(false)}
                 className={styles.drawerClose}
               >
-                ✕
+                <X width={16} height={16} strokeWidth={1.5} />
               </button>
             </div>
             <form onSubmit={(e) => void handleSave(e)} className={styles.form}>

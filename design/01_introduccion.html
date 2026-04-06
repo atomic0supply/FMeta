@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01. Introducción - ForMeta Guía de Estilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>:root {
+            --font-mono: 'DM Mono', 'Courier New', Courier, monospace;
+            --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+            --color-ink: #2C2C28;
+            --color-terra: #B8896A;
+            --color-sand: #F4F0E8;
+            --color-sea: #7A9AAA;
+            --color-stone: #E2DDD4;
+            --color-sage: #8FA892;
+            --color-white: #FFFFFF;
+            --color-offblack: #1A1A18;
+            --color-muted: #7A7870;
+            --color-alert: #d05a5a;
+            --color-bg: var(--color-sand);
+            --color-text: var(--color-ink);
+            --color-text-secondary: var(--color-muted);
+            --color-border-secondary: rgba(44, 44, 40, 0.1);
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1.5rem;
+            --spacing-md: 3rem;
+            --spacing-lg: 6rem;
+            --spacing-xl: 10rem;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--color-sand); color: var(--color-text); font-family: var(--font-serif); font-weight: 300; font-size: 1.15rem; line-height: 1.8; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: var(--spacing-md) var(--spacing-sm); flex: 1; }
+        h1 { font-family: var(--font-serif); font-size: 3.5rem; font-weight: 300; margin-bottom: var(--spacing-xs); color: var(--color-ink); }
+        h2 { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300; margin-bottom: var(--spacing-sm); padding-bottom: 1rem; border-bottom: 1px solid var(--color-border-secondary); }
+        h3 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; color: var(--color-ink); }
+        p { color: var(--color-text-secondary); max-width: 650px; margin-bottom: var(--spacing-sm); }
+        .intro { margin-bottom: var(--spacing-xl); }
+        .lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-text-secondary); margin-top: 1rem; margin-bottom: 0.5rem; }
+        section { margin-bottom: var(--spacing-xl); }
+        footer { text-align: center; margin-top: var(--spacing-xl); padding: var(--spacing-md) 0; border-top: 1px solid var(--color-border-secondary); }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="intro">
+        <div class="lbl">Sección 01</div>
+        <h1>Introducción</h1>
+    </div>
+    
+    <style>
+        .table-wrapper { width: 100%; max-width: 800px; overflow-x: auto; margin-bottom: 1rem; background: var(--color-white); border-radius: 8px; border: 1px solid var(--color-border-secondary); }
+        table { width: 100%; border-collapse: collapse; font-family: var(--font-serif); font-size: 1.1rem; }
+        th, td { text-align: left; padding: 1.2rem; border-bottom: 1px solid var(--color-border-secondary); }
+        th { font-weight: 500; color: var(--color-ink); background: rgba(0,0,0,0.02); font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        tr:last-child td { border-bottom: none; }
+        td { color: var(--color-text-secondary); vertical-align: top; }
+        strong { font-weight: 500; color: var(--color-ink); }
+        .version-tag { font-family: var(--font-mono); font-size: 0.85rem; background: var(--color-stone); padding: 0.3rem 0.6rem; border-radius: 4px; color: var(--color-ink); font-weight: 700; }
+        .date-col { white-space: nowrap; }
+</style>
+    <p style="margin-top: -3rem; margin-bottom: 3rem; font-size: 1.5rem;">Propósito y control de cambios.</p>
+    <section>
+        <h2>Propósito y alcance del documento</h2>
+        <p>Esta guía define la identidad visual y verbal de ForMeta. Existe para que cualquier persona que trabaje con la marca — interna o externamente — tome decisiones coherentes sin tener que preguntar.</p>
+        <p>No es un manual de restricciones. Es una descripción de quiénes somos, traducida a decisiones concretas de diseño, lenguaje y comunicación.</p>
+        <p>El documento cubre: sistema de identidad visual (logo, color, tipografía, símbolo), voz y tono, y criterios de aplicación en los contextos donde ForMeta aparece. No cubre decisiones de producto, arquitectura técnica ni procesos internos.</p>
+        
+        <br>
+        
+        <h2>Cómo usar esta guía</h2>
+        <p>Las secciones marcadas como fundacional (marca, logo, color, tipografía) no se negocian — son la base. Las secciones marcadas como aplicación (componentes UI, papelería, plantillas) son puntos de partida que se adaptan al contexto.</p>
+        <p>Cuando algo no esté cubierto aquí, la pregunta correcta es: <strong>¿esto es coherente con el manifiesto de la sección 02?</strong> Si la respuesta es no, no se hace. Si la respuesta es sí, se hace y se documenta aquí para la próxima versión.</p>
+        
+        <br><br>
+
+        <h2>Versión y control de cambios</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th style="width: 15%;">Versión</th><th style="width: 15%;">Fecha</th><th>Cambios</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="version-tag">v1.0</span></td><td class="date-col">2025</td><td>Primera versión. Fundamentos de identidad, logo en dots, símbolo gota, sistema tipográfico, paleta, motion, voz.</td></tr>
+                    <tr><td><span class="version-tag">v2.0</span></td><td class="date-col">pendiente</td><td>Componentes UI completos, papelería, plantilla comercial, manifiesto visual de fotografía.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size: 0.9rem; max-width: 800px; margin-top: 1.5rem; border-left: 2px solid var(--color-terra); padding-left: 1rem; color: var(--color-ink);">
+            La guía la aprueban los dos fundadores. Cualquier cambio en elementos fundacionales requiere acuerdo explícito de ambos y actualización del número de versión. Los cambios en aplicaciones se pueden hacer por consenso informal y se documentan en el siguiente ciclo.
+        </p>
+    </section>
+
+</div>
+<footer>
+    <svg width="24" height="30" viewBox="0 0 160 200" style="opacity: 0.8; margin: 0 auto;">
+         <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+         <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+    </svg>
+</footer>
+</body>
+</html>

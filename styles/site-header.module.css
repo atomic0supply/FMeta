@@ -25,7 +25,18 @@
 .wordmark {
   display: inline-flex;
   align-items: center;
-  transform: translateY(6px);
+}
+
+.wordmarkImg {
+  height: 32px;
+  width: auto;
+  animation: breathe 4.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
 }
 
 .nav {
@@ -75,10 +86,6 @@
 @media (max-width: 720px) {
   .header {
     padding: 0;
-  }
-
-  .wordmark {
-    transform: translateY(5px);
   }
 
   .nav {

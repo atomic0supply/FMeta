@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Plus, X } from "lucide-react";
 
 import { subscribeToClients, type Client } from "@/lib/clients";
 import {
@@ -29,6 +30,11 @@ const emptyForm: ProjectInput = {
   description: "",
   tags: [],
   notes: "",
+  githubUrl: "",
+  firebaseUrl: "",
+  localPath: "",
+  devUrl: "",
+  externalUrl: "",
 };
 
 export function ProjectsView() {
@@ -77,6 +83,11 @@ export function ProjectsView() {
       description: project.description,
       tags: project.tags,
       notes: project.notes,
+      githubUrl: project.githubUrl ?? "",
+      firebaseUrl: project.firebaseUrl ?? "",
+      localPath: project.localPath ?? "",
+      devUrl: project.devUrl ?? "",
+      externalUrl: project.externalUrl ?? "",
     });
     setTagsInput(project.tags.join(", "));
     setDrawerOpen(true);
@@ -143,6 +154,7 @@ export function ProjectsView() {
           <h1 className={styles.title}>Proyectos</h1>
         </div>
         <button type="button" onClick={openNew} className={styles.btnNew}>
+          <Plus width={14} height={14} strokeWidth={2} />
           Nuevo proyecto
         </button>
       </div>
@@ -232,7 +244,7 @@ export function ProjectsView() {
             onClick={closeDrawer}
             className={styles.drawerClose}
           >
-            ✕
+            <X width={16} height={16} strokeWidth={1.5} />
           </button>
         </div>
 

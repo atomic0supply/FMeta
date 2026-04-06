@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Plus, X } from "lucide-react";
 
 import { subscribeToClients, type Client } from "@/lib/clients";
 import {
@@ -22,10 +23,13 @@ import {
   type ProjectStatus,
   updateProject,
 } from "@/lib/projects";
+import { ProjectApisTab } from "@/components/ProjectApisTab";
+import { ProjectKanbanTab } from "@/components/ProjectKanbanTab";
+import { ProjectLinksTab } from "@/components/ProjectLinksTab";
 import { ProjectTimeTab } from "@/components/ProjectTimeTab";
 import styles from "@/styles/intranet-projects.module.css";
 
-type Tab = "info" | "endpoints" | "tareas" | "tiempo";
+type Tab = "info" | "links" | "apis" | "endpoints" | "tareas" | "tiempo";
 
 const STATUS_LABELS: Record<ProjectStatus, string> = {
   activo: "Activo",
@@ -95,6 +99,11 @@ export function ProjectDetailView({ id }: { id: string }) {
       description: project.description,
       tags: project.tags,
       notes: project.notes,
+      githubUrl: project.githubUrl ?? "",
+      firebaseUrl: project.firebaseUrl ?? "",
+      localPath: project.localPath ?? "",
+      devUrl: project.devUrl ?? "",
+      externalUrl: project.externalUrl ?? "",
     });
     setTagsInput(project.tags.join(", "));
     setEditingProject(true);
@@ -239,7 +248,7 @@ export function ProjectDetailView({ id }: { id: string }) {
 
       {/* Tabs */}
       <div className={styles.tabs}>
-        {(["info", "endpoints", "tareas", "tiempo"] as Tab[]).map((tab) => (
+        {(["info", "links", "apis", "endpoints", "tareas", "tiempo"] as Tab[]).map((tab) => (
           <button
             key={tab}
             type="button"
@@ -247,6 +256,8 @@ export function ProjectDetailView({ id }: { id: string }) {
             className={`${styles.tab} ${activeTab === tab ? styles.tabActive : ""}`}
           >
             {tab === "info" && "Info"}
+            {tab === "links" && "Links"}
+            {tab === "apis" && "APIs"}
             {tab === "endpoints" && `Endpoints${endpoints.length > 0 ? ` (${endpoints.length})` : ""}`}
             {tab === "tareas" && "Tareas"}
             {tab === "tiempo" && "Tiempo"}
@@ -275,11 +286,36 @@ export function ProjectDetailView({ id }: { id: string }) {
         </div>
       )}
 
+      {/* Links tab */}
+      {activeTab === "links" && (
+        <div className={styles.tabContent}>
+          <ProjectLinksTab
+            projectId={project.id}
+            links={{
+              githubUrl: project.githubUrl ?? "",
+              firebaseUrl: project.firebaseUrl ?? "",
+              localPath: project.localPath ?? "",
+              devUrl: project.devUrl ?? "",
+              externalUrl: project.externalUrl ?? "",
+            }}
+            onUpdate={(links) => setProject((p) => p ? { ...p, ...links } : p)}
+          />
+        </div>
+      )}
+
+      {/* APIs tab */}
+      {activeTab === "apis" && (
+        <div className={styles.tabContent}>
+          <ProjectApisTab projectId={project.id} />
+        </div>
+      )}
+
       {/* Endpoints tab */}
       {activeTab === "endpoints" && (
         <div className={styles.tabContent}>
           <div className={styles.tabActions}>
             <button type="button" onClick={openNewEndpoint} className={styles.btnNew}>
+              <Plus width={14} height={14} strokeWidth={2} />
               Añadir endpoint
             </button>
           </div>
@@ -338,7 +374,7 @@ export function ProjectDetailView({ id }: { id: string }) {
               <span className={styles.drawerLabel}>
                 {editingEndpoint ? "Editar endpoint" : "Nuevo endpoint"}
               </span>
-              <button type="button" onClick={closeEndpointDrawer} className={styles.drawerClose}>✕</button>
+              <button type="button" onClick={closeEndpointDrawer} className={styles.drawerClose}><X width={16} height={16} strokeWidth={1.5} /></button>
             </div>
             <form onSubmit={(e) => void handleSaveEndpoint(e)} className={styles.form}>
               <div className={styles.field}>
@@ -372,10 +408,10 @@ export function ProjectDetailView({ id }: { id: string }) {
         </div>
       )}
 
-      {/* Tareas tab — fase 5 */}
+      {/* Tareas tab */}
       {activeTab === "tareas" && (
         <div className={styles.tabContent}>
-          <p className={styles.empty}>El módulo de tareas se construirá en la fase 5.</p>
+          <ProjectKanbanTab projectId={project.id} />
         </div>
       )}
 
@@ -393,7 +429,7 @@ export function ProjectDetailView({ id }: { id: string }) {
           <aside className={`${styles.drawer} ${styles.drawerOpen}`}>
             <div className={styles.drawerHeader}>
               <span className={styles.drawerLabel}>Editar proyecto</span>
-              <button type="button" onClick={() => setEditingProject(false)} className={styles.drawerClose}>✕</button>
+              <button type="button" onClick={() => setEditingProject(false)} className={styles.drawerClose}><X width={16} height={16} strokeWidth={1.5} /></button>
             </div>
             <form onSubmit={(e) => void handleSaveProject(e)} className={styles.form}>
               <div className={styles.field}>
@@ -428,6 +464,28 @@ export function ProjectDetailView({ id }: { id: string }) {
               <div className={styles.field}>
                 <label htmlFor="pnotes" className={styles.label}>Notas internas</label>
                 <textarea id="pnotes" name="notes" value={projectForm.notes} onChange={handleProjectField} className={`${styles.input} ${styles.textarea}`} rows={4} />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="pgithub" className={styles.label}>GitHub</label>
+                <input id="pgithub" name="githubUrl" type="text" value={projectForm.githubUrl ?? ""} onChange={handleProjectField} className={styles.input} placeholder="https://github.com/org/repo" autoComplete="off" />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="pfirebase" className={styles.label}>Firebase Console</label>
+                <input id="pfirebase" name="firebaseUrl" type="text" value={projectForm.firebaseUrl ?? ""} onChange={handleProjectField} className={styles.input} placeholder="https://console.firebase.google.com/project/..." autoComplete="off" />
+              </div>
+              <div className={styles.fieldRow}>
+                <div className={styles.field}>
+                  <label htmlFor="pdev" className={styles.label}>Dev / Staging</label>
+                  <input id="pdev" name="devUrl" type="text" value={projectForm.devUrl ?? ""} onChange={handleProjectField} className={styles.input} placeholder="https://staging.proyecto.com" autoComplete="off" />
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="pext" className={styles.label}>URL externa</label>
+                  <input id="pext" name="externalUrl" type="text" value={projectForm.externalUrl ?? ""} onChange={handleProjectField} className={styles.input} placeholder="https://proyecto.com" autoComplete="off" />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="plocal" className={styles.label}>Carpeta local</label>
+                <input id="plocal" name="localPath" type="text" value={projectForm.localPath ?? ""} onChange={handleProjectField} className={styles.input} placeholder="/Users/tu/dev/proyecto" autoComplete="off" />
               </div>
               <div className={styles.formActions}>
                 <button type="button" onClick={() => setEditingProject(false)} className={styles.btnCancel}>Cancelar</button>

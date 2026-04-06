@@ -1,0 +1,226 @@
+
+<style>
+  .root { display:flex; flex-direction:column; align-items:center; gap:1.5rem; padding:2rem 1rem 1.5rem; }
+  .row  { display:flex; gap:1.5rem; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+  .col  { display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
+  .lbl  { font-family:var(--font-mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--color-text-secondary); }
+  .sub  { font-family:var(--font-mono); font-size:9px; letter-spacing:0.12em; color:var(--color-text-secondary); opacity:0.6; }
+  .btns { display:flex; gap:0.75rem; margin-top:0.5rem; }
+  button {
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em;
+    text-transform:uppercase; padding:6px 18px; cursor:pointer;
+    background:transparent; border:0.5px solid var(--color-border-secondary);
+    border-radius:4px; color:var(--color-text-secondary); transition:all 0.2s;
+  }
+  button:hover { border-color:#b8896a; color:#b8896a; }
+  canvas { display:block; border-radius:6px; }
+</style>
+
+<div class="root">
+  <div class="row">
+    <div class="col">
+      <canvas id="c1" width="340" height="160"></canvas>
+      <div class="lbl">color · sand</div>
+      <div class="sub">01</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <canvas id="c2" width="340" height="160" style="border:0.5px solid rgba(0,0,0,0.08)"></canvas>
+      <div class="lbl">monocromático · blanco</div>
+      <div class="sub">02</div>
+    </div>
+    <div class="col">
+      <canvas id="c3" width="340" height="160"></canvas>
+      <div class="lbl">negativo · ink</div>
+      <div class="sub">03</div>
+    </div>
+  </div>
+  <div class="btns">
+    <button onclick="replayAll()">↺ repetir</button>
+    <button onclick="exportToSVG()">↓ descargar svg</button>
+  </div>
+</div>
+
+<script>
+const TERRA='#b8896a', INK='#2c2c28', SAND='#f4f0e8', SEA='#7a9aaa',
+      STONE='#e2ddd4', WHITE='#ffffff', OFFBLACK='#1a1a18', MUTED='#7a7870';
+
+function ease(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function lerp(a,b,t){ return a+(b-a)*t; }
+
+// ── PIXEL MAP ────────────────────────────────────────────────
+function buildPixels(W, H, inkCol, accentCol, spacing){
+  const off=document.createElement('canvas');
+  off.width=W; off.height=H;
+  const oc=off.getContext('2d');
+  oc.clearRect(0,0,W,H);
+
+  // measure For + Meta to center
+  // Usamos la 'F' en estilo normal para evitar que parezca una "m" en cursiva
+  oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+  const wF=oc.measureText('F').width - 2;
+  oc.font='italic 300 52px "Cormorant Garamond",Georgia,serif';
+  const wor=oc.measureText('or').width + 2;
+  const wFor=wF+wor;
+  oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+  const wMeta=oc.measureText('Meta').width;
+  const totalW=wFor+wMeta-2;
+  const sx=(W-totalW)/2, by=H/2+18;
+
+  oc.fillStyle='#000';
+  oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+  oc.fillText('F', sx, by);
+  oc.font='italic 300 52px "Cormorant Garamond",Georgia,serif';
+  oc.fillText('or', sx+wF, by);
+  oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+  oc.fillText('Meta', sx+wFor-2, by);
+
+  const data=oc.getImageData(0,0,W,H).data;
+  const pts=[];
+  const step=spacing||4;
+  for(let y=0;y<H;y+=step) for(let x=0;x<W;x+=step){
+    const i=(y*W+x)*4;
+    if(data[i+3]>110) pts.push({x,y});
+  }
+  return pts;
+}
+
+function initDots(targets, W, H, inkCol, accentCol, accentRatio){
+  const CX=W/2, CY=H/2;
+  return targets.map(tgt=>{
+    const angle=Math.random()*Math.PI*2;
+    const dist=70+Math.random()*90;
+    // determine if dot is in "For" region (left half) → more accent
+    const inFor = tgt.x < W*0.52;
+    const isAccent = inFor ? Math.random()<(accentRatio*1.4) : Math.random()<(accentRatio*0.3);
+    return {
+      tx:tgt.x, ty:tgt.y,
+      x:CX+Math.cos(angle)*dist,
+      y:CY+Math.sin(angle)*dist,
+      r:Math.random()*1.5+0.5,
+      delay:Math.random()*0.42,
+      col: isAccent ? accentCol : inkCol,
+      finalOp:Math.random()*0.35+0.65,
+    };
+  });
+}
+
+// ── SCENE ENGINE ─────────────────────────────────────────────
+function makeScene(canvasEl, dotCol, accentCol, bgCol, accentRatio, spacing, delay){
+  const ctx=canvasEl.getContext('2d');
+  const W=canvasEl.width, H=canvasEl.height;
+  const DUR=2800;
+  let start=null, raf=null, dots=[];
+
+  function init(){
+    const targets=buildPixels(W,H,dotCol,accentCol,spacing);
+    dots=initDots(targets,W,H,dotCol,accentCol,accentRatio);
+  }
+
+  function draw(ts){
+    if(!start) start=ts;
+    const el=ts-start;
+    ctx.clearRect(0,0,W,H);
+    if(bgCol){ctx.fillStyle=bgCol; ctx.fillRect(0,0,W,H);}
+
+    dots.forEach(d=>{
+      const rawP=Math.max(0,(el/DUR-d.delay))/(1-d.delay);
+      const p=ease(Math.min(1,rawP));
+      const cx=lerp(d.x,d.tx,p);
+      const cy=lerp(d.y,d.ty,p);
+      ctx.globalAlpha=lerp(0.06,d.finalOp,p);
+      ctx.fillStyle=d.col;
+      ctx.beginPath(); ctx.arc(cx,cy,d.r,0,Math.PI*2); ctx.fill();
+    });
+
+    if(el>DUR){
+      const idle=(el-DUR)/900;
+      const pulse=0.86+Math.sin(idle*1.5)*0.14;
+      ctx.clearRect(0,0,W,H);
+      if(bgCol){ctx.fillStyle=bgCol; ctx.fillRect(0,0,W,H);}
+      dots.forEach(d=>{
+        ctx.globalAlpha=d.finalOp*pulse;
+        ctx.fillStyle=d.col;
+        ctx.beginPath(); ctx.arc(d.tx,d.ty,d.r,0,Math.PI*2); ctx.fill();
+      });
+    }
+    ctx.globalAlpha=1;
+    raf=requestAnimationFrame(draw);
+  }
+
+  return {
+    start(){
+      if(raf) cancelAnimationFrame(raf);
+      ctx.clearRect(0,0,W,H);
+      if(bgCol){ctx.fillStyle=bgCol; ctx.fillRect(0,0,W,H);}
+      start=null; init();
+      setTimeout(()=>{ raf=requestAnimationFrame(draw); }, delay||0);
+    },
+    stop(){ if(raf) cancelAnimationFrame(raf); }
+  };
+}
+
+// ── THREE SCENES ─────────────────────────────────────────────
+// 01 Color — ink body, terracota on "For" region
+const s1=makeScene(document.getElementById('c1'),
+  INK, TERRA, SAND, 0.22, 4, 0);
+
+// 02 Mono white — pure ink on white, no accent
+const s2=makeScene(document.getElementById('c2'),
+  '#111110', '#444440', WHITE, 0.0, 4, 180);
+
+// 03 Negative ink — sand/warm dots on dark, terracota accent on For
+const s3=makeScene(document.getElementById('c3'),
+  '#d8d4cc', TERRA, OFFBLACK, 0.25, 4, 360);
+
+function getSVGString(W, H, pts, dotCol, accentCol, bgCol, accentRatio) {
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">\n`;
+  if (bgCol) {
+    svg += `  <rect width="100%" height="100%" fill="${bgCol}" />\n`;
+  }
+  
+  pts.forEach(p => {
+    const inFor = p.x < W*0.52;
+    const isAccent = inFor ? Math.random()<(accentRatio*1.4) : Math.random()<(accentRatio*0.3);
+    const col = isAccent ? accentCol : dotCol;
+    const r = Math.random()*1.5+0.5;
+    const op = Math.random()*0.35+0.65;
+    svg += `  <circle cx="${p.x}" cy="${p.y}" r="${r.toFixed(2)}" fill="${col}" opacity="${op.toFixed(2)}" />\n`;
+  });
+  svg += `</svg>`;
+  return svg;
+}
+
+function downloadStringAsFile(str, filename) {
+  const blob = new Blob([str], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+function exportToSVG(){
+  const W=340, H=160;
+  const pts = buildPixels(W, H, null, null, 4);
+  
+  // 01 Color — sand bg
+  const svg1 = getSVGString(W, H, pts, INK, TERRA, SAND, 0.22);
+  downloadStringAsFile(svg1, 'formeta_01_sand.svg');
+  
+  // 02 Mono white
+  const svg2 = getSVGString(W, H, pts, '#111110', '#444440', WHITE, 0.0);
+  setTimeout(() => downloadStringAsFile(svg2, 'formeta_02_mono.svg'), 300);
+  
+  // 03 Negative ink
+  const svg3 = getSVGString(W, H, pts, '#d8d4cc', TERRA, OFFBLACK, 0.25);
+  setTimeout(() => downloadStringAsFile(svg3, 'formeta_03_negative.svg'), 600);
+}
+
+function replayAll(){ s1.start(); s2.start(); s3.start(); }
+replayAll();
+</script>

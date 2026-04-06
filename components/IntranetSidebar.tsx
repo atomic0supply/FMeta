@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
+import { Clock, Folder, LayoutGrid, Link2, Search, Square, Users } from "lucide-react";
 
 import { auth } from "@/lib/firebase";
 import { formatElapsed, useTimer } from "@/lib/timerContext";
@@ -11,10 +12,12 @@ import { clearSessionCookie } from "@/lib/session";
 import styles from "@/styles/intranet-sidebar.module.css";
 
 const navItems = [
-  { href: "/intranet", label: "Dashboard", exact: true },
-  { href: "/intranet/clientes", label: "Clientes", exact: false },
-  { href: "/intranet/proyectos", label: "Proyectos", exact: false },
-  { href: "/intranet/links", label: "Links", exact: false },
+  { href: "/intranet", label: "Dashboard", exact: true, icon: LayoutGrid },
+  { href: "/intranet/clientes", label: "Clientes", exact: false, icon: Users },
+  { href: "/intranet/proyectos", label: "Proyectos", exact: false, icon: Folder },
+  { href: "/intranet/tiempo", label: "Tiempo", exact: false, icon: Clock },
+  { href: "/intranet/links", label: "Links", exact: false, icon: Link2 },
+  { href: "/intranet/buscar", label: "Buscar", exact: false, icon: Search },
 ];
 
 export function IntranetSidebar() {
@@ -47,6 +50,7 @@ export function IntranetSidebar() {
             href={item.href}
             className={`${styles.navItem} ${isActive(item.href, item.exact) ? styles.navActive : ""}`}
           >
+            <item.icon width={16} height={16} strokeWidth={1.75} />
             {item.label}
           </Link>
         ))}
@@ -61,11 +65,12 @@ export function IntranetSidebar() {
               <span className={styles.timerElapsed}>{formatElapsed(elapsed)}</span>
               <button
                 type="button"
-                onClick={() => void stop()}
+                onClick={() => stop()}
                 className={styles.timerStop}
                 aria-label="Detener timer"
               >
-                ■ Stop
+                <Square width={10} height={10} strokeWidth={0} fill="currentColor" />
+                Stop
               </button>
             </div>
           </>
@@ -75,9 +80,7 @@ export function IntranetSidebar() {
       </div>
 
       <div className={styles.footer}>
-        <Link href="/" className={styles.footerLink}>
-          Web pública
-        </Link>
+        <Link href="/" className={styles.footerLink}>Web pública</Link>
         <button
           type="button"
           onClick={() => void handleSignOut()}

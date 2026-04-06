@@ -1,0 +1,224 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 700px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hint {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.btnEdit {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition:
+    color var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.btnEdit:hover {
+  color: var(--ink);
+  border-color: rgba(44, 44, 40, 0.4);
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* Links grid */
+.linksGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.linkCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(244, 240, 232, 0.5);
+  text-decoration: none;
+  transition:
+    background var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.linkCard:hover {
+  background: rgba(244, 240, 232, 0.9);
+  border-color: var(--line);
+}
+
+.linkIcon {
+  flex-shrink: 0;
+  color: var(--terracotta);
+}
+
+.linkInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.linkLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.linkUrl {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linkArrow {
+  flex-shrink: 0;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+/* Edit form */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  background: rgba(244, 240, 232, 0.4);
+}
+
+.editRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.editIcon {
+  flex-shrink: 0;
+  color: var(--terracotta);
+  margin-top: 26px;
+}
+
+.editField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.editInput {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--stone-strong);
+  border-radius: 0;
+  padding: 6px 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  color: var(--ink);
+  transition: border-color var(--motion-fast) var(--ease-smooth);
+  width: 100%;
+}
+
+.editInput:focus {
+  outline: none;
+  border-bottom-color: var(--terracotta);
+}
+
+.editInput::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.editActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.btnCancel {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition:
+    color var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.btnCancel:hover {
+  color: var(--ink);
+  border-color: rgba(44, 44, 40, 0.4);
+}
+
+.btnSave {
+  padding: 8px 22px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--sand);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.btnSave:hover:not(:disabled) {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+}
+
+.btnSave:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

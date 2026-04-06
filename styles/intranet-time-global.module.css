@@ -1,0 +1,342 @@
+.page {
+  max-width: 1000px;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.kicker {
+  margin: 0 0 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display), serif;
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  line-height: 1.02;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Filter toggle */
+.filterRow {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+  width: fit-content;
+  margin-bottom: 28px;
+}
+
+.filterBtn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition:
+    background var(--motion-fast) var(--ease-smooth),
+    color var(--motion-fast) var(--ease-smooth);
+}
+
+.filterBtn:hover { color: var(--ink); }
+
+.filterBtnActive {
+  background: var(--ink);
+  color: var(--sand);
+}
+
+.filterBtnActive:hover { color: var(--sand); }
+
+/* Stats */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.statCard {
+  padding: 20px 22px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(244, 240, 232, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statValue {
+  font-family: var(--font-display), serif;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.statSub {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* By project chart */
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.projectBars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.projectBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.projectBarName {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--ink);
+  width: 180px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.projectBarTrack {
+  flex: 1;
+  height: 8px;
+  background: rgba(44, 44, 40, 0.07);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.projectBarFill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--terracotta);
+  opacity: 0.7;
+  transition: width 500ms var(--ease-smooth);
+}
+
+.projectBarValue {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* History */
+.historyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dayGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dayLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.sessionList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.sessionRow {
+  display: grid;
+  grid-template-columns: 1fr 160px 80px 100px 32px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  transition: background var(--motion-fast) var(--ease-smooth);
+}
+
+.sessionRow:last-child {
+  border-bottom: none;
+}
+
+.sessionRow:hover {
+  background: rgba(244, 240, 232, 0.6);
+}
+
+.sessionProject {
+  font-size: 0.88rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sessionNotes {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.sessionTime {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.sessionDuration {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.btnDeleteEntry {
+  background: none;
+  border: none;
+  padding: 2px 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
+  opacity: 0;
+  border-radius: 4px;
+  transition: opacity var(--motion-fast) var(--ease-smooth), color var(--motion-fast) var(--ease-smooth);
+}
+
+.sessionRow:hover .btnDeleteEntry {
+  opacity: 1;
+}
+
+.btnDeleteEntry:hover {
+  color: var(--danger);
+}
+
+.btnDeleteEntryConfirm {
+  opacity: 1 !important;
+  color: var(--danger);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+}
+
+.dayTotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 16px;
+  background: rgba(226, 221, 212, 0.4);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dayTotal span:last-child {
+  color: var(--ink);
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.btnExport {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition:
+    color var(--motion-fast) var(--ease-smooth),
+    border-color var(--motion-fast) var(--ease-smooth);
+}
+
+.btnExport:hover {
+  color: var(--ink);
+  border-color: rgba(44, 44, 40, 0.4);
+}
+
+@media (max-width: 720px) {
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sessionRow {
+    grid-template-columns: 1fr 80px 32px;
+  }
+
+  .sessionRow > *:nth-child(2),
+  .sessionRow > *:nth-child(3) {
+    display: none;
+  }
+}

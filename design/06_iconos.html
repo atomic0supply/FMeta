@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Iconos - ForMeta Guía de Estilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --font-mono: 'DM Mono', 'Courier New', Courier, monospace;
+            --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+            
+            --color-ink: #2C2C28;
+            --color-terra: #B8896A;
+            --color-sand: #F4F0E8;
+            --color-sea: #7A9AAA;
+            --color-stone: #E2DDD4;
+            --color-sage: #8FA892;
+            --color-white: #FFFFFF;
+            --color-offblack: #1A1A18;
+            --color-muted: #7A7870;
+            --color-alert: #d05a5a;
+            
+            --color-bg: var(--color-sand);
+            --color-text: var(--color-ink);
+            --color-text-secondary: var(--color-muted);
+            --color-border-secondary: rgba(44, 44, 40, 0.1);
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1.5rem;
+            --spacing-md: 3rem;
+            --spacing-lg: 6rem;
+            --spacing-xl: 10rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-sand);
+            color: var(--color-text);
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-sm);
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-ink);
+            letter-spacing: -0.01em;
+        }
+
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border-secondary);
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            color: var(--color-ink);
+        }
+
+        p {
+            color: var(--color-text-secondary);
+            max-width: 650px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .intro {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .lbl {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            margin-top: 1rem;
+        }
+        
+        section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        /* Icon Grid */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .icon-grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1.5rem 1rem;
+            background: var(--color-white);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 8px;
+            color: var(--color-ink);
+            transition: transform 0.3s ease;
+        }
+        
+        .icon-grid-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-stone);
+        }
+
+        .icon-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--color-text-secondary);
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Scale showcase */
+        .scale-box {
+            display: flex;
+            align-items: flex-end;
+            gap: 2.5rem;
+            background: var(--color-white);
+            padding: 3rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-border-secondary);
+            flex-wrap: wrap;
+        }
+
+        .scale-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .scale-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--color-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        .scale-label span {
+            display: block;
+            margin-top: 4px;
+            color: var(--color-terra);
+        }
+
+        /* Rules Cards */
+        .rule-list {
+            list-style: none;
+            counter-reset: rule-counter;
+            margin-top: 2rem;
+        }
+        
+        .rule-list li {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            max-width: 800px;
+            line-height: 1.6;
+            color: var(--color-ink);
+        }
+        
+        .rule-list li::before {
+            counter-increment: rule-counter;
+            content: "0" counter(rule-counter);
+            position: absolute;
+            left: 0;
+            top: 0.1rem;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--color-terra);
+        }
+
+        /* Context Examples */
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .context-card {
+            background: var(--color-white);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .context-lbl {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--color-muted);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .btn {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 400;
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: default;
+        }
+        
+        .btn-primary {
+            background: var(--color-terra);
+            color: var(--color-white);
+            border: 1px solid var(--color-terra);
+        }
+
+        .btn-secondary {
+            background: var(--color-sand);
+            color: var(--color-ink);
+            border: 1px solid var(--color-stone);
+        }
+        
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 240px;
+        }
+        
+        .input-wrapper svg {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-muted);
+        }
+        
+        .input-field {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.6rem;
+            border: 1px solid var(--color-stone);
+            border-radius: 6px;
+            background: var(--color-sand);
+            color: var(--color-ink);
+            outline: none;
+        }
+        
+        .input-field::placeholder { color: var(--color-muted); }
+        
+        .badge {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(143, 168, 146, 0.15); /* Sage alpha */
+            color: #557559; /* Dark sage */
+            border: 1px solid rgba(143, 168, 146, 0.3);
+        }
+
+        /* Vocab Grid */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .vocab-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem;
+            background: var(--color-white);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 8px;
+        }
+        
+        .vocab-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .vocab-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .vocab-name {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            color: var(--color-ink);
+            margin-bottom: 0.2rem;
+        }
+        
+        .vocab-role {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+            line-height: 1.2;
+        }
+        
+        /* Functional Colors */
+        .color-sea { color: var(--color-sea); }
+        .color-terra { color: var(--color-terra); }
+        .color-sage { color: var(--color-sage); }
+        .color-ink { color: var(--color-ink); }
+        .color-muted { color: var(--color-muted); }
+
+        footer {
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-md) 0;
+            border-top: 1px solid var(--color-border-secondary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="intro">
+        <div class="lbl">Sección 06</div>
+        <h1>Iconografía</h1>
+        <p>El sistema tiene cinco capas estructurales. Un marco para representar información de forma universal, manteniendo una modulación sutil y el rigor de ForMeta.</p>
+    </div>
+
+    <!-- 1. Librería Base -->
+    <section>
+        <h2>6.1 Librería Base</h2>
+        <p>Utilizamos el core set de <strong>Lucide</strong>. Un conjunto filtrado de 40 iconos cubre el 90% de los escenarios en aplicaciones de gestión de procesos. Todo se diseña por defecto a 24px con un <i>stroke</i> de 1.5.</p>
+        
+        <div class="icon-grid">
+            <div class="icon-grid-item"><i data-lucide="archive" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">archive</span></div>
+            <div class="icon-grid-item"><i data-lucide="arrow-right" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">arrow</span></div>
+            <div class="icon-grid-item"><i data-lucide="bell" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">bell</span></div>
+            <div class="icon-grid-item"><i data-lucide="calendar" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">calendar</span></div>
+            <div class="icon-grid-item"><i data-lucide="check" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">check</span></div>
+            <div class="icon-grid-item"><i data-lucide="chevron-down" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">chevron</span></div>
+            <div class="icon-grid-item"><i data-lucide="clipboard" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">clip</span></div>
+            <div class="icon-grid-item"><i data-lucide="clock" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">clock</span></div>
+            <div class="icon-grid-item"><i data-lucide="copy" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">copy</span></div>
+            <div class="icon-grid-item"><i data-lucide="cpu" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">cpu</span></div>
+            <div class="icon-grid-item"><i data-lucide="credit-card" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">card</span></div>
+            <div class="icon-grid-item"><i data-lucide="database" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">db</span></div>
+            <div class="icon-grid-item"><i data-lucide="download" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">dl</span></div>
+            <div class="icon-grid-item"><i data-lucide="edit" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">edit</span></div>
+            <div class="icon-grid-item"><i data-lucide="eye" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">eye</span></div>
+            <div class="icon-grid-item"><i data-lucide="file-text" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">file</span></div>
+            <div class="icon-grid-item"><i data-lucide="filter" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">filter</span></div>
+            <div class="icon-grid-item"><i data-lucide="folder" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">folder</span></div>
+            <div class="icon-grid-item"><i data-lucide="home" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">home</span></div>
+            <div class="icon-grid-item"><i data-lucide="image" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">img</span></div>
+            <div class="icon-grid-item"><i data-lucide="info" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">info</span></div>
+            <div class="icon-grid-item"><i data-lucide="layers" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">layer</span></div>
+            <div class="icon-grid-item"><i data-lucide="layout-grid" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">layout</span></div>
+            <div class="icon-grid-item"><i data-lucide="link" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">link</span></div>
+            <div class="icon-grid-item"><i data-lucide="list" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">list</span></div>
+            <div class="icon-grid-item"><i data-lucide="mail" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">mail</span></div>
+            <div class="icon-grid-item"><i data-lucide="map-pin" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">map</span></div>
+            <div class="icon-grid-item"><i data-lucide="menu" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">menu</span></div>
+            <div class="icon-grid-item"><i data-lucide="message-square" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">msgs</span></div>
+            <div class="icon-grid-item"><i data-lucide="more-horizontal" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">more</span></div>
+            <div class="icon-grid-item"><i data-lucide="paperclip" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">clip</span></div>
+            <div class="icon-grid-item"><i data-lucide="plus" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">plus</span></div>
+            <div class="icon-grid-item"><i data-lucide="search" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">search</span></div>
+            <div class="icon-grid-item"><i data-lucide="settings" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">config</span></div>
+            <div class="icon-grid-item"><i data-lucide="share" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">share</span></div>
+            <div class="icon-grid-item"><i data-lucide="shield" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">shield</span></div>
+            <div class="icon-grid-item"><i data-lucide="trash" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">trash</span></div>
+            <div class="icon-grid-item"><i data-lucide="user" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">user</span></div>
+            <div class="icon-grid-item"><i data-lucide="users" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">users</span></div>
+            <div class="icon-grid-item"><i data-lucide="x" width="24" height="24" stroke-width="1.5"></i><span class="icon-label">close</span></div>
+        </div>
+    </section>
+
+    <!-- 2. Escala de Tamaños -->
+    <section>
+        <h2>6.2 Escala de Tamaños</h2>
+        <p>Existen cinco tamaños únicamente: 16, 20, 24, 32 y 48px. Nada intermedio. El grosor de la línea óptica se altera programáticamente para compensar la percepción.</p>
+        
+        <div class="scale-box">
+            <div class="scale-item">
+                <i data-lucide="settings" width="16" height="16" stroke-width="1.75"></i>
+                <div class="scale-label">16px <span>SW 1.75</span></div>
+            </div>
+            <div class="scale-item">
+                <i data-lucide="settings" width="20" height="20" stroke-width="1.5"></i>
+                <div class="scale-label">20px <span>SW 1.5</span></div>
+            </div>
+            <div class="scale-item">
+                <i data-lucide="settings" width="24" height="24" stroke-width="1.5"></i>
+                <div class="scale-label">24px (Base) <span>SW 1.5</span></div>
+            </div>
+            <div class="scale-item">
+                <i data-lucide="settings" width="32" height="32" stroke-width="1.5"></i>
+                <div class="scale-label">32px <span>SW 1.5</span></div>
+            </div>
+            <div class="scale-item">
+                <i data-lucide="settings" width="48" height="48" stroke-width="1.25"></i>
+                <div class="scale-label">48px <span>SW 1.25</span></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 3. Reglas -->
+    <section>
+        <h2>6.3 Reglas de Uso</h2>
+        <p>Lo más importante es lo que no se hace. El tratamiento visual estricto separa el software de una simple página web.</p>
+        <ul class="rule-list">
+            <li><strong>Nada de iconos rellenos.</strong> Transmitimos ligereza operativa.</li>
+            <li><strong>Nada de Terracota como color funcional.</strong> Terracota es acento de marca (botones o branding), no una señal de alerta, error o success en la interfaz.</li>
+            <li><strong>Nunca un icono solo en una acción crítica.</strong> Confirmar pagos, borrar registros o aplicar cambios drásticos siempre requiere etiqueta de texto explícita.</li>
+        </ul>
+    </section>
+
+    <!-- 4. Iconos en contexto -->
+    <section>
+        <h2>6.4 Iconos en Contexto</h2>
+        <p>Unificamos la coherencia entre el icono y la topografía del UI.</p>
+        
+        <div class="context-grid">
+            <div class="context-card">
+                <div class="context-lbl">Botón Primario</div>
+                <button class="btn btn-primary"><i data-lucide="plus" width="18" height="18" stroke-width="2"></i><span>Nuevo Proyecto</span></button>
+            </div>
+            
+            <div class="context-card">
+                <div class="context-lbl">Botón Secundario</div>
+                <button class="btn btn-secondary"><i data-lucide="filter" width="18" height="18" stroke-width="1.75"></i><span>Filtrar</span></button>
+            </div>
+            
+            <div class="context-card" style="grid-column: span 1;">
+                <div class="context-lbl">Input Prefijo</div>
+                <div class="input-wrapper">
+                    <i data-lucide="search" width="18" height="18"></i>
+                    <input type="text" placeholder="Buscar procesos..." class="input-field">
+                </div>
+            </div>
+            
+            <div class="context-card" style="grid-column: span 1;">
+                <div class="context-lbl">Status Badge</div>
+                <span class="badge"><i data-lucide="check-circle" width="14" height="14" stroke-width="2"></i><span>Completado</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Vocabulario funcional -->
+    <section>
+        <h2>6.5 Vocabulario Funcional de ForMeta</h2>
+        <p>Los 16 iconos con mayor presencia en los productos que construimos. Clasificados por su rol y el color semántico que adoptan de forma inherente cuando comunican estado (dejando Ink para el uso neutral general).</p>
+        
+        <!-- Sea (Tech/AI) -->
+        <h3 style="margin-top: 2rem;">Inteligencia y Tecnología (Color: Sea)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item">
+                <div class="vocab-icon color-sea"><i data-lucide="cpu" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">CPU</span><span class="vocab-role">Proceso / Engine</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-sea"><i data-lucide="sparkles" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">SPARKLES</span><span class="vocab-role">Inferencia / AI</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-sea"><i data-lucide="network" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">NETWORK</span><span class="vocab-role">APIs / Integraciones</span></div>
+            </div>
+        </div>
+
+        <!-- Terracota (Acciones/Branding) -->
+        <h3 style="margin-top: 2.5rem;">Carga Narrativa / Acciones (Color: Terracota)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item">
+                <div class="vocab-icon color-terra"><i data-lucide="play" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">PLAY</span><span class="vocab-role">Ejecución Activa</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-terra"><i data-lucide="map-pin" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">MAP PIN</span><span class="vocab-role">Proximidad Local</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-terra"><i data-lucide="zap" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">ZAP</span><span class="vocab-role">Flash Action</span></div>
+            </div>
+        </div>
+
+        <!-- Sage (Positivo) -->
+        <h3 style="margin-top: 2.5rem;">Confirmación / Positive Status (Color: Sage)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item">
+                <div class="vocab-icon color-sage"><i data-lucide="check-circle" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">CHECK</span><span class="vocab-role">Tarea completada</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-sage"><i data-lucide="shield-check" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">SHIELD</span><span class="vocab-role">Seguro / Validado</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-sage"><i data-lucide="thumbs-up" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">THUMBS UP</span><span class="vocab-role">Aceptación</span></div>
+            </div>
+        </div>
+
+        <!-- Ink (Estructura/Nav) -->
+        <h3 style="margin-top: 2.5rem;">Estructura y Navegación (Color: Ink)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item">
+                <div class="vocab-icon color-ink"><i data-lucide="layout-grid" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">LAYOUT</span><span class="vocab-role">Dashboard</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-ink"><i data-lucide="folder" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">FOLDER</span><span class="vocab-role">Directorio Master</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-ink"><i data-lucide="menu" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">MENU</span><span class="vocab-role">Hamburguesa Nav</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-ink"><i data-lucide="home" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">HOME</span><span class="vocab-role">Raíz del tenant</span></div>
+            </div>
+        </div>
+
+        <!-- Muted (Secundaria) -->
+        <h3 style="margin-top: 2.5rem;">Información Secundaria (Color: Muted)</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item">
+                <div class="vocab-icon color-muted"><i data-lucide="info" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">INFO</span><span class="vocab-role">Details / Tooltip</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-muted"><i data-lucide="help-circle" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">HELP</span><span class="vocab-role">Asistencia</span></div>
+            </div>
+            <div class="vocab-item">
+                <div class="vocab-icon color-muted"><i data-lucide="clock" width="24" height="24" stroke-width="1.5"></i></div>
+                <div class="vocab-text"><span class="vocab-name">CLOCK</span><span class="vocab-role">Historial / Log</span></div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<footer>
+    <svg width="24" height="30" viewBox="0 0 160 200" style="opacity: 0.8; margin: 0 auto;">
+         <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+         <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+    </svg>
+</footer>
+
+<script>
+    lucide.createIcons();
+</script>
+</body>
+</html>

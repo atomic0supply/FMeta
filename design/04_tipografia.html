@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Tipografía - ForMeta Guía de Estilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-mono: 'DM Mono', 'Courier New', Courier, monospace;
+            --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+            
+            --color-ink: #2C2C28;
+            --color-terra: #B8896A;
+            --color-sand: #F4F0E8;
+            --color-sea: #7A9AAA;
+            --color-stone: #E2DDD4;
+            --color-sage: #8FA892;
+            --color-white: #FFFFFF;
+            --color-offblack: #1A1A18;
+            --color-muted: #7A7870;
+            --color-alert: #d05a5a;
+            
+            --color-bg: var(--color-sand);
+            --color-text: var(--color-ink);
+            --color-text-secondary: var(--color-muted);
+            --color-border-secondary: rgba(44, 44, 40, 0.1);
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1.5rem;
+            --spacing-md: 3rem;
+            --spacing-lg: 6rem;
+            --spacing-xl: 10rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {background-color: var(--color-sand);
+            color: var(--color-text);
+            /* Escala indicada dice: Body = Cormorant Garamond Light 11-13pt */
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 1.15rem;
+            font-weight: 300;
+            font-size: 1.25rem; /* ~12pt context */
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-sm);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            color: var(--color-ink);
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            line-height: 1.05;
+            letter-spacing: -0.01em;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border-secondary);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        p {
+            color: var(--color-text-secondary);
+            max-width: 650px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .intro {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .lbl {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Type Specimen Box */
+        .type-showcase {
+            background: var(--color-white);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 8px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .showcase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-stone);
+        }
+
+        .family-name {
+            font-family: var(--font-serif); /* keep interface elements sans or serif as needed, using what we have */
+            font-size: 1.25rem;
+            color: var(--color-ink);
+            letter-spacing: 0.05em;
+        }
+
+        .family-role {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            color: var(--color-terra);
+            text-transform: uppercase;
+        }
+
+        /* Cormorant Specimen */
+        .specimen-serif {
+            font-family: var(--font-serif);
+            font-weight: 300;
+        }
+
+        .specimen-serif-hero {
+            font-size: 4rem;
+            line-height: 1.1;
+            color: var(--color-ink);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .specimen-serif-sub {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .specimen-serif-body {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            color: var(--color-ink);
+            max-width: 800px;
+        }
+
+        /* DM Mono Specimen */
+        .specimen-mono {
+            font-family: var(--font-mono);
+            font-weight: 300;
+        }
+
+        .specimen-mono-block {
+            background: var(--color-stone);
+            padding: 1.5rem;
+            border-radius: 4px;
+            color: var(--color-ink);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            letter-spacing: 0.1em;
+        }
+
+        .specimen-mono-light {
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .specimen-mono-accent {
+            color: var(--color-terra);
+        }
+
+        /* Escala Tipográfica Table */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 3rem;
+            background: var(--color-white);
+            border-radius: 8px;
+            border: 1px solid var(--color-border-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--color-border-secondary);
+        }
+
+        th {
+            font-weight: 400;
+            color: var(--color-muted);
+            background: rgba(0,0,0,0.02);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .scale-nivel {
+            color: var(--color-ink);
+            font-weight: 500;
+        }
+
+        .scale-fuente {
+            color: var(--color-terra);
+        }
+
+        .scale-uso {
+            color: var(--color-text-secondary);
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 0;
+        }
+
+        /* Fallback Box */
+        .fallback-box {
+            background: var(--color-ink);
+            color: var(--color-sand);
+            border-radius: 8px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .fallback-box h3 {
+            color: var(--color-terra);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .fallback-rule {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            display: flex;
+        }
+
+        .fallback-rule strong {
+            width: 90px;
+            color: var(--color-sage);
+            font-weight: 400;
+        }
+        
+        .fallback-rule span {
+            opacity: 0.8;
+        }
+
+        .email-warning {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            line-height: 1.4;
+            color: var(--color-stone);
+        }
+
+        .email-warning strong {
+            color: var(--color-alert);
+            font-weight: 400;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="intro">
+        <div class="lbl">Sección 04</div>
+        <h1>Tipografía</h1>
+        <p>Sistema tipográfico. Una combinación sobria que contrapone la elegancia atemporal del mundo editorial con el rigor técnico del desarrollo de software.</p>
+    </div>
+
+    <!-- 1. Cormorant Garamond -->
+    <div class="type-showcase">
+        <div class="showcase-header">
+            <div class="family-name specimen-serif">Cormorant Garamond</div>
+            <div class="family-role">Display / Editorial</div>
+        </div>
+        <div class="specimen-serif">
+            <div class="specimen-serif-hero">Dar forma a las cosas.</div>
+            <div class="specimen-serif-sub">Software construido desde la raíz.</div>
+            <div class="specimen-serif-body">Inteligencia aplicada con precisión meridiana.</div>
+        </div>
+    </div>
+
+    <!-- 2. DM Mono -->
+    <div class="type-showcase">
+        <div class="showcase-header">
+            <div class="family-name specimen-mono">DM Mono</div>
+            <div class="family-role">Etiquetas / Código / Datos</div>
+        </div>
+        <div class="specimen-mono">
+            <div class="specimen-mono-light">01 — SOFTWARE A MEDIDA <span class="specimen-mono-accent">·</span> AI INTEGRATION</div>
+            <div class="specimen-mono-block">
+                model.perceive(context) &rarr; agent.execute(plan)
+            </div>
+            <div style="font-size: 1rem; letter-spacing: 0.15em; margin-top: 1.5rem; color: var(--color-muted); text-transform: uppercase;">
+                less is more
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Escala Tipográfica -->
+    <h2>Escala Tipográfica</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nivel</th>
+                    <th>Fuente</th>
+                    <th>Tam.</th>
+                    <th>L-H</th>
+                    <th>L-S</th>
+                    <th>Uso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="scale-nivel">H1</td>
+                    <td class="scale-fuente">Cormorant Garamond Light</td>
+                    <td>48–96pt</td>
+                    <td>1.05</td>
+                    <td>-0.01em</td>
+                    <td class="scale-uso">Portada · hero</td>
+                </tr>
+                <tr>
+                    <td class="scale-nivel">H2</td>
+                    <td class="scale-fuente">Cormorant Garamond Light</td>
+                    <td>28–36pt</td>
+                    <td>1.2</td>
+                    <td>0</td>
+                    <td class="scale-uso">Títulos sección</td>
+                </tr>
+                <tr>
+                    <td class="scale-nivel">H3</td>
+                    <td class="scale-fuente">Cormorant Garamond Light</td>
+                    <td>20–24pt</td>
+                    <td>1.3</td>
+                    <td>0</td>
+                    <td class="scale-uso">Subtítulos</td>
+                </tr>
+                <tr>
+                    <td class="scale-nivel">Body</td>
+                    <td class="scale-fuente">Cormorant Garamond Light</td>
+                    <td>11–13pt</td>
+                    <td>1.8</td>
+                    <td>0</td>
+                    <td class="scale-uso">Cuerpo de texto</td>
+                </tr>
+                <tr>
+                    <td class="scale-nivel">Label</td>
+                    <td class="scale-fuente" style="color: var(--color-sea)">DM Mono Light</td>
+                    <td>8–10pt</td>
+                    <td>1.4</td>
+                    <td>+0.2em</td>
+                    <td class="scale-uso">Etiquetas · índices</td>
+                </tr>
+                <tr>
+                    <td class="scale-nivel">Code</td>
+                    <td class="scale-fuente" style="color: var(--color-sea)">DM Mono Light</td>
+                    <td>9–11pt</td>
+                    <td>1.6</td>
+                    <td>+0.1em</td>
+                    <td class="scale-uso">Código · paths</td>
+                </tr>
+                <tr>
+                    <td class="scale-nivel">Caption</td>
+                    <td class="scale-fuente">Cormorant Garamond Lgt</td>
+                    <td>10pt</td>
+                    <td>1.6</td>
+                    <td>0</td>
+                    <td class="scale-uso">Notas al pie</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 4. Fallback Stack -->
+    <div class="fallback-box">
+        <h3>Fallback Stack</h3>
+        
+        <div class="fallback-rule">
+            <strong>Display</strong>
+            <span>'Cormorant Garamond', 'Garamond', 'Georgia', serif</span>
+        </div>
+        <div class="fallback-rule">
+            <strong>Mono</strong>
+            <span>'DM Mono', 'Courier New', 'Courier', monospace</span>
+        </div>
+
+        <div class="email-warning">
+            En email HTML usar exclusivamente <i>Georgia</i> + <i>Courier New</i>. <br>
+            <strong>Nunca Arial, Inter ni Helvetica.</strong>
+        </div>
+    </div>
+    
+    <div style="margin-top: 4rem; text-align: center; color: var(--color-terra); opacity: 0.6; font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: 0.1em; padding-bottom: 2rem;">
+        ForMeta ·
+    </div>
+    
+</div>
+
+
+<footer style="text-align: center; margin-top: var(--spacing-xl); padding: var(--spacing-md) 0; border-top: 1px solid var(--color-border-secondary);">
+    <svg width="24" height="30" viewBox="0 0 160 200" style="opacity: 0.8; margin: 0 auto;">
+         <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+         <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+    </svg>
+</footer>
+</body>
+
+</html>

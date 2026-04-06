@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Logo - ForMeta Guía de Estilo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-mono: 'DM Mono', 'Courier New', Courier, monospace;
+            --font-serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+            
+            --color-ink: #2c2c28;
+            --color-terra: #b8896a;
+            --color-sand: #f4f0e8;
+            --color-sea: #7a9aaa;
+            --color-stone: #e2ddd4;
+            --color-white: #ffffff;
+            --color-offblack: #1a1a18;
+            --color-muted: #7a7870;
+            --color-alert: #d05a5a;
+            
+            --color-bg: var(--color-sand);
+            --color-text: var(--color-ink);
+            --color-text-secondary: var(--color-muted);
+            --color-border-secondary: rgba(44, 44, 40, 0.1);
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1.5rem;
+            --spacing-md: 3rem;
+            --spacing-lg: 6rem;
+            --spacing-xl: 10rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {background-color: var(--color-sand);
+            color: var(--color-text);
+            font-family: var(--font-serif);
+            font-weight: 300;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-sm);
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-ink);
+        }
+
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border-secondary);
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            max-width: 650px;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 300;
+        }
+
+        .intro {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .lbl {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            margin-top: 1rem;
+        }
+
+        .sub {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--color-text-secondary);
+            opacity: 0.6;
+            margin-top: 0.25rem;
+        }
+
+        /* Section Layouts */
+        section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        /* Asset Cards */
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-visual {
+            width: 100%;
+            height: 240px;
+            background: var(--color-white);
+            border: 0.5px solid var(--color-border-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+        }
+
+        .card-visual:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+        }
+
+        .card-visual.dark { background: var(--color-offblack); }
+        .card-visual.color { background: var(--color-sand); }
+        .card-visual.ink { background: var(--color-ink); }
+
+        canvas {
+            display: block;
+            border-radius: 6px;
+        }
+
+        /* Static Mockups (for exclusion zones and incorrect uses) */
+        .logo-static {
+            font-family: var(--font-serif);
+            font-size: 48px;
+            font-weight: 300;
+            color: var(--color-ink);
+        }
+        .logo-static i {
+            font-style: italic;
+        }
+        .dark .logo-static { color: var(--color-white); }
+        .ink .logo-static { color: var(--color-sand); }
+        
+        .isotipo-static {
+            font-family: var(--font-serif);
+            font-size: 80px;
+            font-weight: 300;
+            color: var(--color-ink);
+        }
+
+        /* Exclusion Zone Visualization */
+        .exclusion-box {
+            position: relative;
+            display: inline-block;
+        }
+        .exclusion-lines {
+            position: absolute;
+            top: -24px; bottom: -24px; left: -24px; right: -24px;
+            border: 1px dashed var(--color-terra);
+            pointer-events: none;
+        }
+        .exclusion-x {
+            position: absolute;
+            color: var(--color-terra);
+            font-family: var(--font-mono);
+            font-size: 14px;
+        }
+        .ex-top { top: -18px; left: 50%; transform: translateX(-50%); }
+        .ex-bottom { bottom: -22px; left: 50%; transform: translateX(-50%); }
+        .ex-left { left: -16px; top: 50%; transform: translateY(-50%); }
+        .ex-right { right: -20px; top: 50%; transform: translateY(-50%); }
+
+        /* Incorrect Uses */
+        .incorrect-overlay {
+            position: absolute;
+            top: 1rem; left: 1rem;
+            color: var(--color-alert);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .incorrect-overlay::before {
+            content: "✕";
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .wrong-stretch { transform: scaleX(1.5); }
+        .wrong-color { color: #8A2BE2 !important; }
+        .wrong-font { font-family: 'Comic Sans MS', sans-serif !important; font-style: normal !important; }
+        .wrong-rotate { transform: rotate(-15deg); }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: var(--spacing-sm);
+        }
+
+        button {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 6px;
+            color: var(--color-ink);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        button:hover {
+            border-color: var(--color-terra);
+            color: var(--color-terra);
+            background: var(--color-white);
+        }
+        /* Hover Animations for Símbolos */
+        .anim-respiracion { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .anim-respiracion circle { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: 80px 130px; }
+        .anim-respiracion:hover { transform: scale(1.04); }
+        .anim-respiracion:hover circle { transform: scale(1.8); }
+
+        .anim-eco .eco-ring { transform-origin: 80px 130px; }
+        .anim-eco:hover .eco-ring { animation: ripple 1.2s ease-out infinite; }
+        
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(3.5); opacity: 0; stroke-width: 0.1px; }
+        }
+
+        .anim-flotacion { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .anim-flotacion:hover { transform: translateY(-8px); }
+        .anim-flotacion circle { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .anim-flotacion:hover circle { transform: translateY(6px); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="intro">
+        <div class="lbl">Sección 03</div>
+        <h1>Logo</h1>
+        <p>El logotipo de ForMeta es el elemento principal de nuestra identidad. Transmite la conjunción entre estructura ("Forma") y trascendencia ("Meta"). Su uso debe ser cuidadoso y coherente para mantener la integridad visual de la marca.</p>
+    </div>
+
+    <!-- 1. Principal y variantes -->
+    <section>
+        <h2>3.1 Principal y Variantes</h2>
+        <p>Las diferentes configuraciones del logotipo aseguran legibilidad en cualquier formato y soporte. La versión horizontal es la principal.</p>
+        
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-visual color">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160">
+  <rect width="100%" height="100%" fill="#f4f0e8" />
+  <circle cx="76" cy="64" r="1.55" fill="#2c2c28" opacity="0.83" />
+  <circle cx="80" cy="64" r="0.55" fill="#2c2c28" opacity="0.69" />
+  <circle cx="96" cy="64" r="0.63" fill="#2c2c28" opacity="0.97" />
+  <circle cx="100" cy="64" r="1.81" fill="#b8896a" opacity="0.86" />
+  <circle cx="156" cy="64" r="1.38" fill="#2c2c28" opacity="0.98" />
+  <circle cx="160" cy="64" r="2.00" fill="#2c2c28" opacity="0.93" />
+  <circle cx="164" cy="64" r="0.59" fill="#b8896a" opacity="0.69" />
+  <circle cx="184" cy="64" r="0.84" fill="#2c2c28" opacity="0.74" />
+  <circle cx="188" cy="64" r="1.54" fill="#2c2c28" opacity="0.67" />
+  <circle cx="192" cy="64" r="0.95" fill="#2c2c28" opacity="0.70" />
+  <circle cx="80" cy="68" r="1.05" fill="#2c2c28" opacity="0.90" />
+  <circle cx="100" cy="68" r="1.80" fill="#b8896a" opacity="0.71" />
+  <circle cx="160" cy="68" r="0.93" fill="#2c2c28" opacity="0.69" />
+  <circle cx="164" cy="68" r="0.97" fill="#2c2c28" opacity="0.85" />
+  <circle cx="184" cy="68" r="0.76" fill="#2c2c28" opacity="0.87" />
+  <circle cx="188" cy="68" r="1.28" fill="#2c2c28" opacity="0.79" />
+  <circle cx="232" cy="68" r="1.16" fill="#2c2c28" opacity="0.70" />
+  <circle cx="80" cy="72" r="1.82" fill="#2c2c28" opacity="0.68" />
+  <circle cx="112" cy="72" r="1.25" fill="#b8896a" opacity="0.69" />
+  <circle cx="116" cy="72" r="1.07" fill="#2c2c28" opacity="0.77" />
+  <circle cx="132" cy="72" r="0.51" fill="#2c2c28" opacity="0.88" />
+  <circle cx="136" cy="72" r="0.83" fill="#b8896a" opacity="0.90" />
+  <circle cx="144" cy="72" r="1.66" fill="#2c2c28" opacity="0.79" />
+  <circle cx="148" cy="72" r="1.46" fill="#2c2c28" opacity="0.87" />
+  <circle cx="160" cy="72" r="0.77" fill="#2c2c28" opacity="0.66" />
+  <circle cx="164" cy="72" r="0.96" fill="#b8896a" opacity="0.68" />
+  <circle cx="168" cy="72" r="1.82" fill="#b8896a" opacity="0.74" />
+  <circle cx="188" cy="72" r="1.36" fill="#2c2c28" opacity="0.89" />
+  <circle cx="212" cy="72" r="1.21" fill="#2c2c28" opacity="0.91" />
+  <circle cx="216" cy="72" r="1.88" fill="#2c2c28" opacity="0.83" />
+  <circle cx="228" cy="72" r="1.32" fill="#2c2c28" opacity="0.78" />
+  <circle cx="232" cy="72" r="1.85" fill="#2c2c28" opacity="0.76" />
+  <circle cx="236" cy="72" r="1.87" fill="#b8896a" opacity="0.97" />
+  <circle cx="240" cy="72" r="1.72" fill="#2c2c28" opacity="0.75" />
+  <circle cx="252" cy="72" r="1.53" fill="#2c2c28" opacity="0.91" />
+  <circle cx="256" cy="72" r="1.72" fill="#2c2c28" opacity="0.72" />
+  <circle cx="260" cy="72" r="1.60" fill="#2c2c28" opacity="0.73" />
+  <circle cx="80" cy="76" r="1.30" fill="#b8896a" opacity="0.97" />
+  <circle cx="92" cy="76" r="1.58" fill="#2c2c28" opacity="0.93" />
+  <circle cx="108" cy="76" r="1.89" fill="#2c2c28" opacity="0.86" />
+  <circle cx="120" cy="76" r="1.42" fill="#2c2c28" opacity="0.96" />
+  <circle cx="136" cy="76" r="1.52" fill="#2c2c28" opacity="0.71" />
+  <circle cx="140" cy="76" r="0.65" fill="#2c2c28" opacity="0.91" />
+  <circle cx="148" cy="76" r="1.20" fill="#2c2c28" opacity="0.82" />
+  <circle cx="160" cy="76" r="0.88" fill="#2c2c28" opacity="0.84" />
+  <circle cx="164" cy="76" r="1.39" fill="#2c2c28" opacity="0.77" />
+  <circle cx="168" cy="76" r="1.42" fill="#b8896a" opacity="0.88" />
+  <circle cx="180" cy="76" r="0.52" fill="#2c2c28" opacity="0.80" />
+  <circle cx="188" cy="76" r="0.61" fill="#2c2c28" opacity="0.83" />
+  <circle cx="204" cy="76" r="0.91" fill="#2c2c28" opacity="0.92" />
+  <circle cx="208" cy="76" r="1.76" fill="#2c2c28" opacity="0.65" />
+  <circle cx="220" cy="76" r="1.93" fill="#2c2c28" opacity="0.83" />
+  <circle cx="232" cy="76" r="1.45" fill="#2c2c28" opacity="0.68" />
+  <circle cx="248" cy="76" r="1.00" fill="#2c2c28" opacity="0.71" />
+  <circle cx="260" cy="76" r="1.63" fill="#2c2c28" opacity="0.90" />
+  <circle cx="80" cy="80" r="0.85" fill="#2c2c28" opacity="0.74" />
+  <circle cx="84" cy="80" r="1.46" fill="#2c2c28" opacity="0.84" />
+  <circle cx="88" cy="80" r="1.55" fill="#2c2c28" opacity="0.67" />
+  <circle cx="92" cy="80" r="0.75" fill="#2c2c28" opacity="0.70" />
+  <circle cx="104" cy="80" r="1.67" fill="#2c2c28" opacity="0.85" />
+  <circle cx="120" cy="80" r="0.77" fill="#2c2c28" opacity="0.88" />
+  <circle cx="124" cy="80" r="0.59" fill="#b8896a" opacity="0.78" />
+  <circle cx="136" cy="80" r="1.40" fill="#2c2c28" opacity="0.87" />
+  <circle cx="148" cy="80" r="1.28" fill="#2c2c28" opacity="0.85" />
+  <circle cx="160" cy="80" r="1.22" fill="#b8896a" opacity="0.94" />
+  <circle cx="168" cy="80" r="1.94" fill="#b8896a" opacity="0.66" />
+  <circle cx="180" cy="80" r="1.62" fill="#2c2c28" opacity="0.94" />
+  <circle cx="188" cy="80" r="1.84" fill="#2c2c28" opacity="0.77" />
+  <circle cx="204" cy="80" r="0.52" fill="#2c2c28" opacity="0.72" />
+  <circle cx="220" cy="80" r="1.92" fill="#2c2c28" opacity="0.73" />
+  <circle cx="232" cy="80" r="0.63" fill="#2c2c28" opacity="0.91" />
+  <circle cx="248" cy="80" r="1.76" fill="#2c2c28" opacity="0.93" />
+  <circle cx="260" cy="80" r="1.76" fill="#2c2c28" opacity="0.83" />
+  <circle cx="264" cy="80" r="1.59" fill="#2c2c28" opacity="0.68" />
+  <circle cx="80" cy="84" r="1.20" fill="#b8896a" opacity="0.97" />
+  <circle cx="92" cy="84" r="0.59" fill="#2c2c28" opacity="0.67" />
+  <circle cx="104" cy="84" r="1.85" fill="#2c2c28" opacity="0.72" />
+  <circle cx="120" cy="84" r="1.97" fill="#b8896a" opacity="0.98" />
+  <circle cx="124" cy="84" r="1.95" fill="#2c2c28" opacity="0.95" />
+  <circle cx="132" cy="84" r="1.54" fill="#2c2c28" opacity="0.69" />
+  <circle cx="136" cy="84" r="0.67" fill="#2c2c28" opacity="0.92" />
+  <circle cx="160" cy="84" r="1.67" fill="#2c2c28" opacity="0.66" />
+  <circle cx="168" cy="84" r="1.09" fill="#2c2c28" opacity="0.98" />
+  <circle cx="172" cy="84" r="1.05" fill="#2c2c28" opacity="0.78" />
+  <circle cx="176" cy="84" r="0.93" fill="#2c2c28" opacity="0.79" />
+  <circle cx="188" cy="84" r="1.11" fill="#2c2c28" opacity="0.96" />
+  <circle cx="204" cy="84" r="1.71" fill="#2c2c28" opacity="0.95" />
+  <circle cx="208" cy="84" r="0.89" fill="#2c2c28" opacity="1.00" />
+  <circle cx="212" cy="84" r="1.08" fill="#2c2c28" opacity="0.67" />
+  <circle cx="216" cy="84" r="1.79" fill="#2c2c28" opacity="0.90" />
+  <circle cx="220" cy="84" r="0.79" fill="#2c2c28" opacity="0.94" />
+  <circle cx="232" cy="84" r="1.79" fill="#2c2c28" opacity="0.90" />
+  <circle cx="252" cy="84" r="1.92" fill="#2c2c28" opacity="0.89" />
+  <circle cx="256" cy="84" r="1.65" fill="#2c2c28" opacity="0.73" />
+  <circle cx="260" cy="84" r="1.85" fill="#2c2c28" opacity="0.71" />
+  <circle cx="264" cy="84" r="1.87" fill="#2c2c28" opacity="0.71" />
+  <circle cx="80" cy="88" r="0.66" fill="#2c2c28" opacity="0.67" />
+  <circle cx="100" cy="88" r="1.84" fill="#2c2c28" opacity="0.67" />
+  <circle cx="104" cy="88" r="1.07" fill="#2c2c28" opacity="0.95" />
+  <circle cx="120" cy="88" r="1.23" fill="#2c2c28" opacity="0.67" />
+  <circle cx="124" cy="88" r="1.15" fill="#2c2c28" opacity="0.90" />
+  <circle cx="132" cy="88" r="1.13" fill="#b8896a" opacity="0.88" />
+  <circle cx="136" cy="88" r="0.84" fill="#b8896a" opacity="0.95" />
+  <circle cx="160" cy="88" r="0.74" fill="#2c2c28" opacity="0.68" />
+  <circle cx="172" cy="88" r="0.73" fill="#b8896a" opacity="0.71" />
+  <circle cx="176" cy="88" r="0.51" fill="#2c2c28" opacity="0.81" />
+  <circle cx="188" cy="88" r="1.24" fill="#2c2c28" opacity="0.65" />
+  <circle cx="204" cy="88" r="1.02" fill="#2c2c28" opacity="0.72" />
+  <circle cx="232" cy="88" r="1.01" fill="#2c2c28" opacity="0.95" />
+  <circle cx="248" cy="88" r="1.74" fill="#2c2c28" opacity="0.80" />
+  <circle cx="260" cy="88" r="1.06" fill="#2c2c28" opacity="0.74" />
+  <circle cx="264" cy="88" r="0.76" fill="#2c2c28" opacity="0.65" />
+  <circle cx="80" cy="92" r="1.67" fill="#2c2c28" opacity="0.87" />
+  <circle cx="104" cy="92" r="0.94" fill="#2c2c28" opacity="0.81" />
+  <circle cx="120" cy="92" r="1.61" fill="#b8896a" opacity="0.98" />
+  <circle cx="132" cy="92" r="1.34" fill="#b8896a" opacity="0.73" />
+  <circle cx="160" cy="92" r="1.22" fill="#2c2c28" opacity="0.90" />
+  <circle cx="172" cy="92" r="1.45" fill="#b8896a" opacity="0.76" />
+  <circle cx="188" cy="92" r="1.86" fill="#2c2c28" opacity="0.86" />
+  <circle cx="204" cy="92" r="0.72" fill="#2c2c28" opacity="0.81" />
+  <circle cx="208" cy="92" r="1.58" fill="#2c2c28" opacity="0.69" />
+  <circle cx="232" cy="92" r="0.54" fill="#2c2c28" opacity="0.82" />
+  <circle cx="248" cy="92" r="0.70" fill="#2c2c28" opacity="0.65" />
+  <circle cx="260" cy="92" r="1.52" fill="#2c2c28" opacity="0.78" />
+  <circle cx="264" cy="92" r="1.27" fill="#2c2c28" opacity="0.76" />
+  <circle cx="72" cy="96" r="1.36" fill="#b8896a" opacity="0.92" />
+  <circle cx="76" cy="96" r="1.54" fill="#2c2c28" opacity="0.86" />
+  <circle cx="80" cy="96" r="1.67" fill="#2c2c28" opacity="1.00" />
+  <circle cx="84" cy="96" r="0.78" fill="#b8896a" opacity="0.70" />
+  <circle cx="104" cy="96" r="1.81" fill="#2c2c28" opacity="0.91" />
+  <circle cx="108" cy="96" r="1.72" fill="#2c2c28" opacity="0.90" />
+  <circle cx="112" cy="96" r="1.50" fill="#b8896a" opacity="0.87" />
+  <circle cx="116" cy="96" r="0.54" fill="#b8896a" opacity="0.82" />
+  <circle cx="132" cy="96" r="0.71" fill="#b8896a" opacity="0.88" />
+  <circle cx="152" cy="96" r="1.83" fill="#b8896a" opacity="0.74" />
+  <circle cx="156" cy="96" r="0.64" fill="#2c2c28" opacity="0.80" />
+  <circle cx="160" cy="96" r="1.09" fill="#2c2c28" opacity="0.93" />
+  <circle cx="164" cy="96" r="1.24" fill="#2c2c28" opacity="0.90" />
+  <circle cx="172" cy="96" r="0.50" fill="#b8896a" opacity="0.95" />
+  <circle cx="184" cy="96" r="1.21" fill="#b8896a" opacity="0.99" />
+  <circle cx="188" cy="96" r="1.89" fill="#2c2c28" opacity="0.86" />
+  <circle cx="192" cy="96" r="1.55" fill="#2c2c28" opacity="0.84" />
+  <circle cx="196" cy="96" r="1.59" fill="#2c2c28" opacity="0.71" />
+  <circle cx="208" cy="96" r="1.38" fill="#b8896a" opacity="0.96" />
+  <circle cx="212" cy="96" r="0.66" fill="#2c2c28" opacity="0.66" />
+  <circle cx="216" cy="96" r="0.75" fill="#2c2c28" opacity="0.77" />
+  <circle cx="220" cy="96" r="0.64" fill="#b8896a" opacity="0.70" />
+  <circle cx="232" cy="96" r="1.63" fill="#2c2c28" opacity="0.88" />
+  <circle cx="236" cy="96" r="1.40" fill="#2c2c28" opacity="0.82" />
+  <circle cx="240" cy="96" r="1.47" fill="#2c2c28" opacity="0.99" />
+  <circle cx="248" cy="96" r="1.13" fill="#2c2c28" opacity="0.88" />
+  <circle cx="252" cy="96" r="1.17" fill="#2c2c28" opacity="0.81" />
+  <circle cx="256" cy="96" r="0.86" fill="#2c2c28" opacity="0.92" />
+  <circle cx="260" cy="96" r="1.63" fill="#2c2c28" opacity="0.95" />
+  <circle cx="264" cy="96" r="1.31" fill="#b8896a" opacity="0.78" />
+  <circle cx="268" cy="96" r="1.50" fill="#2c2c28" opacity="0.69" />
+</svg>
+                </div>
+                <div class="lbl">Color · Fondo Sand</div>
+                <div class="sub">01</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160">
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <circle cx="76" cy="64" r="1.01" fill="#111110" opacity="0.69" />
+  <circle cx="80" cy="64" r="1.60" fill="#111110" opacity="0.87" />
+  <circle cx="96" cy="64" r="1.86" fill="#111110" opacity="0.87" />
+  <circle cx="100" cy="64" r="1.85" fill="#111110" opacity="0.77" />
+  <circle cx="156" cy="64" r="0.68" fill="#111110" opacity="0.77" />
+  <circle cx="160" cy="64" r="0.80" fill="#111110" opacity="0.87" />
+  <circle cx="164" cy="64" r="1.00" fill="#111110" opacity="0.73" />
+  <circle cx="184" cy="64" r="1.43" fill="#111110" opacity="0.85" />
+  <circle cx="188" cy="64" r="0.97" fill="#111110" opacity="0.87" />
+  <circle cx="192" cy="64" r="0.68" fill="#111110" opacity="0.91" />
+  <circle cx="80" cy="68" r="0.86" fill="#111110" opacity="0.89" />
+  <circle cx="100" cy="68" r="1.89" fill="#111110" opacity="0.90" />
+  <circle cx="160" cy="68" r="1.89" fill="#111110" opacity="0.78" />
+  <circle cx="164" cy="68" r="0.69" fill="#111110" opacity="0.67" />
+  <circle cx="184" cy="68" r="1.80" fill="#111110" opacity="0.99" />
+  <circle cx="188" cy="68" r="0.73" fill="#111110" opacity="0.80" />
+  <circle cx="232" cy="68" r="0.85" fill="#111110" opacity="0.88" />
+  <circle cx="80" cy="72" r="0.96" fill="#111110" opacity="0.85" />
+  <circle cx="112" cy="72" r="0.92" fill="#111110" opacity="0.84" />
+  <circle cx="116" cy="72" r="1.65" fill="#111110" opacity="0.92" />
+  <circle cx="132" cy="72" r="0.78" fill="#111110" opacity="0.89" />
+  <circle cx="136" cy="72" r="0.70" fill="#111110" opacity="0.92" />
+  <circle cx="144" cy="72" r="1.57" fill="#111110" opacity="0.76" />
+  <circle cx="148" cy="72" r="1.25" fill="#111110" opacity="0.76" />
+  <circle cx="160" cy="72" r="0.56" fill="#111110" opacity="0.71" />
+  <circle cx="164" cy="72" r="1.36" fill="#111110" opacity="0.91" />
+  <circle cx="168" cy="72" r="0.95" fill="#111110" opacity="0.90" />
+  <circle cx="188" cy="72" r="1.53" fill="#111110" opacity="0.68" />
+  <circle cx="212" cy="72" r="1.22" fill="#111110" opacity="0.86" />
+  <circle cx="216" cy="72" r="1.35" fill="#111110" opacity="0.85" />
+  <circle cx="228" cy="72" r="2.00" fill="#111110" opacity="0.76" />
+  <circle cx="232" cy="72" r="0.71" fill="#111110" opacity="0.93" />
+  <circle cx="236" cy="72" r="0.79" fill="#111110" opacity="0.66" />
+  <circle cx="240" cy="72" r="1.59" fill="#111110" opacity="0.93" />
+  <circle cx="252" cy="72" r="0.51" fill="#111110" opacity="0.69" />
+  <circle cx="256" cy="72" r="1.27" fill="#111110" opacity="0.68" />
+  <circle cx="260" cy="72" r="1.73" fill="#111110" opacity="0.79" />
+  <circle cx="80" cy="76" r="1.09" fill="#111110" opacity="0.73" />
+  <circle cx="92" cy="76" r="0.71" fill="#111110" opacity="0.82" />
+  <circle cx="108" cy="76" r="0.73" fill="#111110" opacity="0.96" />
+  <circle cx="120" cy="76" r="0.93" fill="#111110" opacity="0.99" />
+  <circle cx="136" cy="76" r="0.60" fill="#111110" opacity="0.74" />
+  <circle cx="140" cy="76" r="0.74" fill="#111110" opacity="0.82" />
+  <circle cx="148" cy="76" r="1.15" fill="#111110" opacity="0.95" />
+  <circle cx="160" cy="76" r="1.54" fill="#111110" opacity="0.71" />
+  <circle cx="164" cy="76" r="1.34" fill="#111110" opacity="1.00" />
+  <circle cx="168" cy="76" r="1.78" fill="#111110" opacity="0.92" />
+  <circle cx="180" cy="76" r="1.81" fill="#111110" opacity="0.76" />
+  <circle cx="188" cy="76" r="0.71" fill="#111110" opacity="0.84" />
+  <circle cx="204" cy="76" r="1.04" fill="#111110" opacity="0.87" />
+  <circle cx="208" cy="76" r="0.70" fill="#111110" opacity="0.94" />
+  <circle cx="220" cy="76" r="0.55" fill="#111110" opacity="0.96" />
+  <circle cx="232" cy="76" r="1.95" fill="#111110" opacity="0.68" />
+  <circle cx="248" cy="76" r="0.58" fill="#111110" opacity="0.76" />
+  <circle cx="260" cy="76" r="0.64" fill="#111110" opacity="0.88" />
+  <circle cx="80" cy="80" r="1.46" fill="#111110" opacity="0.80" />
+  <circle cx="84" cy="80" r="1.41" fill="#111110" opacity="0.91" />
+  <circle cx="88" cy="80" r="0.74" fill="#111110" opacity="0.93" />
+  <circle cx="92" cy="80" r="1.98" fill="#111110" opacity="0.84" />
+  <circle cx="104" cy="80" r="0.96" fill="#111110" opacity="0.77" />
+  <circle cx="120" cy="80" r="0.52" fill="#111110" opacity="0.75" />
+  <circle cx="124" cy="80" r="1.34" fill="#111110" opacity="0.93" />
+  <circle cx="136" cy="80" r="0.61" fill="#111110" opacity="0.78" />
+  <circle cx="148" cy="80" r="1.33" fill="#111110" opacity="0.65" />
+  <circle cx="160" cy="80" r="1.61" fill="#111110" opacity="0.94" />
+  <circle cx="168" cy="80" r="0.83" fill="#111110" opacity="0.78" />
+  <circle cx="180" cy="80" r="1.87" fill="#111110" opacity="0.88" />
+  <circle cx="188" cy="80" r="1.87" fill="#111110" opacity="0.85" />
+  <circle cx="204" cy="80" r="1.51" fill="#111110" opacity="0.92" />
+  <circle cx="220" cy="80" r="1.82" fill="#111110" opacity="1.00" />
+  <circle cx="232" cy="80" r="1.22" fill="#111110" opacity="0.92" />
+  <circle cx="248" cy="80" r="1.35" fill="#111110" opacity="0.96" />
+  <circle cx="260" cy="80" r="0.91" fill="#111110" opacity="0.77" />
+  <circle cx="264" cy="80" r="0.52" fill="#111110" opacity="0.84" />
+  <circle cx="80" cy="84" r="1.45" fill="#111110" opacity="0.76" />
+  <circle cx="92" cy="84" r="0.89" fill="#111110" opacity="0.96" />
+  <circle cx="104" cy="84" r="0.55" fill="#111110" opacity="0.77" />
+  <circle cx="120" cy="84" r="1.46" fill="#111110" opacity="0.87" />
+  <circle cx="124" cy="84" r="1.63" fill="#111110" opacity="0.68" />
+  <circle cx="132" cy="84" r="1.91" fill="#111110" opacity="0.79" />
+  <circle cx="136" cy="84" r="1.46" fill="#111110" opacity="0.84" />
+  <circle cx="160" cy="84" r="1.07" fill="#111110" opacity="0.96" />
+  <circle cx="168" cy="84" r="0.85" fill="#111110" opacity="0.75" />
+  <circle cx="172" cy="84" r="1.61" fill="#111110" opacity="0.96" />
+  <circle cx="176" cy="84" r="0.82" fill="#111110" opacity="0.99" />
+  <circle cx="188" cy="84" r="0.62" fill="#111110" opacity="0.86" />
+  <circle cx="204" cy="84" r="1.73" fill="#111110" opacity="0.75" />
+  <circle cx="208" cy="84" r="1.60" fill="#111110" opacity="0.69" />
+  <circle cx="212" cy="84" r="0.51" fill="#111110" opacity="0.81" />
+  <circle cx="216" cy="84" r="1.82" fill="#111110" opacity="1.00" />
+  <circle cx="220" cy="84" r="0.68" fill="#111110" opacity="0.74" />
+  <circle cx="232" cy="84" r="1.82" fill="#111110" opacity="0.89" />
+  <circle cx="252" cy="84" r="1.07" fill="#111110" opacity="0.75" />
+  <circle cx="256" cy="84" r="0.99" fill="#111110" opacity="0.98" />
+  <circle cx="260" cy="84" r="0.84" fill="#111110" opacity="0.95" />
+  <circle cx="264" cy="84" r="1.90" fill="#111110" opacity="0.84" />
+  <circle cx="80" cy="88" r="1.53" fill="#111110" opacity="0.94" />
+  <circle cx="100" cy="88" r="1.22" fill="#111110" opacity="0.88" />
+  <circle cx="104" cy="88" r="1.80" fill="#111110" opacity="0.76" />
+  <circle cx="120" cy="88" r="0.86" fill="#111110" opacity="0.93" />
+  <circle cx="124" cy="88" r="1.12" fill="#111110" opacity="0.94" />
+  <circle cx="132" cy="88" r="0.67" fill="#111110" opacity="0.69" />
+  <circle cx="136" cy="88" r="1.95" fill="#111110" opacity="0.97" />
+  <circle cx="160" cy="88" r="0.73" fill="#111110" opacity="0.69" />
+  <circle cx="172" cy="88" r="1.41" fill="#111110" opacity="0.84" />
+  <circle cx="176" cy="88" r="1.14" fill="#111110" opacity="0.83" />
+  <circle cx="188" cy="88" r="1.75" fill="#111110" opacity="0.73" />
+  <circle cx="204" cy="88" r="1.37" fill="#111110" opacity="0.95" />
+  <circle cx="232" cy="88" r="1.94" fill="#111110" opacity="0.82" />
+  <circle cx="248" cy="88" r="1.69" fill="#111110" opacity="0.89" />
+  <circle cx="260" cy="88" r="0.53" fill="#111110" opacity="0.69" />
+  <circle cx="264" cy="88" r="1.76" fill="#111110" opacity="0.90" />
+  <circle cx="80" cy="92" r="1.54" fill="#111110" opacity="0.80" />
+  <circle cx="104" cy="92" r="0.89" fill="#111110" opacity="0.96" />
+  <circle cx="120" cy="92" r="1.76" fill="#111110" opacity="0.85" />
+  <circle cx="132" cy="92" r="0.62" fill="#111110" opacity="0.82" />
+  <circle cx="160" cy="92" r="1.94" fill="#111110" opacity="0.74" />
+  <circle cx="172" cy="92" r="0.80" fill="#111110" opacity="0.81" />
+  <circle cx="188" cy="92" r="1.74" fill="#111110" opacity="0.70" />
+  <circle cx="204" cy="92" r="1.01" fill="#111110" opacity="0.74" />
+  <circle cx="208" cy="92" r="0.65" fill="#111110" opacity="0.96" />
+  <circle cx="232" cy="92" r="0.55" fill="#111110" opacity="0.86" />
+  <circle cx="248" cy="92" r="1.27" fill="#111110" opacity="0.95" />
+  <circle cx="260" cy="92" r="0.67" fill="#111110" opacity="0.72" />
+  <circle cx="264" cy="92" r="1.78" fill="#111110" opacity="0.88" />
+  <circle cx="72" cy="96" r="1.73" fill="#111110" opacity="0.88" />
+  <circle cx="76" cy="96" r="0.97" fill="#111110" opacity="0.76" />
+  <circle cx="80" cy="96" r="1.99" fill="#111110" opacity="0.80" />
+  <circle cx="84" cy="96" r="1.22" fill="#111110" opacity="0.73" />
+  <circle cx="104" cy="96" r="1.45" fill="#111110" opacity="0.79" />
+  <circle cx="108" cy="96" r="1.11" fill="#111110" opacity="0.73" />
+  <circle cx="112" cy="96" r="1.26" fill="#111110" opacity="0.95" />
+  <circle cx="116" cy="96" r="1.03" fill="#111110" opacity="0.95" />
+  <circle cx="132" cy="96" r="0.60" fill="#111110" opacity="0.89" />
+  <circle cx="152" cy="96" r="1.05" fill="#111110" opacity="0.89" />
+  <circle cx="156" cy="96" r="0.52" fill="#111110" opacity="0.70" />
+  <circle cx="160" cy="96" r="1.55" fill="#111110" opacity="0.85" />
+  <circle cx="164" cy="96" r="1.56" fill="#111110" opacity="0.73" />
+  <circle cx="172" cy="96" r="1.01" fill="#111110" opacity="0.86" />
+  <circle cx="184" cy="96" r="1.04" fill="#111110" opacity="0.96" />
+  <circle cx="188" cy="96" r="1.48" fill="#111110" opacity="0.80" />
+  <circle cx="192" cy="96" r="1.54" fill="#111110" opacity="0.96" />
+  <circle cx="196" cy="96" r="1.78" fill="#111110" opacity="0.71" />
+  <circle cx="208" cy="96" r="0.77" fill="#111110" opacity="0.88" />
+  <circle cx="212" cy="96" r="1.73" fill="#111110" opacity="0.69" />
+  <circle cx="216" cy="96" r="0.84" fill="#111110" opacity="0.90" />
+  <circle cx="220" cy="96" r="1.31" fill="#111110" opacity="0.71" />
+  <circle cx="232" cy="96" r="1.35" fill="#111110" opacity="0.75" />
+  <circle cx="236" cy="96" r="1.31" fill="#111110" opacity="0.83" />
+  <circle cx="240" cy="96" r="1.93" fill="#111110" opacity="0.84" />
+  <circle cx="248" cy="96" r="1.32" fill="#111110" opacity="0.91" />
+  <circle cx="252" cy="96" r="1.75" fill="#111110" opacity="0.85" />
+  <circle cx="256" cy="96" r="1.42" fill="#111110" opacity="0.99" />
+  <circle cx="260" cy="96" r="1.26" fill="#111110" opacity="0.68" />
+  <circle cx="264" cy="96" r="1.31" fill="#111110" opacity="0.92" />
+  <circle cx="268" cy="96" r="1.57" fill="#111110" opacity="0.73" />
+</svg>
+                </div>
+                <div class="lbl">Monocromático · Blanco</div>
+                <div class="sub">02</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160">
+  <rect width="100%" height="100%" fill="#1a1a18" />
+  <circle cx="76" cy="64" r="0.75" fill="#d8d4cc" opacity="0.79" />
+  <circle cx="80" cy="64" r="1.64" fill="#d8d4cc" opacity="0.65" />
+  <circle cx="96" cy="64" r="0.91" fill="#b8896a" opacity="0.77" />
+  <circle cx="100" cy="64" r="1.90" fill="#b8896a" opacity="0.81" />
+  <circle cx="156" cy="64" r="1.62" fill="#d8d4cc" opacity="0.89" />
+  <circle cx="160" cy="64" r="0.61" fill="#d8d4cc" opacity="0.86" />
+  <circle cx="164" cy="64" r="1.84" fill="#b8896a" opacity="0.73" />
+  <circle cx="184" cy="64" r="1.52" fill="#d8d4cc" opacity="0.98" />
+  <circle cx="188" cy="64" r="0.59" fill="#d8d4cc" opacity="0.85" />
+  <circle cx="192" cy="64" r="0.57" fill="#d8d4cc" opacity="0.68" />
+  <circle cx="80" cy="68" r="0.54" fill="#d8d4cc" opacity="0.77" />
+  <circle cx="100" cy="68" r="1.62" fill="#d8d4cc" opacity="0.85" />
+  <circle cx="160" cy="68" r="0.82" fill="#d8d4cc" opacity="0.71" />
+  <circle cx="164" cy="68" r="0.59" fill="#d8d4cc" opacity="0.89" />
+  <circle cx="184" cy="68" r="1.51" fill="#d8d4cc" opacity="0.99" />
+  <circle cx="188" cy="68" r="1.07" fill="#d8d4cc" opacity="0.81" />
+  <circle cx="232" cy="68" r="0.83" fill="#d8d4cc" opacity="1.00" />
+  <circle cx="80" cy="72" r="1.80" fill="#d8d4cc" opacity="0.90" />
+  <circle cx="112" cy="72" r="1.00" fill="#b8896a" opacity="0.70" />
+  <circle cx="116" cy="72" r="1.97" fill="#d8d4cc" opacity="0.80" />
+  <circle cx="132" cy="72" r="0.80" fill="#b8896a" opacity="0.96" />
+  <circle cx="136" cy="72" r="1.84" fill="#b8896a" opacity="0.80" />
+  <circle cx="144" cy="72" r="1.86" fill="#d8d4cc" opacity="0.97" />
+  <circle cx="148" cy="72" r="1.01" fill="#d8d4cc" opacity="0.74" />
+  <circle cx="160" cy="72" r="0.80" fill="#d8d4cc" opacity="0.87" />
+  <circle cx="164" cy="72" r="1.62" fill="#b8896a" opacity="0.72" />
+  <circle cx="168" cy="72" r="0.56" fill="#d8d4cc" opacity="0.68" />
+  <circle cx="188" cy="72" r="0.69" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="212" cy="72" r="0.85" fill="#d8d4cc" opacity="0.70" />
+  <circle cx="216" cy="72" r="1.34" fill="#d8d4cc" opacity="0.86" />
+  <circle cx="228" cy="72" r="0.69" fill="#d8d4cc" opacity="0.73" />
+  <circle cx="232" cy="72" r="0.92" fill="#d8d4cc" opacity="0.99" />
+  <circle cx="236" cy="72" r="1.87" fill="#d8d4cc" opacity="0.95" />
+  <circle cx="240" cy="72" r="1.31" fill="#d8d4cc" opacity="0.93" />
+  <circle cx="252" cy="72" r="1.78" fill="#d8d4cc" opacity="0.76" />
+  <circle cx="256" cy="72" r="1.32" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="260" cy="72" r="1.21" fill="#d8d4cc" opacity="0.77" />
+  <circle cx="80" cy="76" r="1.40" fill="#d8d4cc" opacity="0.87" />
+  <circle cx="92" cy="76" r="1.83" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="108" cy="76" r="1.00" fill="#b8896a" opacity="0.68" />
+  <circle cx="120" cy="76" r="1.62" fill="#d8d4cc" opacity="0.82" />
+  <circle cx="136" cy="76" r="1.33" fill="#d8d4cc" opacity="0.92" />
+  <circle cx="140" cy="76" r="1.25" fill="#d8d4cc" opacity="0.99" />
+  <circle cx="148" cy="76" r="1.75" fill="#d8d4cc" opacity="0.92" />
+  <circle cx="160" cy="76" r="1.83" fill="#b8896a" opacity="0.68" />
+  <circle cx="164" cy="76" r="1.49" fill="#b8896a" opacity="0.65" />
+  <circle cx="168" cy="76" r="1.62" fill="#b8896a" opacity="0.70" />
+  <circle cx="180" cy="76" r="1.97" fill="#d8d4cc" opacity="0.88" />
+  <circle cx="188" cy="76" r="0.96" fill="#d8d4cc" opacity="0.90" />
+  <circle cx="204" cy="76" r="1.13" fill="#d8d4cc" opacity="0.67" />
+  <circle cx="208" cy="76" r="1.43" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="220" cy="76" r="1.79" fill="#d8d4cc" opacity="1.00" />
+  <circle cx="232" cy="76" r="1.76" fill="#d8d4cc" opacity="0.66" />
+  <circle cx="248" cy="76" r="0.93" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="260" cy="76" r="1.43" fill="#d8d4cc" opacity="0.72" />
+  <circle cx="80" cy="80" r="1.07" fill="#b8896a" opacity="0.90" />
+  <circle cx="84" cy="80" r="0.66" fill="#b8896a" opacity="0.76" />
+  <circle cx="88" cy="80" r="1.56" fill="#b8896a" opacity="0.77" />
+  <circle cx="92" cy="80" r="1.34" fill="#d8d4cc" opacity="0.89" />
+  <circle cx="104" cy="80" r="1.53" fill="#d8d4cc" opacity="0.67" />
+  <circle cx="120" cy="80" r="0.84" fill="#d8d4cc" opacity="0.98" />
+  <circle cx="124" cy="80" r="0.75" fill="#d8d4cc" opacity="0.80" />
+  <circle cx="136" cy="80" r="1.05" fill="#d8d4cc" opacity="0.80" />
+  <circle cx="148" cy="80" r="1.40" fill="#d8d4cc" opacity="0.72" />
+  <circle cx="160" cy="80" r="1.70" fill="#d8d4cc" opacity="0.69" />
+  <circle cx="168" cy="80" r="0.62" fill="#d8d4cc" opacity="0.78" />
+  <circle cx="180" cy="80" r="1.89" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="188" cy="80" r="0.79" fill="#d8d4cc" opacity="0.65" />
+  <circle cx="204" cy="80" r="1.90" fill="#d8d4cc" opacity="0.92" />
+  <circle cx="220" cy="80" r="1.19" fill="#d8d4cc" opacity="0.96" />
+  <circle cx="232" cy="80" r="0.93" fill="#d8d4cc" opacity="0.69" />
+  <circle cx="248" cy="80" r="1.61" fill="#d8d4cc" opacity="0.79" />
+  <circle cx="260" cy="80" r="1.77" fill="#d8d4cc" opacity="0.89" />
+  <circle cx="264" cy="80" r="0.91" fill="#b8896a" opacity="0.86" />
+  <circle cx="80" cy="84" r="1.78" fill="#b8896a" opacity="0.91" />
+  <circle cx="92" cy="84" r="1.68" fill="#d8d4cc" opacity="0.66" />
+  <circle cx="104" cy="84" r="1.64" fill="#d8d4cc" opacity="0.66" />
+  <circle cx="120" cy="84" r="1.27" fill="#d8d4cc" opacity="0.93" />
+  <circle cx="124" cy="84" r="1.44" fill="#d8d4cc" opacity="0.84" />
+  <circle cx="132" cy="84" r="1.51" fill="#d8d4cc" opacity="0.68" />
+  <circle cx="136" cy="84" r="0.95" fill="#d8d4cc" opacity="0.90" />
+  <circle cx="160" cy="84" r="0.73" fill="#b8896a" opacity="0.79" />
+  <circle cx="168" cy="84" r="0.74" fill="#d8d4cc" opacity="0.85" />
+  <circle cx="172" cy="84" r="0.60" fill="#d8d4cc" opacity="0.84" />
+  <circle cx="176" cy="84" r="1.84" fill="#d8d4cc" opacity="0.82" />
+  <circle cx="188" cy="84" r="0.56" fill="#d8d4cc" opacity="0.77" />
+  <circle cx="204" cy="84" r="0.81" fill="#d8d4cc" opacity="0.99" />
+  <circle cx="208" cy="84" r="1.36" fill="#d8d4cc" opacity="0.98" />
+  <circle cx="212" cy="84" r="1.50" fill="#d8d4cc" opacity="0.91" />
+  <circle cx="216" cy="84" r="1.64" fill="#d8d4cc" opacity="0.87" />
+  <circle cx="220" cy="84" r="1.52" fill="#d8d4cc" opacity="0.69" />
+  <circle cx="232" cy="84" r="1.49" fill="#d8d4cc" opacity="0.95" />
+  <circle cx="252" cy="84" r="1.39" fill="#d8d4cc" opacity="0.69" />
+  <circle cx="256" cy="84" r="0.81" fill="#d8d4cc" opacity="0.70" />
+  <circle cx="260" cy="84" r="1.48" fill="#d8d4cc" opacity="0.99" />
+  <circle cx="264" cy="84" r="1.21" fill="#d8d4cc" opacity="0.65" />
+  <circle cx="80" cy="88" r="1.68" fill="#b8896a" opacity="0.95" />
+  <circle cx="100" cy="88" r="1.29" fill="#d8d4cc" opacity="0.93" />
+  <circle cx="104" cy="88" r="1.83" fill="#b8896a" opacity="0.67" />
+  <circle cx="120" cy="88" r="0.68" fill="#d8d4cc" opacity="0.95" />
+  <circle cx="124" cy="88" r="1.33" fill="#d8d4cc" opacity="0.84" />
+  <circle cx="132" cy="88" r="1.25" fill="#d8d4cc" opacity="0.66" />
+  <circle cx="136" cy="88" r="1.25" fill="#b8896a" opacity="0.66" />
+  <circle cx="160" cy="88" r="1.12" fill="#d8d4cc" opacity="0.96" />
+  <circle cx="172" cy="88" r="0.79" fill="#d8d4cc" opacity="0.70" />
+  <circle cx="176" cy="88" r="1.15" fill="#b8896a" opacity="0.96" />
+  <circle cx="188" cy="88" r="1.97" fill="#d8d4cc" opacity="0.87" />
+  <circle cx="204" cy="88" r="0.65" fill="#b8896a" opacity="0.95" />
+  <circle cx="232" cy="88" r="1.02" fill="#d8d4cc" opacity="0.85" />
+  <circle cx="248" cy="88" r="1.26" fill="#d8d4cc" opacity="0.73" />
+  <circle cx="260" cy="88" r="0.58" fill="#d8d4cc" opacity="0.94" />
+  <circle cx="264" cy="88" r="1.12" fill="#d8d4cc" opacity="0.97" />
+  <circle cx="80" cy="92" r="1.81" fill="#d8d4cc" opacity="0.79" />
+  <circle cx="104" cy="92" r="1.34" fill="#b8896a" opacity="0.75" />
+  <circle cx="120" cy="92" r="1.80" fill="#d8d4cc" opacity="0.82" />
+  <circle cx="132" cy="92" r="1.59" fill="#d8d4cc" opacity="0.66" />
+  <circle cx="160" cy="92" r="0.83" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="172" cy="92" r="1.60" fill="#b8896a" opacity="0.88" />
+  <circle cx="188" cy="92" r="1.87" fill="#d8d4cc" opacity="0.94" />
+  <circle cx="204" cy="92" r="1.04" fill="#b8896a" opacity="0.96" />
+  <circle cx="208" cy="92" r="1.47" fill="#d8d4cc" opacity="0.97" />
+  <circle cx="232" cy="92" r="0.59" fill="#b8896a" opacity="0.81" />
+  <circle cx="248" cy="92" r="1.78" fill="#d8d4cc" opacity="0.79" />
+  <circle cx="260" cy="92" r="0.60" fill="#d8d4cc" opacity="0.83" />
+  <circle cx="264" cy="92" r="0.66" fill="#d8d4cc" opacity="0.79" />
+  <circle cx="72" cy="96" r="0.83" fill="#d8d4cc" opacity="0.90" />
+  <circle cx="76" cy="96" r="1.19" fill="#d8d4cc" opacity="0.80" />
+  <circle cx="80" cy="96" r="1.36" fill="#d8d4cc" opacity="0.66" />
+  <circle cx="84" cy="96" r="1.80" fill="#b8896a" opacity="0.82" />
+  <circle cx="104" cy="96" r="1.09" fill="#d8d4cc" opacity="0.97" />
+  <circle cx="108" cy="96" r="1.61" fill="#d8d4cc" opacity="0.90" />
+  <circle cx="112" cy="96" r="0.60" fill="#b8896a" opacity="0.74" />
+  <circle cx="116" cy="96" r="1.09" fill="#d8d4cc" opacity="0.84" />
+  <circle cx="132" cy="96" r="1.35" fill="#d8d4cc" opacity="0.77" />
+  <circle cx="152" cy="96" r="1.54" fill="#d8d4cc" opacity="0.92" />
+  <circle cx="156" cy="96" r="0.70" fill="#b8896a" opacity="0.88" />
+  <circle cx="160" cy="96" r="1.15" fill="#b8896a" opacity="0.73" />
+  <circle cx="164" cy="96" r="1.42" fill="#d8d4cc" opacity="0.99" />
+  <circle cx="172" cy="96" r="1.95" fill="#d8d4cc" opacity="0.73" />
+  <circle cx="184" cy="96" r="1.23" fill="#d8d4cc" opacity="0.98" />
+  <circle cx="188" cy="96" r="1.46" fill="#d8d4cc" opacity="0.65" />
+  <circle cx="192" cy="96" r="0.69" fill="#d8d4cc" opacity="0.94" />
+  <circle cx="196" cy="96" r="0.98" fill="#d8d4cc" opacity="0.87" />
+  <circle cx="208" cy="96" r="1.47" fill="#d8d4cc" opacity="0.77" />
+  <circle cx="212" cy="96" r="1.34" fill="#d8d4cc" opacity="0.85" />
+  <circle cx="216" cy="96" r="1.06" fill="#d8d4cc" opacity="0.85" />
+  <circle cx="220" cy="96" r="1.74" fill="#d8d4cc" opacity="0.84" />
+  <circle cx="232" cy="96" r="1.69" fill="#d8d4cc" opacity="0.74" />
+  <circle cx="236" cy="96" r="1.32" fill="#b8896a" opacity="0.68" />
+  <circle cx="240" cy="96" r="0.83" fill="#d8d4cc" opacity="0.69" />
+  <circle cx="248" cy="96" r="1.28" fill="#d8d4cc" opacity="0.80" />
+  <circle cx="252" cy="96" r="1.64" fill="#b8896a" opacity="1.00" />
+  <circle cx="256" cy="96" r="0.69" fill="#d8d4cc" opacity="0.75" />
+  <circle cx="260" cy="96" r="1.51" fill="#d8d4cc" opacity="0.73" />
+  <circle cx="264" cy="96" r="1.37" fill="#d8d4cc" opacity="0.71" />
+  <circle cx="268" cy="96" r="0.91" fill="#d8d4cc" opacity="0.89" />
+</svg>
+                </div>
+                <div class="lbl">Negativo · Ink</div>
+                <div class="sub">03</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Versiones por fondo -->
+    <section>
+        <h2>3.2 Versiones por Fondo</h2>
+        <p>Comportamiento de la marca según su entorno. El sistema de puntos reacciona para asegurar el contraste adecuado y destacar la región "For".</p>
+        
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-visual color">
+                    <canvas id="c1" width="340" height="160"></canvas>
+                </div>
+                <div class="lbl">Color · Fondo Sand</div>
+                <div class="sub">01</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual">
+                    <canvas id="c2" width="340" height="160"></canvas>
+                </div>
+                <div class="lbl">Monocromático · Fondo Blanco</div>
+                <div class="sub">02</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual dark">
+                    <canvas id="c3" width="340" height="160"></canvas>
+                </div>
+                <div class="lbl">Negativo · Fondo Ink</div>
+                <div class="sub">03</div>
+            </div>
+        </div>
+        
+        <div class="btn-group" style="justify-content: center;">
+            <button onclick="replayAll()">↺ Repetir Animaciones</button>
+            <button onclick="exportToSVG()">↓ Descargar SVG</button>
+        </div>
+    </section>
+
+    <!-- 3. Zona de exclusión y tamaño mínimo -->
+    <section>
+        <h2>3.3 Zona de Exclusión y Tamaño Mínimo</h2>
+        <p>Proteger el logotipo es esencial para su reconocimiento. Se debe mantener siempre un área de respeto equivalente a la altura de la vocal "o".</p>
+        
+        <div class="grid-2">
+            <!-- Zona Exclusión -->
+            <div class="card">
+                <div class="card-visual" style="background-color: #fcfbfa; border: 1px dashed #dcd8d1;">
+                    <div class="exclusion-box">
+                        <div class="exclusion-lines">
+                            <span class="exclusion-x ex-top">o</span>
+                            <span class="exclusion-x ex-bottom">o</span>
+                            <span class="exclusion-x ex-left">o</span>
+                            <span class="exclusion-x ex-right">o</span>
+                        </div>
+                        <div class="logo-static" style="font-size: 36px;">F<i>or</i>Meta</div>
+                    </div>
+                </div>
+                <div class="lbl">Área de Respeto (x = "o")</div>
+                <div class="sub">01</div>
+            </div>
+
+            <!-- Tamaño Mínimo -->
+            <div class="card">
+                <div class="card-visual">
+                    <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 2rem;">
+                            <div class="logo-static" style="font-size: 14px;">F<i>or</i>Meta</div>
+                            <div class="lbl" style="margin-top:0">Pantalla: 80px</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 2rem;">
+                            <div class="isotipo-static" style="font-size: 16px;">F</div>
+                            <div class="lbl" style="margin-top:0">Pantalla: 16px</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lbl">Tamaños Mínimos Recomendados</div>
+                <div class="sub">02</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Usos incorrectos -->
+    <section>
+        <h2>3.4 Usos Incorrectos</h2>
+        <p>No se debe alterar, distorsionar ni modificar la estructura del logotipo original. Los siguientes ejemplos ilustran prácticas que deben evitarse para preservar la integridad visual.</p>
+        
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-visual" style="background-color: #fff4f4; border-color: #ffdce0;">
+                    <div class="incorrect-overlay">Distorsionar o escalar</br>desproporcionadamente</div>
+                    <div class="logo-static wrong-stretch">F<i>or</i>Meta</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual" style="background-color: #fff4f4; border-color: #ffdce0;">
+                    <div class="incorrect-overlay">Cambiar los colores</br>corporativos</div>
+                    <div class="logo-static wrong-color">F<i>or</i>Meta</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual" style="background-color: #fff4f4; border-color: #ffdce0;">
+                    <div class="incorrect-overlay">Reemplazar la</br>tipografía original</div>
+                    <div class="logo-static wrong-font">ForMeta</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-visual" style="background-color: #fff4f4; border-color: #ffdce0;">
+                    <div class="incorrect-overlay">Rotar el logo u</br>omitir jerarquías</div>
+                    <div class="logo-static wrong-rotate">F<i>or</i>Meta</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. El Símbolo (Drop) -->
+    <section>
+        <h2>3.5 El Símbolo (Drop)</h2>
+        <p>El símbolo de ForMeta es una abstracción natural (gota) que condensa la esencia de la evolución y la contención. Su adaptabilidad permite usarlo tanto en trazados como en sólidos, con ecos intermedios para enriquecer la textura visual de la marca.</p>
+        
+        <h3 style="margin-top:2rem;">Comportamiento según el fondo</h3>
+        <div class="grid-3" style="margin-bottom:2rem;">
+            <div class="card">
+                <div class="card-visual color" style="padding:1rem;">
+                    <svg width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z"
+                          fill="none" stroke="var(--color-terra)" stroke-width="1.4" stroke-linejoin="round"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-terra)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Color · Sand</div>
+            </div>
+            <div class="card">
+                <div class="card-visual dark" style="padding:1rem;">
+                    <svg width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z"
+                          fill="none" stroke="var(--color-terra)" stroke-width="1.4" stroke-linejoin="round"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-terra)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Negativo · Ink</div>
+            </div>
+            <div class="card">
+                <div class="card-visual" style="padding:1rem;">
+                    <svg width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z"
+                          fill="none" stroke="var(--color-ink)" stroke-width="1.4" stroke-linejoin="round"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-ink)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Mono · Blanco</div>
+            </div>
+        </div>
+
+        <h3 style="margin-top:2rem;">Variantes estilísticas</h3>
+        <div class="grid-3" style="margin-bottom:2rem;">
+            <div class="card">
+                <div class="card-visual color" style="padding:1rem;">
+                    <svg width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="1.4"/>
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-ink)" stroke-width="0.5" stroke-opacity="0.25" stroke-dasharray="4 8" transform="scale(0.72) translate(22 25)"/>
+                        <circle cx="80" cy="130" r="3.5" fill="var(--color-terra)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Con Eco Interior</div>
+            </div>
+            <div class="card">
+                <div class="card-visual color" style="padding:1rem;">
+                    <svg width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="var(--color-terra)" fill-opacity="0.08" stroke="var(--color-terra)" stroke-width="1.4"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-terra)"/>
+                        <circle cx="80" cy="130" r="8" fill="none" stroke="var(--color-terra)" stroke-width="0.6" stroke-opacity="0.4"/>
+                    </svg>
+                </div>
+                <div class="lbl">Relleno Sutil + Anillo</div>
+            </div>
+            <div class="card">
+                <div class="card-visual color" style="padding:1rem;">
+                    <svg width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 22 C80 22 106 60 118 94 C128 122 122 155 100 169 C91 175 80 177 80 177 C80 177 69 175 60 169 C38 155 32 122 42 94 C54 60 80 22 80 22 Z" fill="none" stroke="var(--color-ink)" stroke-width="1.0" stroke-opacity="0.9"/>
+                        <path d="M80 22 C80 22 106 60 118 94 C128 122 122 155 100 169 C91 175 80 177 80 177 C80 177 69 175 60 169 C38 155 32 122 42 94 C54 60 80 22 80 22 Z" fill="none" stroke="var(--color-terra)" stroke-width="0.5" stroke-opacity="0.5" transform="translate(0 0) scale(0.60) translate(32 37)"/>
+                        <line x1="80" y1="24" x2="80" y2="176" stroke="var(--color-ink)" stroke-width="0.4" stroke-opacity="0.20"/>
+                        <circle cx="80" cy="126" r="2.8" fill="var(--color-terra)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Contorno + Eje + Eco</div>
+            </div>
+        </div>
+
+        <h3 style="margin-top:2rem;">Progresión de Tamaño</h3>
+        <p>A tamaños muy reducidos, el símbolo pierde el trazo y se convierte en una forma sólida para mantener la presencia y legibilidad rápida.</p>
+        <div class="card-visual color" style="height:auto; min-height:160px; padding:2rem; flex-direction:row; gap:2.5rem; align-items:flex-end;">
+            <div class="col" style="align-items:center;">
+              <svg width="48" height="60" viewBox="0 0 160 200">
+                <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="2"/>
+                <circle cx="80" cy="130" r="4" fill="var(--color-terra)"/>
+              </svg>
+              <div class="lbl" style="margin-top:1rem;">Trazo (L)</div>
+            </div>
+            <div class="col" style="align-items:center;">
+              <svg width="24" height="30" viewBox="0 0 160 200">
+                <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+                <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+              </svg>
+              <div class="lbl" style="margin-top:1rem;">Grueso (M)</div>
+            </div>
+            <div class="col" style="align-items:center;">
+              <svg width="16" height="20" viewBox="0 0 160 200">
+                <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="var(--color-terra)" stroke="none"/>
+              </svg>
+              <div class="lbl" style="margin-top:1rem;">Sólido (SM)</div>
+            </div>
+        </div>
+        <div class="btn-group" style="justify-content: center; margin-top:3rem;">
+            <button onclick="exportSymbolsSVG()">↓ Descargar Símbolos SVG</button>
+        </div>
+    </section>
+    <!-- 6. Animaciones del Símbolo -->
+    <section>
+        <h2>3.6 Animaciones del Símbolo</h2>
+        <p>Micro-interacciones recomendadas para entornos digitales cuando el símbolo actúa como botón, enlace o elemento interactivo. Pasa el cursor por encima para probarlas.</p>
+        
+        <div class="grid-3" style="margin-bottom:2rem;">
+            <div class="card">
+                <div class="card-visual color">
+                    <svg class="anim-respiracion" width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z"
+                          fill="none" stroke="var(--color-terra)" stroke-width="1.4" stroke-linejoin="round"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-terra)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Respiración (Pulse)</div>
+            </div>
+            <div class="card">
+                <div class="card-visual color">
+                    <svg class="anim-eco" width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="var(--color-terra)" fill-opacity="0.08" stroke="var(--color-terra)" stroke-width="1.4"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-terra)"/>
+                        <circle class="eco-ring" cx="80" cy="130" r="8" fill="none" stroke="var(--color-terra)" stroke-width="0.8" opacity="0"/>
+                    </svg>
+                </div>
+                <div class="lbl">Eco (Ripple)</div>
+            </div>
+            <div class="card">
+                <div class="card-visual color">
+                    <svg class="anim-flotacion" width="100%" height="160" viewBox="0 0 160 200">
+                        <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z"
+                          fill="none" stroke="var(--color-ink)" stroke-width="1.4" stroke-linejoin="round"/>
+                        <circle cx="80" cy="130" r="3" fill="var(--color-ink)"/>
+                    </svg>
+                </div>
+                <div class="lbl">Flotación (Hover Elevate)</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- SCRIPTS DE ANIMACION DEL LOGO DE PUNTOS -->
+<script>
+    const TERRA='#b8896a', INK='#2c2c28', SAND='#f4f0e8', SEA='#7a9aaa',
+          STONE='#e2ddd4', WHITE='#ffffff', OFFBLACK='#1a1a18', MUTED='#7a7870';
+    
+    function ease(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+    function lerp(a,b,t){ return a+(b-a)*t; }
+    
+    function buildPixels(W, H, inkCol, accentCol, spacing){
+      const off=document.createElement('canvas');
+      off.width=W; off.height=H;
+      const oc=off.getContext('2d');
+      oc.clearRect(0,0,W,H);
+    
+      oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+      const wF=oc.measureText('F').width - 2;
+      oc.font='italic 300 52px "Cormorant Garamond",Georgia,serif';
+      const wor=oc.measureText('or').width + 2;
+      const wFor=wF+wor;
+      oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+      const wMeta=oc.measureText('Meta').width;
+      const totalW=wFor+wMeta-2;
+      const sx=(W-totalW)/2, by=H/2+18;
+    
+      oc.fillStyle='#000';
+      oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+      oc.fillText('F', sx, by);
+      oc.font='italic 300 52px "Cormorant Garamond",Georgia,serif';
+      oc.fillText('or', sx+wF, by);
+      oc.font='300 52px "Cormorant Garamond",Georgia,serif';
+      oc.fillText('Meta', sx+wFor-2, by);
+    
+      const data=oc.getImageData(0,0,W,H).data;
+      const pts=[];
+      const step=spacing||4;
+      for(let y=0;y<H;y+=step) for(let x=0;x<W;x+=step){
+        const i=(y*W+x)*4;
+        if(data[i+3]>110) pts.push({x,y});
+      }
+      return pts;
+    }
+    
+    function initDots(targets, W, H, inkCol, accentCol, accentRatio){
+      const CX=W/2, CY=H/2;
+      return targets.map(tgt=>{
+        const angle=Math.random()*Math.PI*2;
+        const dist=70+Math.random()*90;
+        const inFor = tgt.x < W*0.52;
+        const isAccent = inFor ? Math.random()<(accentRatio*1.4) : Math.random()<(accentRatio*0.3);
+        return {
+          tx:tgt.x, ty:tgt.y,
+          x:CX+Math.cos(angle)*dist,
+          y:CY+Math.sin(angle)*dist,
+          r:Math.random()*1.5+0.5,
+          delay:Math.random()*0.42,
+          col: isAccent ? accentCol : inkCol,
+          finalOp:Math.random()*0.35+0.65,
+        };
+      });
+    }
+    
+    function makeScene(canvasEl, dotCol, accentCol, bgCol, accentRatio, spacing, delay){
+      const ctx=canvasEl.getContext('2d');
+      const W=canvasEl.width, H=canvasEl.height;
+      const DUR=2800;
+      let start=null, raf=null, dots=[];
+    
+      function init(){
+        const targets=buildPixels(W,H,dotCol,accentCol,spacing);
+        dots=initDots(targets,W,H,dotCol,accentCol,accentRatio);
+      }
+    
+      function draw(ts){
+        if(!start) start=ts;
+        const el=ts-start;
+        ctx.clearRect(0,0,W,H);
+        if(bgCol){ctx.fillStyle=bgCol; ctx.fillRect(0,0,W,H);}
+    
+        dots.forEach(d=>{
+          const rawP=Math.max(0,(el/DUR-d.delay))/(1-d.delay);
+          const p=ease(Math.min(1,rawP));
+          const cx=lerp(d.x,d.tx,p);
+          const cy=lerp(d.y,d.ty,p);
+          ctx.globalAlpha=lerp(0.06,d.finalOp,p);
+          ctx.fillStyle=d.col;
+          ctx.beginPath(); ctx.arc(cx,cy,d.r,0,Math.PI*2); ctx.fill();
+        });
+    
+        if(el>DUR){
+          const idle=(el-DUR)/900;
+          const pulse=0.86+Math.sin(idle*1.5)*0.14;
+          ctx.clearRect(0,0,W,H);
+          if(bgCol){ctx.fillStyle=bgCol; ctx.fillRect(0,0,W,H);}
+          dots.forEach(d=>{
+            ctx.globalAlpha=d.finalOp*pulse;
+            ctx.fillStyle=d.col;
+            ctx.beginPath(); ctx.arc(d.tx,d.ty,d.r,0,Math.PI*2); ctx.fill();
+          });
+        }
+        ctx.globalAlpha=1;
+        raf=requestAnimationFrame(draw);
+      }
+    
+      return {
+        start(){
+          if(raf) cancelAnimationFrame(raf);
+          ctx.clearRect(0,0,W,H);
+          if(bgCol){ctx.fillStyle=bgCol; ctx.fillRect(0,0,W,H);}
+          start=null; init();
+          setTimeout(()=>{ raf=requestAnimationFrame(draw); }, delay||0);
+        },
+        stop(){ if(raf) cancelAnimationFrame(raf); }
+      };
+    }
+    
+    // Scene setup
+    const s1 = makeScene(document.getElementById('c1'), INK, TERRA, SAND, 0.22, 4, 0);
+    const s2 = makeScene(document.getElementById('c2'), '#111110', '#444440', WHITE, 0.0, 4, 180);
+    const s3 = makeScene(document.getElementById('c3'), '#d8d4cc', TERRA, OFFBLACK, 0.25, 4, 360);
+    
+    function getSVGString(W, H, pts, dotCol, accentCol, bgCol, accentRatio) {
+      let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">\n`;
+      if (bgCol) {
+        svg += `  <rect width="100%" height="100%" fill="${bgCol}" />\n`;
+      }
+      
+      pts.forEach(p => {
+        const inFor = p.x < W*0.52;
+        const isAccent = inFor ? Math.random()<(accentRatio*1.4) : Math.random()<(accentRatio*0.3);
+        const col = isAccent ? accentCol : dotCol;
+        const r = Math.random()*1.5+0.5;
+        const op = Math.random()*0.35+0.65;
+        svg += `  <circle cx="${p.x}" cy="${p.y}" r="${r.toFixed(2)}" fill="${col}" opacity="${op.toFixed(2)}" />\n`;
+      });
+      svg += `</svg>`;
+      return svg;
+    }
+    
+    function downloadStringAsFile(str, filename) {
+      const blob = new Blob([str], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
+    
+    function exportToSVG(){
+      const W=340, H=160;
+      const pts = buildPixels(W, H, null, null, 4);
+      const svg1 = getSVGString(W, H, pts, INK, TERRA, SAND, 0.22);
+      downloadStringAsFile(svg1, 'formeta_01_sand.svg');
+      const svg2 = getSVGString(W, H, pts, '#111110', '#444440', WHITE, 0.0);
+      setTimeout(() => downloadStringAsFile(svg2, 'formeta_02_mono.svg'), 300);
+      const svg3 = getSVGString(W, H, pts, '#d8d4cc', TERRA, OFFBLACK, 0.25);
+      setTimeout(() => downloadStringAsFile(svg3, 'formeta_03_negative.svg'), 600);
+    }
+
+    function exportSymbolsSVG(){
+      const svgs = document.querySelectorAll('section:nth-of-type(5) svg');
+      let delay = 0;
+      svgs.forEach((svg, i) => {
+        let clone = svg.cloneNode(true);
+        if(!clone.getAttribute('xmlns')) {
+            clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        }
+        
+        let label = "simbolo_" + (i+1);
+        let lblEl = svg.closest('.card, .col') ? svg.closest('.card, .col').querySelector('.lbl') : null;
+        if(lblEl) {
+            label = 'simbolo_' + lblEl.innerText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/_$/, '');
+        }
+        
+        let str = clone.outerHTML;
+        // Reemplazar variables CSS por códigos hex para el SVG estático
+        str = str.replace(/var\(--color-terra\)/g, TERRA)
+                 .replace(/var\(--color-ink\)/g, INK);
+
+        setTimeout(() => {
+           downloadStringAsFile(str, label + '.svg');
+        }, delay);
+        delay += 300;
+      });
+    }
+    
+    function replayAll(){ 
+      s1.start(); s2.start(); s3.start(); 
+    }
+    replayAll();
+</script>
+
+
+<footer style="text-align: center; margin-top: var(--spacing-xl); padding: var(--spacing-md) 0; border-top: 1px solid var(--color-border-secondary);">
+    <svg width="24" height="30" viewBox="0 0 160 200" style="opacity: 0.8; margin: 0 auto;">
+         <path d="M80 12 C80 12 104 52 116 88 C126 118 122 152 102 168 C92 176 80 178 80 178 C80 178 68 176 58 168 C38 152 34 118 44 88 C56 52 80 12 80 12 Z" fill="none" stroke="var(--color-terra)" stroke-width="4"/>
+         <circle cx="80" cy="130" r="6" fill="var(--color-terra)"/>
+    </svg>
+</footer>
+</body>
+
+</html>

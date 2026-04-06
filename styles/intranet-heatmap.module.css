@@ -1,0 +1,156 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+/* Month labels row */
+.monthRow {
+  display: flex;
+  gap: 4px;
+  padding-left: 20px; /* align with weeks grid */
+}
+
+.monthLabelsContainer {
+  position: relative;
+  height: 14px;
+  flex: 1;
+}
+
+.monthLabel {
+  position: absolute;
+  top: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Main grid row */
+.gridRow {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+/* Day labels: Mon/Wed/Fri */
+.dayLabels {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.dayLabel {
+  height: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.52rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 3px;
+  line-height: 1;
+}
+
+/* Weeks */
+.weeksContainer {
+  display: flex;
+  gap: 3px;
+}
+
+.weekCol {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Cells */
+.cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  cursor: default;
+  transition: opacity 150ms;
+  flex-shrink: 0;
+}
+
+.cell:hover {
+  opacity: 0.75;
+  outline: 1px solid rgba(44, 44, 40, 0.3);
+  outline-offset: 0;
+}
+
+/* Level 0 = no work */
+.cell[data-level="0"] {
+  background: rgba(44, 44, 40, 0.07);
+}
+
+/* Level 1 = < 1h */
+.cell[data-level="1"] {
+  background: rgba(143, 168, 146, 0.35);
+}
+
+/* Level 2 = 1–2h */
+.cell[data-level="2"] {
+  background: rgba(143, 168, 146, 0.6);
+}
+
+/* Level 3 = 2–4h */
+.cell[data-level="3"] {
+  background: rgba(90, 138, 94, 0.72);
+}
+
+/* Level 4 = 4h+ */
+.cell[data-level="4"] {
+  background: rgba(90, 138, 94, 0.95);
+}
+
+/* Future days */
+.cell[data-level="future"] {
+  background: transparent;
+  cursor: default;
+}
+
+.cell[data-level="future"]:hover {
+  opacity: 1;
+  outline: none;
+}
+
+/* Today */
+.cellToday {
+  outline: 1.5px solid var(--terracotta) !important;
+  outline-offset: 1px;
+}
+
+.cellToday:hover {
+  opacity: 0.85;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 20px;
+  margin-top: 2px;
+}
+
+.legendText {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.52rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.legendCell {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
