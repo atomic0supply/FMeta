@@ -26,6 +26,7 @@ import {
   type TaskStatus,
   updateTask,
 } from "@/lib/tasks";
+import { useCurrentUser } from "@/lib/useCurrentUser";
 import styles from "@/styles/intranet-kanban.module.css";
 
 type View = "kanban" | "list" | "gantt";
@@ -97,6 +98,7 @@ export function ProjectKanbanTab({
   client,
   onProjectPlanningSummaryChange,
 }: Props) {
+  const currentUser = useCurrentUser();
   const [view, setView] = useState<View>("kanban");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -133,6 +135,13 @@ export function ProjectKanbanTab({
   const [focusPromoting, setFocusPromoting] = useState(false);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const titleRef = useRef<HTMLInputElement>(null);
+  const profileGeminiApiKey = currentUser?.geminiApiKey?.trim() ?? "";
+  const hasProfileGeminiApiKey = profileGeminiApiKey.length > 0;
+  const plannerAvailable = plannerStatus.available || hasProfileGeminiApiKey;
+  const plannerDisabledReason = plannerAvailable
+    ? null
+    : plannerStatus.disabledReason ??
+      "Configura tu clave Gemini en Equipo para usar estas funciones.";
 
   useEffect(() => {
     const unsub = subscribeToTasks(projectId, setTasks);
@@ -330,7 +339,7 @@ export function ProjectKanbanTab({
   }
 
   async function handleGeneratePlan() {
-    if (!plannerStatus.available || !plannerInput.trim()) {
+    if (!plannerAvailable || !plannerInput.trim()) {
       return;
     }
 
@@ -367,6 +376,7 @@ export function ProjectKanbanTab({
         dueDate: task.dueDate,
         status: task.status,
       })),
+      apiKeyOverride: profileGeminiApiKey,
     };
 
     try {
@@ -427,7 +437,7 @@ export function ProjectKanbanTab({
 
   const loadFocusRecommendation = useCallback(
     async (manualRefresh: boolean, cancelled = false) => {
-      if (!plannerStatus.available || openTasks.length === 0) {
+      if (!plannerAvailable || openTasks.length === 0) {
         return;
       }
 
@@ -466,6 +476,7 @@ export function ProjectKanbanTab({
           dueDate: task.dueDate,
           status: task.status,
         })),
+        apiKeyOverride: profileGeminiApiKey,
       };
 
       try {
@@ -510,11 +521,11 @@ export function ProjectKanbanTab({
         }
       }
     },
-    [client, openTasks, plannerStatus.available, project, projectId, savedSummary],
+    [client, openTasks, plannerAvailable, profileGeminiApiKey, project, projectId, savedSummary],
   );
 
   useEffect(() => {
-    if (!plannerStatus.available) {
+    if (!plannerAvailable) {
       setFocusRecommendation(null);
       setFocusError(null);
       return;
@@ -536,7 +547,7 @@ export function ProjectKanbanTab({
       cancelled = true;
       window.clearTimeout(timeoutId);
     };
-  }, [plannerStatus.available, openTasks, savedSummary, loadFocusRecommendation]);
+  }, [plannerAvailable, openTasks, savedSummary, loadFocusRecommendation]);
 
   async function handlePromoteRecommendedTask() {
     if (!recommendedTask || recommendedTask.status === "in_progress") {
@@ -651,30 +662,34 @@ export function ProjectKanbanTab({
             <h2 className={styles.focusTitle}>Qué tarea atacar ahora</h2>
           </div>
           <div className={styles.focusHeaderActions}>
-            <span className={styles.aiModelBadge}>{plannerStatus.model}</span>
+            <span className={styles.aiModelBadge}>
+              {hasProfileGeminiApiKey
+                ? `${plannerStatus.model} · perfil`
+                : plannerStatus.model}
+            </span>
             <button
               type="button"
               onClick={() => void loadFocusRecommendation(true)}
               className={styles.btnAction}
-              disabled={!plannerStatus.available || focusRefreshing || openTasks.length === 0}
+              disabled={!plannerAvailable || focusRefreshing || openTasks.length === 0}
             >
               {focusRefreshing ? "Actualizando…" : "Recalcular"}
             </button>
           </div>
         </div>
 
-        {!plannerStatus.available && plannerStatus.disabledReason && (
-          <p className={styles.aiWarning}>{plannerStatus.disabledReason}</p>
+        {!plannerAvailable && plannerDisabledReason && (
+          <p className={styles.aiWarning}>{plannerDisabledReason}</p>
         )}
 
-        {plannerStatus.available && openTasks.length === 0 && (
+        {plannerAvailable && openTasks.length === 0 && (
           <p className={styles.empty}>
             No hay tareas abiertas todavía. Cuando existan tareas pendientes,
             Gemini te sugerirá automáticamente la siguiente.
           </p>
         )}
 
-        {plannerStatus.available && openTasks.length > 0 && focusLoading && !recommendedTask && (
+        {plannerAvailable && openTasks.length > 0 && focusLoading && !recommendedTask && (
           <p className={styles.focusLoading}>Gemini está revisando prioridades, fechas y estado para proponerte el siguiente paso…</p>
         )}
 
@@ -758,8 +773,13 @@ export function ProjectKanbanTab({
             <p className={styles.aiKicker}>Gemini</p>
             <h2 className={styles.aiTitle}>Planificar tareas con IA</h2>
           </div>
-          <span className={styles.aiModelBadge}>{plannerStatus.model}</span>
-        </div>
+            <span className={styles.aiModelBadge}>{plannerStatus.model}</span>
+            {hasProfileGeminiApiKey && (
+              <span className={styles.aiModelBadge}>
+                clave desde perfil
+              </span>
+            )}
+          </div>
 
         <div className={styles.aiPlannerGrid}>
           <div className={styles.aiComposer}>
@@ -773,7 +793,7 @@ export function ProjectKanbanTab({
               className={`${styles.input} ${styles.textarea} ${styles.aiTextarea}`}
               rows={7}
               placeholder="Pega aquí el correo del cliente, roadmap, requisitos, feedback o cualquier bloque de contexto que quieras convertir en tareas."
-              disabled={!plannerStatus.available || plannerLoading}
+              disabled={!plannerAvailable || plannerLoading}
             />
 
             <div className={styles.aiComposerFooter}>
@@ -786,7 +806,7 @@ export function ProjectKanbanTab({
                 onClick={() => void handleGeneratePlan()}
                 className={styles.aiGenerateBtn}
                 disabled={
-                  !plannerStatus.available ||
+                  !plannerAvailable ||
                   plannerLoading ||
                   !plannerInput.trim()
                 }
@@ -796,8 +816,8 @@ export function ProjectKanbanTab({
               </button>
             </div>
 
-            {!plannerStatus.available && plannerStatus.disabledReason && (
-              <p className={styles.aiWarning}>{plannerStatus.disabledReason}</p>
+            {!plannerAvailable && plannerDisabledReason && (
+              <p className={styles.aiWarning}>{plannerDisabledReason}</p>
             )}
             {plannerError && <p className={styles.aiError}>{plannerError}</p>}
             {plannerInfo && <p className={styles.aiInfo}>{plannerInfo}</p>}

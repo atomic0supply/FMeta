@@ -78,7 +78,7 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
     };
   }, [activeTimer]);
 
-  const start = useCallback((projectId = "", projectName = "") => {
+  const start = useCallback((projectId = "", projectName = "Sin asignar") => {
     const timer: ActiveTimer = { projectId, projectName, startedAt: Date.now() };
     setActiveTimer(timer);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(timer));

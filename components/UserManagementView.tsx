@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+import { useCurrentUser } from "@/lib/useCurrentUser";
 import {
   setUserActive,
   subscribeToAllUsers,
   updateUserRole,
   type UserProfile,
 } from "@/lib/adminUsers";
-import type { UserRole } from "@/lib/users";
+import {
+  updateCurrentUserSettings,
+  type UserRole,
+} from "@/lib/users";
 import styles from "@/styles/intranet-team.module.css";
 
 function initials(profile: UserProfile): string {
@@ -21,12 +25,26 @@ function initials(profile: UserProfile): string {
 }
 
 export function UserManagementView() {
+  const currentUser = useCurrentUser();
+  const isAdmin = currentUser?.role === "admin";
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const [geminiApiKey, setGeminiApiKey] = useState("");
+  const [savingKey, setSavingKey] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isAdmin) {
+      setUsers([]);
+      return;
+    }
+
     const unsub = subscribeToAllUsers(setUsers);
     return unsub;
-  }, []);
+  }, [isAdmin]);
+
+  useEffect(() => {
+    setGeminiApiKey(currentUser?.geminiApiKey ?? "");
+  }, [currentUser?.geminiApiKey]);
 
   async function handleRoleChange(uid: string, role: UserRole) {
     await updateUserRole(uid, role);
@@ -34,6 +52,31 @@ export function UserManagementView() {
 
   async function handleToggleActive(uid: string, current: boolean) {
     await setUserActive(uid, !current);
+  }
+
+  async function handleSaveApiKey(e: React.FormEvent) {
+    e.preventDefault();
+    if (!currentUser) {
+      return;
+    }
+
+    setSavingKey(true);
+    setSaveMessage(null);
+
+    try {
+      await updateCurrentUserSettings(currentUser.uid, {
+        geminiApiKey: geminiApiKey.trim(),
+      });
+      setSaveMessage(
+        geminiApiKey.trim()
+          ? "Clave Gemini guardada en tu perfil."
+          : "Clave Gemini eliminada de tu perfil.",
+      );
+    } catch {
+      setSaveMessage("No se ha podido guardar la clave Gemini.");
+    } finally {
+      setSavingKey(false);
+    }
   }
 
   return (
@@ -45,11 +88,63 @@ export function UserManagementView() {
         </div>
       </div>
 
-      {users.length === 0 && (
+      <section className={styles.settingsCard}>
+        <div className={styles.settingsHeader}>
+          <div>
+            <p className={styles.sectionKicker}>Perfil IA</p>
+            <h2 className={styles.sectionTitle}>Tu clave Gemini</h2>
+          </div>
+          <span className={styles.settingsStatus}>
+            {currentUser?.geminiApiKey ? "Configurada" : "Sin configurar"}
+          </span>
+        </div>
+
+        <p className={styles.settingsCopy}>
+          Guarda aquí tu clave personal para que las funciones de IA sigan
+          funcionando después de cada redeploy. La app usará esta clave para tus
+          peticiones si no existe una clave global en el servidor.
+        </p>
+
+        <form onSubmit={(e) => void handleSaveApiKey(e)} className={styles.settingsForm}>
+          <label htmlFor="geminiApiKey" className={styles.fieldLabel}>
+            Gemini API Key
+          </label>
+          <input
+            id="geminiApiKey"
+            type="password"
+            value={geminiApiKey}
+            onChange={(e) => setGeminiApiKey(e.target.value)}
+            className={styles.apiKeyInput}
+            placeholder="AIza..."
+            autoComplete="off"
+            spellCheck={false}
+          />
+          <div className={styles.settingsActions}>
+            <button
+              type="button"
+              onClick={() => setGeminiApiKey("")}
+              className={styles.secondaryBtn}
+              disabled={savingKey || geminiApiKey.length === 0}
+            >
+              Limpiar
+            </button>
+            <button
+              type="submit"
+              className={styles.primaryBtn}
+              disabled={savingKey || !currentUser}
+            >
+              {savingKey ? "Guardando…" : "Guardar clave"}
+            </button>
+          </div>
+          {saveMessage && <p className={styles.saveMessage}>{saveMessage}</p>}
+        </form>
+      </section>
+
+      {isAdmin && users.length === 0 && (
         <p className={styles.empty}>No hay usuarios registrados.</p>
       )}
 
-      {users.length > 0 && (
+      {isAdmin && users.length > 0 && (
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>

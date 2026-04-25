@@ -3,11 +3,20 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
-import { Clock, Folder, LayoutGrid, Link2, Search, Shield, Square, Users } from "lucide-react";
+import {
+  Clock,
+  Folder,
+  LayoutGrid,
+  Link2,
+  Play,
+  Search,
+  Shield,
+  Square,
+  Users,
+} from "lucide-react";
 
 import { auth } from "@/lib/firebase";
 import { formatElapsed, useTimer } from "@/lib/timerContext";
-import { useCurrentUser } from "@/lib/useCurrentUser";
 import { BrandWordmark } from "@/components/BrandWordmark";
 import { clearSessionCookie } from "@/lib/session";
 import styles from "@/styles/intranet-sidebar.module.css";
@@ -24,9 +33,7 @@ const navItems = [
 export function IntranetSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { activeTimer, elapsed, stop } = useTimer();
-  const currentUser = useCurrentUser();
-  const isAdmin = currentUser?.role === "admin";
+  const { activeTimer, elapsed, start, stop } = useTimer();
 
   function isActive(href: string, exact: boolean) {
     return exact ? pathname === href : pathname.startsWith(href);
@@ -57,41 +64,62 @@ export function IntranetSidebar() {
             {item.label}
           </Link>
         ))}
-        {isAdmin && (
-          <Link
-            href="/intranet/equipo"
-            className={`${styles.navItem} ${isActive("/intranet/equipo", false) ? styles.navActive : ""}`}
-          >
-            <Shield width={16} height={16} strokeWidth={1.75} />
-            Equipo
-          </Link>
-        )}
+        <Link
+          href="/intranet/equipo"
+          className={`${styles.navItem} ${isActive("/intranet/equipo", false) ? styles.navActive : ""}`}
+        >
+          <Shield width={16} height={16} strokeWidth={1.75} />
+          Equipo
+        </Link>
       </nav>
 
-      <div className={`${styles.timerSlot} ${activeTimer ? styles.timerActive : ""}`}>
-        <span className={styles.timerLabel}>Timer</span>
-        {activeTimer ? (
-          <>
-            <p className={styles.timerProject}>{activeTimer.projectName}</p>
-            <div className={styles.timerRow}>
-              <span className={styles.timerElapsed}>{formatElapsed(elapsed)}</span>
+      <div className={styles.footer}>
+        <div className={`${styles.timerSlot} ${activeTimer ? styles.timerActive : ""}`}>
+          <div className={styles.timerHeader}>
+            <span className={styles.timerLabel}>Timer</span>
+            <Link href="/intranet/tiempo" className={styles.timerLink}>
+              Ver tiempo
+            </Link>
+          </div>
+
+          {activeTimer ? (
+            <>
+              <p className={styles.timerProject}>
+                {activeTimer.projectName || "Sin asignar"}
+              </p>
+              <div className={styles.timerRow}>
+                <span className={styles.timerElapsed}>{formatElapsed(elapsed)}</span>
+                <button
+                  type="button"
+                  onClick={() => stop()}
+                  className={styles.timerStop}
+                  aria-label="Detener timer"
+                >
+                  <Square width={10} height={10} strokeWidth={0} fill="currentColor" />
+                  Stop
+                </button>
+              </div>
+              {!activeTimer.projectId && (
+                <p className={styles.timerHint}>
+                  Lo podrás asignar a un proyecto al detenerlo.
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className={styles.timerIdle}>Empieza ahora y asigna el proyecto al parar.</p>
               <button
                 type="button"
-                onClick={() => stop()}
-                className={styles.timerStop}
-                aria-label="Detener timer"
+                onClick={() => start()}
+                className={styles.timerStart}
               >
-                <Square width={10} height={10} strokeWidth={0} fill="currentColor" />
-                Stop
+                <Play width={12} height={12} strokeWidth={2} fill="currentColor" />
+                Iniciar ahora
               </button>
-            </div>
-          </>
-        ) : (
-          <p className={styles.timerIdle}>Sin proyecto activo</p>
-        )}
-      </div>
+            </>
+          )}
+        </div>
 
-      <div className={styles.footer}>
         <Link href="/" className={styles.footerLink}>Web pública</Link>
         <button
           type="button"

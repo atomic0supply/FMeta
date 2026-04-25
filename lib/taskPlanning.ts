@@ -36,6 +36,7 @@ export type TaskPlanRequest = {
   project: ProjectPlanningSnapshot;
   client: ClientPlanningSnapshot | null;
   tasks: ExistingTaskPlanningSnapshot[];
+  apiKeyOverride?: string;
 };
 
 export type TaskDraft = {
@@ -62,6 +63,7 @@ export type TaskRecommendationRequest = {
   project: ProjectPlanningSnapshot;
   client: ClientPlanningSnapshot | null;
   tasks: ExistingTaskPlanningSnapshot[];
+  apiKeyOverride?: string;
 };
 
 export type TaskRecommendationResponse = {

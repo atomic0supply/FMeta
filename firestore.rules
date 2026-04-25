@@ -64,9 +64,13 @@ service cloud.firestore {
     }
 
     // Perfiles de usuario
+    // Cualquier usuario autenticado puede leer la lista (necesario para selector de asignados)
+    // Solo el propio usuario puede actualizar su perfil; solo admins pueden gestionar otros
     match /users/{uid} {
-      allow read, update: if isAuth() && request.auth.uid == uid;
-      allow read, write: if isAdmin();
+      allow read: if isAuth();
+      allow update: if isAuth() && request.auth.uid == uid;
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin();
     }
   }
 }

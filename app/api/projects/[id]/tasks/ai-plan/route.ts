@@ -42,7 +42,9 @@ function isTaskPlanRequest(value: unknown): value is TaskPlanRequest {
     !!project &&
     typeof project === "object" &&
     !Array.isArray(project) &&
-    Array.isArray(tasks)
+    Array.isArray(tasks) &&
+    (record.apiKeyOverride === undefined ||
+      typeof record.apiKeyOverride === "string")
   );
 }
 
@@ -132,11 +134,6 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const availability = getAvailability();
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-
-  if (!availability.available || !apiKey) {
-    return NextResponse.json(availability, { status: 503 });
-  }
 
   let body: unknown;
 
@@ -159,6 +156,7 @@ export async function POST(request: Request) {
   const input: TaskPlanRequest = {
     ...body,
     contextText: body.contextText.trim(),
+    apiKeyOverride: body.apiKeyOverride?.trim() || "",
   };
 
   if (!input.contextText) {
@@ -166,6 +164,12 @@ export async function POST(request: Request) {
       { error: "Pega primero el contexto que quieres convertir en tareas." },
       { status: 400 },
     );
+  }
+
+  const apiKey = input.apiKeyOverride || process.env.GEMINI_API_KEY?.trim() || "";
+
+  if (!apiKey) {
+    return NextResponse.json(availability, { status: 503 });
   }
 
   try {

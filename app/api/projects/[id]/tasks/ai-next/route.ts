@@ -42,7 +42,9 @@ function isTaskRecommendationRequest(
     !!project &&
     typeof project === "object" &&
     !Array.isArray(project) &&
-    Array.isArray(tasks)
+    Array.isArray(tasks) &&
+    (record.apiKeyOverride === undefined ||
+      typeof record.apiKeyOverride === "string")
   );
 }
 
@@ -111,11 +113,6 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const availability = getAvailability();
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-
-  if (!availability.available || !apiKey) {
-    return NextResponse.json(availability, { status: 503 });
-  }
 
   let body: unknown;
 
@@ -137,6 +134,11 @@ export async function POST(request: Request) {
 
   const input = body as TaskRecommendationRequest;
   const openTasks = input.tasks.filter((task) => task.status !== "done");
+  const apiKey = input.apiKeyOverride?.trim() || process.env.GEMINI_API_KEY?.trim() || "";
+
+  if (!apiKey) {
+    return NextResponse.json(availability, { status: 503 });
+  }
 
   if (openTasks.length === 0) {
     return NextResponse.json(

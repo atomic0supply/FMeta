@@ -4,6 +4,10 @@ import { db } from "@/lib/firebase";
 
 export type UserRole = "admin" | "team";
 
+export type UserProfileSettings = {
+  geminiApiKey?: string;
+};
+
 type EnsureUserArgs = {
   uid: string;
   email: string | null;
@@ -29,6 +33,23 @@ export async function ensureUserProfile({
       displayName,
       active: true,
       createdAt: serverTimestamp(),
+    },
+    { merge: true },
+  );
+}
+
+export async function updateCurrentUserSettings(
+  uid: string,
+  data: UserProfileSettings,
+) {
+  if (!db) {
+    throw new Error("Firebase no disponible");
+  }
+
+  await setDoc(
+    doc(db, "users", uid),
+    {
+      ...data,
     },
     { merge: true },
   );

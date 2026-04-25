@@ -13,6 +13,7 @@ export type CurrentUser = {
   displayName: string | null;
   role: UserRole;
   active: boolean;
+  geminiApiKey?: string;
 };
 
 export function useCurrentUser(): CurrentUser | null {
@@ -34,6 +35,8 @@ export function useCurrentUser(): CurrentUser | null {
           displayName: firebaseUser.displayName ?? data?.displayName ?? null,
           role: (data?.role as UserRole) ?? "team",
           active: data?.active ?? true,
+          geminiApiKey:
+            typeof data?.geminiApiKey === "string" ? data.geminiApiKey : "",
         });
       } catch {
         setUser({
@@ -42,6 +45,7 @@ export function useCurrentUser(): CurrentUser | null {
           displayName: firebaseUser.displayName,
           role: "team",
           active: true,
+          geminiApiKey: "",
         });
       }
     });
