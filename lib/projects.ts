@@ -14,7 +14,9 @@ import {
   where,
 } from "firebase/firestore";
 
+import { auth } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
+import { logActivity } from "@/lib/activityLog";
 
 export type ProjectStatus = "activo" | "pausado" | "cerrado";
 
@@ -32,6 +34,11 @@ export type Project = {
   localPath: string;
   devUrl: string;
   externalUrl: string;
+  hourlyRate?: number;
+  budgetHours?: number | null;
+  currency?: string;
+  taskPlanningSummary?: string;
+  taskPlanningUpdatedAt?: Timestamp | null;
   createdAt: Timestamp | null;
 };
 
@@ -91,6 +98,16 @@ export async function createProject(data: ProjectInput): Promise<string> {
     createdAt: serverTimestamp(),
   });
 
+  const actor = auth?.currentUser;
+  void logActivity({
+    type: "project_created",
+    actorUid: actor?.uid ?? "",
+    actorName: actor?.displayName ?? actor?.email ?? "Usuario",
+    projectId: ref.id,
+    projectName: data.name,
+    payload: {},
+  });
+
   return ref.id;
 }
 
@@ -100,6 +117,17 @@ export async function updateProject(
 ): Promise<void> {
   if (!db) throw new Error("Firebase no disponible");
   await updateDoc(doc(db, "projects", id), data);
+  if (data.name) {
+    const actor = auth?.currentUser;
+    void logActivity({
+      type: "project_updated",
+      actorUid: actor?.uid ?? "",
+      actorName: actor?.displayName ?? actor?.email ?? "Usuario",
+      projectId: id,
+      projectName: data.name,
+      payload: {},
+    });
+  }
 }
 
 export async function deleteProject(id: string): Promise<void> {

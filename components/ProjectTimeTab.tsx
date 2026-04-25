@@ -189,6 +189,9 @@ export function ProjectTimeTab({ projectId, projectName }: Props) {
               <div className={styles.sessionList}>
                 {dayEntries.map((entry) => (
                   <div key={entry.id} className={styles.sessionRow}>
+                    {entry.userDisplayName && (
+                      <span className={styles.sessionUser}>{entry.userDisplayName}</span>
+                    )}
                     <span className={styles.sessionTime}>
                       {timeLabel(entry.startedAt)} → {timeLabel(entry.endedAt)}
                     </span>

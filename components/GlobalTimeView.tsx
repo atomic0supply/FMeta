@@ -85,6 +85,18 @@ export function GlobalTimeView() {
 
   const maxProjectSec = byProject[0]?.[1] ?? 1;
 
+  // By member
+  const byMember = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const e of entries) {
+      const name = e.userDisplayName ?? "Sin asignar";
+      map.set(name, (map.get(name) ?? 0) + e.durationSeconds);
+    }
+    return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
+  }, [entries]);
+
+  const maxMemberSec = byMember[0]?.[1] ?? 1;
+
   // Grouped by day
   const grouped = useMemo(() => {
     const map = new Map<string, TimeEntry[]>();
@@ -163,6 +175,27 @@ export function GlobalTimeView() {
                   <div
                     className={styles.projectBarFill}
                     style={{ width: `${(sec / maxProjectSec) * 100}%` }}
+                  />
+                </div>
+                <span className={styles.projectBarValue}>{formatDuration(sec)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* By member */}
+      {byMember.length > 1 && (
+        <div className={styles.section}>
+          <p className={styles.sectionTitle}>Por miembro</p>
+          <div className={styles.projectBars}>
+            {byMember.map(([name, sec]) => (
+              <div key={name} className={styles.projectBar}>
+                <span className={styles.projectBarName} title={name}>{name}</span>
+                <div className={styles.projectBarTrack}>
+                  <div
+                    className={styles.projectBarFill}
+                    style={{ width: `${(sec / maxMemberSec) * 100}%` }}
                   />
                 </div>
                 <span className={styles.projectBarValue}>{formatDuration(sec)}</span>

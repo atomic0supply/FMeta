@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
-import { Clock, Folder, LayoutGrid, Link2, Search, Square, Users } from "lucide-react";
+import { Clock, Folder, LayoutGrid, Link2, Search, Shield, Square, Users } from "lucide-react";
 
 import { auth } from "@/lib/firebase";
 import { formatElapsed, useTimer } from "@/lib/timerContext";
+import { useCurrentUser } from "@/lib/useCurrentUser";
 import { BrandWordmark } from "@/components/BrandWordmark";
 import { clearSessionCookie } from "@/lib/session";
 import styles from "@/styles/intranet-sidebar.module.css";
@@ -24,6 +25,8 @@ export function IntranetSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { activeTimer, elapsed, stop } = useTimer();
+  const currentUser = useCurrentUser();
+  const isAdmin = currentUser?.role === "admin";
 
   function isActive(href: string, exact: boolean) {
     return exact ? pathname === href : pathname.startsWith(href);
@@ -54,6 +57,15 @@ export function IntranetSidebar() {
             {item.label}
           </Link>
         ))}
+        {isAdmin && (
+          <Link
+            href="/intranet/equipo"
+            className={`${styles.navItem} ${isActive("/intranet/equipo", false) ? styles.navActive : ""}`}
+          >
+            <Shield width={16} height={16} strokeWidth={1.75} />
+            Equipo
+          </Link>
+        )}
       </nav>
 
       <div className={`${styles.timerSlot} ${activeTimer ? styles.timerActive : ""}`}>

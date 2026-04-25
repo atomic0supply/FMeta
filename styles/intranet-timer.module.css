@@ -268,6 +268,15 @@
   border-bottom: none;
 }
 
+.sessionUser {
+  font-size: 0.68rem;
+  color: var(--muted);
+  background: var(--stone, #e8e4dc);
+  padding: 1px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 .sessionTime {
   font-family: var(--font-mono), monospace;
   font-size: 0.7rem;

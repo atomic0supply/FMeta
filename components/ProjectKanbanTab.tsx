@@ -1,8 +1,21 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Timestamp } from "firebase/firestore";
+import { ArrowRight, Plus, Sparkles, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import type { Client } from "@/lib/clients";
+import { updateProject, type Project } from "@/lib/projects";
+import { subscribeToAllUsers, type UserProfile } from "@/lib/adminUsers";
+import { TaskCommentThread } from "@/components/TaskCommentThread";
+import {
+  type TaskDraft,
+  type TaskPlanAvailabilityResponse,
+  type TaskPlanRequest,
+  type TaskRecommendationRequest,
+  type TaskRecommendationResponse,
+  type TaskPlanResponse,
+} from "@/lib/taskPlanning";
 import {
   createTask,
   deleteTask,
@@ -19,6 +32,9 @@ type View = "kanban" | "list" | "gantt";
 
 type Props = {
   projectId: string;
+  project: Project;
+  client: Client | null;
+  onProjectPlanningSummaryChange?: (summary: string) => void;
 };
 
 const STATUS_LABELS: Record<TaskStatus, string> = {
@@ -66,9 +82,21 @@ const emptyForm: TaskInput = {
   priority: "medium",
   dueDate: "",
   order: 0,
+  assignedTo: null,
 };
 
-export function ProjectKanbanTab({ projectId }: Props) {
+type PlannerErrorResponse = {
+  error?: string;
+  detail?: string;
+  disabledReason?: string;
+};
+
+export function ProjectKanbanTab({
+  projectId,
+  project,
+  client,
+  onProjectPlanningSummaryChange,
+}: Props) {
   const [view, setView] = useState<View>("kanban");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -78,6 +106,32 @@ export function ProjectKanbanTab({ projectId }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragOverCol, setDragOverCol] = useState<TaskStatus | null>(null);
+  const [plannerInput, setPlannerInput] = useState("");
+  const [plannerStatus, setPlannerStatus] = useState<TaskPlanAvailabilityResponse>({
+    available: false,
+    model: "gemini",
+    disabledReason: "Comprobando disponibilidad de Gemini…",
+  });
+  const [plannerLoading, setPlannerLoading] = useState(false);
+  const [plannerApplying, setPlannerApplying] = useState(false);
+  const [plannerError, setPlannerError] = useState<string | null>(null);
+  const [plannerInfo, setPlannerInfo] = useState<string | null>(null);
+  const [plannerDrafts, setPlannerDrafts] = useState<TaskDraft[]>([]);
+  const [selectedDrafts, setSelectedDrafts] = useState<Record<number, boolean>>(
+    {},
+  );
+  const [hasGeneratedPlan, setHasGeneratedPlan] = useState(false);
+  const [savedSummary, setSavedSummary] = useState(
+    project.taskPlanningSummary ?? "",
+  );
+  const [focusLoading, setFocusLoading] = useState(false);
+  const [focusRefreshing, setFocusRefreshing] = useState(false);
+  const [focusError, setFocusError] = useState<string | null>(null);
+  const [focusInfo, setFocusInfo] = useState<string | null>(null);
+  const [focusRecommendation, setFocusRecommendation] =
+    useState<TaskRecommendationResponse | null>(null);
+  const [focusPromoting, setFocusPromoting] = useState(false);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -86,8 +140,100 @@ export function ProjectKanbanTab({ projectId }: Props) {
   }, [projectId]);
 
   useEffect(() => {
+    const unsub = subscribeToAllUsers(setUsers);
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    setSavedSummary(project.taskPlanningSummary ?? "");
+  }, [project.taskPlanningSummary]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPlannerAvailability() {
+      try {
+        const response = await fetch(`/api/projects/${projectId}/tasks/ai-plan`, {
+          method: "GET",
+          cache: "no-store",
+        });
+        const data = (await response.json()) as TaskPlanAvailabilityResponse;
+        if (!cancelled) {
+          setPlannerStatus(data);
+        }
+      } catch {
+        if (!cancelled) {
+          setPlannerStatus({
+            available: false,
+            model: "gemini",
+            disabledReason:
+              "No se ha podido comprobar la disponibilidad del planificador IA.",
+          });
+        }
+      }
+    }
+
+    void loadPlannerAvailability();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [projectId]);
+
+  useEffect(() => {
     if (drawerOpen) setTimeout(() => titleRef.current?.focus(), 120);
   }, [drawerOpen]);
+
+  const projectContextLines = useMemo(() => {
+    const lines = [
+      `Proyecto: ${project.name}`,
+      `Cliente: ${client?.name || project.clientName || "Sin cliente asignado"}`,
+      `Tareas registradas: ${tasks.length}`,
+    ];
+
+    if (project.tags.length > 0) {
+      lines.push(`Tags: ${project.tags.join(", ")}`);
+    }
+
+    if (client?.email) {
+      lines.push(`Email de cliente disponible: ${client.email}`);
+    }
+
+    if (savedSummary) {
+      lines.push(`Resumen persistido: ${savedSummary}`);
+    }
+
+    if (tasks.length > 0) {
+      lines.push(
+        `Tareas actuales: ${tasks
+          .slice(0, 5)
+          .map((task) => task.title)
+          .join(" · ")}${tasks.length > 5 ? "…" : ""}`,
+      );
+    }
+
+    return lines;
+  }, [client?.email, client?.name, project.clientName, project.name, project.tags, savedSummary, tasks]);
+
+  const selectedDraftIndexes = useMemo(
+    () =>
+      plannerDrafts.flatMap((_, index) => (selectedDrafts[index] ? [index] : [])),
+    [plannerDrafts, selectedDrafts],
+  );
+
+  const openTasks = useMemo(
+    () => tasks.filter((task) => task.status !== "done"),
+    [tasks],
+  );
+
+  const recommendedTask = useMemo(
+    () =>
+      focusRecommendation
+        ? tasks.find((task) => task.id === focusRecommendation.recommendedTaskId) ??
+          null
+        : null,
+    [focusRecommendation, tasks],
+  );
 
   function openNew(status: TaskStatus = "todo") {
     setEditingTask(null);
@@ -105,6 +251,7 @@ export function ProjectKanbanTab({ projectId }: Props) {
       priority: task.priority,
       dueDate: task.dueDate ?? "",
       order: task.order,
+      assignedTo: task.assignedTo ?? null,
     });
     setConfirmDelete(false);
     setDrawerOpen(true);
@@ -150,7 +297,6 @@ export function ProjectKanbanTab({ projectId }: Props) {
     closeDrawer();
   }
 
-  // Drag and drop
   function handleDragStart(taskId: string) {
     setDraggingId(taskId);
   }
@@ -170,11 +316,305 @@ export function ProjectKanbanTab({ projectId }: Props) {
     setDragOverCol(null);
   }
 
-  // Gantt
-  const { start: gStart, end: gEnd, total: gTotal } = useMemo(
-    () => ganttTimeline(),
-    [],
+  function toggleDraft(index: number) {
+    setSelectedDrafts((current) => ({
+      ...current,
+      [index]: !current[index],
+    }));
+  }
+
+  function selectAllDrafts() {
+    setSelectedDrafts(
+      Object.fromEntries(plannerDrafts.map((_, index) => [index, true])),
+    );
+  }
+
+  async function handleGeneratePlan() {
+    if (!plannerStatus.available || !plannerInput.trim()) {
+      return;
+    }
+
+    setPlannerLoading(true);
+    setPlannerError(null);
+    setPlannerInfo(null);
+    setHasGeneratedPlan(false);
+
+    const payload: TaskPlanRequest = {
+      contextText: plannerInput.trim(),
+      project: {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        notes: project.notes,
+        tags: project.tags,
+        clientName: project.clientName,
+        taskPlanningSummary: savedSummary,
+      },
+      client: client
+        ? {
+            name: client.name,
+            sector: client.sector,
+            contact: client.contact,
+            email: client.email,
+            notes: client.notes,
+          }
+        : null,
+      tasks: tasks.map((task) => ({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        priority: task.priority,
+        dueDate: task.dueDate,
+        status: task.status,
+      })),
+    };
+
+    try {
+      const response = await fetch(`/api/projects/${projectId}/tasks/ai-plan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = (await response.json()) as TaskPlanResponse | PlannerErrorResponse;
+
+      if (!response.ok || !("proposedTasks" in data)) {
+        const errorData = data as PlannerErrorResponse;
+        const message =
+          errorData.error ||
+          errorData.disabledReason ||
+          "No se ha podido generar la propuesta.";
+        throw new Error(
+          errorData.detail ? `${message} ${errorData.detail}`.trim() : message,
+        );
+      }
+
+      setPlannerDrafts(data.proposedTasks);
+      setSelectedDrafts(
+        Object.fromEntries(data.proposedTasks.map((_, index) => [index, true])),
+      );
+      setHasGeneratedPlan(true);
+      setPlannerStatus((current) => ({ ...current, model: data.model }));
+
+      if (data.summary && data.summary !== savedSummary) {
+        try {
+          await updateProject(projectId, {
+            taskPlanningSummary: data.summary,
+            taskPlanningUpdatedAt: Timestamp.now(),
+          });
+          setSavedSummary(data.summary);
+          onProjectPlanningSummaryChange?.(data.summary);
+        } catch {
+          setPlannerInfo(
+            "La propuesta se ha generado, pero no se ha podido guardar el resumen del proyecto.",
+          );
+        }
+      }
+    } catch (error) {
+      setPlannerDrafts([]);
+      setSelectedDrafts({});
+      setPlannerError(
+        error instanceof Error
+          ? error.message
+          : "No se ha podido generar la propuesta.",
+      );
+    } finally {
+      setPlannerLoading(false);
+    }
+  }
+
+  const loadFocusRecommendation = useCallback(
+    async (manualRefresh: boolean, cancelled = false) => {
+      if (!plannerStatus.available || openTasks.length === 0) {
+        return;
+      }
+
+      if (manualRefresh) {
+        setFocusRefreshing(true);
+      } else {
+        setFocusLoading(true);
+      }
+
+      setFocusError(null);
+
+      const payload: TaskRecommendationRequest = {
+        project: {
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          notes: project.notes,
+          tags: project.tags,
+          clientName: project.clientName,
+          taskPlanningSummary: savedSummary,
+        },
+        client: client
+          ? {
+              name: client.name,
+              sector: client.sector,
+              contact: client.contact,
+              email: client.email,
+              notes: client.notes,
+            }
+          : null,
+        tasks: openTasks.map((task) => ({
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          priority: task.priority,
+          dueDate: task.dueDate,
+          status: task.status,
+        })),
+      };
+
+      try {
+        const response = await fetch(`/api/projects/${projectId}/tasks/ai-next`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = (await response.json()) as
+          | TaskRecommendationResponse
+          | PlannerErrorResponse;
+
+        if (!response.ok || !("recommendedTaskId" in data)) {
+          const errorData = data as PlannerErrorResponse;
+          throw new Error(
+            errorData.error ||
+              errorData.disabledReason ||
+              "No se ha podido recomendar la siguiente tarea.",
+          );
+        }
+
+        if (!cancelled) {
+          setFocusRecommendation(data);
+          setFocusInfo("Foco sugerido por Gemini en función del tablero actual.");
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setFocusRecommendation(null);
+          setFocusError(
+            error instanceof Error
+              ? error.message
+              : "No se ha podido recomendar la siguiente tarea.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setFocusLoading(false);
+          setFocusRefreshing(false);
+        }
+      }
+    },
+    [client, openTasks, plannerStatus.available, project, projectId, savedSummary],
   );
+
+  useEffect(() => {
+    if (!plannerStatus.available) {
+      setFocusRecommendation(null);
+      setFocusError(null);
+      return;
+    }
+
+    if (openTasks.length === 0) {
+      setFocusRecommendation(null);
+      setFocusError(null);
+      setFocusInfo(null);
+      return;
+    }
+
+    let cancelled = false;
+    const timeoutId = window.setTimeout(() => {
+      void loadFocusRecommendation(false, cancelled);
+    }, 450);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [plannerStatus.available, openTasks, savedSummary, loadFocusRecommendation]);
+
+  async function handlePromoteRecommendedTask() {
+    if (!recommendedTask || recommendedTask.status === "in_progress") {
+      return;
+    }
+
+    setFocusPromoting(true);
+    setFocusError(null);
+
+    try {
+      await updateTask(projectId, recommendedTask.id, { status: "in_progress" });
+      setFocusInfo(`"${recommendedTask.title}" ha pasado a En progreso.`);
+    } catch {
+      setFocusError("No se ha podido pasar la tarea recomendada a En progreso.");
+    } finally {
+      setFocusPromoting(false);
+    }
+  }
+
+  async function handleCreateDrafts(mode: "selected" | "all") {
+    const indexes =
+      mode === "all"
+        ? plannerDrafts.map((_, index) => index)
+        : selectedDraftIndexes;
+
+    if (indexes.length === 0) {
+      return;
+    }
+
+    setPlannerApplying(true);
+    setPlannerError(null);
+    setPlannerInfo(null);
+
+    const currentMaxOrder = tasks.reduce(
+      (max, task) => Math.max(max, task.order || 0),
+      0,
+    );
+    const baseOrder = Math.max(currentMaxOrder + 1, Date.now());
+    const selectedIndexSet = new Set(indexes);
+
+    try {
+      for (const [offset, index] of indexes.entries()) {
+        const draft = plannerDrafts[index];
+        if (!draft) {
+          continue;
+        }
+
+        await createTask(projectId, {
+          title: draft.title,
+          description: draft.description,
+          priority: draft.priority,
+          dueDate: draft.dueDate,
+          status: "todo",
+          order: baseOrder + offset,
+        });
+      }
+
+      const remainingDrafts = plannerDrafts.filter(
+        (_, index) => !selectedIndexSet.has(index),
+      );
+
+      setPlannerDrafts(remainingDrafts);
+      setSelectedDrafts(
+        Object.fromEntries(remainingDrafts.map((_, index) => [index, true])),
+      );
+      setPlannerInfo(
+        indexes.length === 1
+          ? "Se ha creado 1 tarea nueva en el tablero."
+          : `Se han creado ${indexes.length} tareas nuevas en el tablero.`,
+      );
+    } catch {
+      setPlannerError("No se han podido crear las tareas seleccionadas.");
+    } finally {
+      setPlannerApplying(false);
+    }
+  }
+
+  const { start: gStart, total: gTotal } = useMemo(() => ganttTimeline(), []);
 
   const ganttWeeks = useMemo(() => {
     const weeks: { label: string; leftPct: number; isThisWeek: boolean }[] = [];
@@ -204,7 +644,257 @@ export function ProjectKanbanTab({ projectId }: Props) {
 
   return (
     <div className={styles.container}>
-      {/* Top bar */}
+      <section className={styles.focusWidget}>
+        <div className={styles.focusWidgetHeader}>
+          <div>
+            <p className={styles.focusKicker}>Siguiente paso</p>
+            <h2 className={styles.focusTitle}>Qué tarea atacar ahora</h2>
+          </div>
+          <div className={styles.focusHeaderActions}>
+            <span className={styles.aiModelBadge}>{plannerStatus.model}</span>
+            <button
+              type="button"
+              onClick={() => void loadFocusRecommendation(true)}
+              className={styles.btnAction}
+              disabled={!plannerStatus.available || focusRefreshing || openTasks.length === 0}
+            >
+              {focusRefreshing ? "Actualizando…" : "Recalcular"}
+            </button>
+          </div>
+        </div>
+
+        {!plannerStatus.available && plannerStatus.disabledReason && (
+          <p className={styles.aiWarning}>{plannerStatus.disabledReason}</p>
+        )}
+
+        {plannerStatus.available && openTasks.length === 0 && (
+          <p className={styles.empty}>
+            No hay tareas abiertas todavía. Cuando existan tareas pendientes,
+            Gemini te sugerirá automáticamente la siguiente.
+          </p>
+        )}
+
+        {plannerStatus.available && openTasks.length > 0 && focusLoading && !recommendedTask && (
+          <p className={styles.focusLoading}>Gemini está revisando prioridades, fechas y estado para proponerte el siguiente paso…</p>
+        )}
+
+        {focusError && <p className={styles.aiError}>{focusError}</p>}
+
+        {recommendedTask && focusRecommendation && (
+          <div className={styles.focusCard}>
+            <div className={styles.focusMain}>
+              <div className={styles.focusMetaRow}>
+                <span
+                  className={styles.priorityPill}
+                  data-priority={recommendedTask.priority}
+                >
+                  {PRIORITY_LABELS[recommendedTask.priority]}
+                </span>
+                <span
+                  className={styles.statusPill}
+                  data-status={recommendedTask.status}
+                >
+                  {STATUS_LABELS[recommendedTask.status]}
+                </span>
+                <span className={styles.focusUrgency}>
+                  {focusRecommendation.urgencyLabel}
+                </span>
+                {recommendedTask.dueDate && (
+                  <span
+                    className={`${styles.dueDate} ${isOverdue(recommendedTask.dueDate) && recommendedTask.status !== "done" ? styles.dueDateOverdue : ""}`}
+                  >
+                    {formatDate(recommendedTask.dueDate)}
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.focusBody}>
+                <div className={styles.focusText}>
+                  <h3 className={styles.focusTaskTitle}>{recommendedTask.title}</h3>
+                  {recommendedTask.description && (
+                    <p className={styles.focusTaskDescription}>
+                      {recommendedTask.description}
+                    </p>
+                  )}
+                  <p className={styles.focusReasoning}>
+                    {focusRecommendation.reasoning}
+                  </p>
+                </div>
+
+                <div className={styles.focusActions}>
+                  <button
+                    type="button"
+                    onClick={() => openEdit(recommendedTask)}
+                    className={styles.btnAction}
+                  >
+                    Ver tarea
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void handlePromoteRecommendedTask()}
+                    className={styles.focusPrimaryBtn}
+                    disabled={
+                      focusPromoting || recommendedTask.status === "in_progress"
+                    }
+                  >
+                    <ArrowRight width={14} height={14} strokeWidth={1.8} />
+                    {recommendedTask.status === "in_progress"
+                      ? "Ya en progreso"
+                      : focusPromoting
+                        ? "Moviendo…"
+                        : "Poner en progreso"}
+                  </button>
+                </div>
+              </div>
+            </div>
+            {focusInfo && <p className={styles.aiInfo}>{focusInfo}</p>}
+          </div>
+        )}
+      </section>
+
+      <section className={styles.aiPlanner}>
+        <div className={styles.aiPlannerHeader}>
+          <div>
+            <p className={styles.aiKicker}>Gemini</p>
+            <h2 className={styles.aiTitle}>Planificar tareas con IA</h2>
+          </div>
+          <span className={styles.aiModelBadge}>{plannerStatus.model}</span>
+        </div>
+
+        <div className={styles.aiPlannerGrid}>
+          <div className={styles.aiComposer}>
+            <label htmlFor="plannerInput" className={styles.label}>
+              Contexto pegado
+            </label>
+            <textarea
+              id="plannerInput"
+              value={plannerInput}
+              onChange={(event) => setPlannerInput(event.target.value)}
+              className={`${styles.input} ${styles.textarea} ${styles.aiTextarea}`}
+              rows={7}
+              placeholder="Pega aquí el correo del cliente, roadmap, requisitos, feedback o cualquier bloque de contexto que quieras convertir en tareas."
+              disabled={!plannerStatus.available || plannerLoading}
+            />
+
+            <div className={styles.aiComposerFooter}>
+              <p className={styles.aiHint}>
+                La IA solo propone tareas nuevas. Tú revisas el borrador antes de
+                guardarlo.
+              </p>
+              <button
+                type="button"
+                onClick={() => void handleGeneratePlan()}
+                className={styles.aiGenerateBtn}
+                disabled={
+                  !plannerStatus.available ||
+                  plannerLoading ||
+                  !plannerInput.trim()
+                }
+              >
+                <Sparkles width={14} height={14} strokeWidth={1.8} />
+                {plannerLoading ? "Generando…" : "Generar propuesta"}
+              </button>
+            </div>
+
+            {!plannerStatus.available && plannerStatus.disabledReason && (
+              <p className={styles.aiWarning}>{plannerStatus.disabledReason}</p>
+            )}
+            {plannerError && <p className={styles.aiError}>{plannerError}</p>}
+            {plannerInfo && <p className={styles.aiInfo}>{plannerInfo}</p>}
+          </div>
+
+          <div className={styles.aiContextCard}>
+            <span className={styles.aiContextLabel}>
+              Contexto usado automáticamente
+            </span>
+            <div className={styles.aiContextList}>
+              {projectContextLines.map((line) => (
+                <p key={line} className={styles.aiContextLine}>
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {(plannerDrafts.length > 0 || hasGeneratedPlan) && (
+          <div className={styles.aiResults}>
+            <div className={styles.aiResultsHeader}>
+              <div>
+                <span className={styles.aiResultsLabel}>Borrador IA</span>
+                <p className={styles.aiResultsMeta}>
+                  {plannerDrafts.length > 0
+                    ? `${plannerDrafts.length} tareas propuestas · ${selectedDraftIndexes.length} seleccionadas`
+                    : "No se han propuesto tareas nuevas con este contexto."}
+                </p>
+              </div>
+              {plannerDrafts.length > 0 && (
+                <div className={styles.aiResultsActions}>
+                  <button
+                    type="button"
+                    onClick={selectAllDrafts}
+                    className={styles.btnAction}
+                  >
+                    Seleccionar todo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void handleCreateDrafts("selected")}
+                    className={styles.btnAction}
+                    disabled={
+                      plannerApplying || selectedDraftIndexes.length === 0
+                    }
+                  >
+                    Crear seleccionadas
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void handleCreateDrafts("all")}
+                    className={styles.aiApplyBtn}
+                    disabled={plannerApplying || plannerDrafts.length === 0}
+                  >
+                    {plannerApplying ? "Creando…" : "Crear todas"}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {plannerDrafts.length > 0 && (
+              <div className={styles.aiDraftList}>
+                {plannerDrafts.map((draft, index) => (
+                  <label key={`${draft.title}-${index}`} className={styles.aiDraftCard}>
+                    <div className={styles.aiDraftCheckRow}>
+                      <input
+                        type="checkbox"
+                        checked={!!selectedDrafts[index]}
+                        onChange={() => toggleDraft(index)}
+                        className={styles.aiCheckbox}
+                      />
+                      <div className={styles.aiDraftHeading}>
+                        <span className={styles.aiDraftTitle}>{draft.title}</span>
+                        <div className={styles.aiDraftMeta}>
+                          <span
+                            className={styles.priorityPill}
+                            data-priority={draft.priority}
+                          >
+                            {PRIORITY_LABELS[draft.priority]}
+                          </span>
+                          <span className={styles.aiDraftDue}>
+                            {formatDate(draft.dueDate)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className={styles.aiDraftDescription}>{draft.description}</p>
+                    <p className={styles.aiDraftSource}>{draft.sourceNote}</p>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
       <div className={styles.topBar}>
         <div className={styles.viewToggle}>
           {(["kanban", "list", "gantt"] as View[]).map((v) => (
@@ -232,11 +922,11 @@ export function ProjectKanbanTab({ projectId }: Props) {
 
       {taskCount === 0 && (
         <p className={styles.empty}>
-          No hay tareas todavía. Crea la primera con el botón de arriba.
+          No hay tareas todavía. Crea la primera con el botón de arriba o deja
+          que Gemini te prepare un borrador.
         </p>
       )}
 
-      {/* ── KANBAN ── */}
       {view === "kanban" && taskCount > 0 && (
         <div className={styles.board}>
           {COLUMNS.map((col) => {
@@ -282,6 +972,14 @@ export function ProjectKanbanTab({ projectId }: Props) {
                           {formatDate(task.dueDate)}
                         </span>
                       )}
+                      {task.assignedTo && (
+                        <span
+                          className={styles.cardAssignee}
+                          title={task.assignedTo.name}
+                        >
+                          {task.assignedTo.name.split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("")}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -299,7 +997,6 @@ export function ProjectKanbanTab({ projectId }: Props) {
         </div>
       )}
 
-      {/* ── LIST ── */}
       {view === "list" && taskCount > 0 && (
         <div className={styles.list}>
           <div className={styles.listHeader}>
@@ -347,11 +1044,9 @@ export function ProjectKanbanTab({ projectId }: Props) {
         </div>
       )}
 
-      {/* ── GANTT ── */}
       {view === "gantt" && taskCount > 0 && (
         <div className={styles.ganttWrapper}>
           <div className={styles.gantt}>
-            {/* Header */}
             <div className={styles.ganttHeaderRow}>
               <div className={styles.ganttLabelCol}>Tarea</div>
               <div className={styles.ganttTimeline}>
@@ -366,7 +1061,6 @@ export function ProjectKanbanTab({ projectId }: Props) {
               </div>
             </div>
 
-            {/* Rows */}
             {tasks.map((task) => {
               const createdMs = task.createdAt
                 ? task.createdAt.seconds * 1000
@@ -378,10 +1072,7 @@ export function ProjectKanbanTab({ projectId }: Props) {
 
               const leftPct = Math.min(
                 100,
-                Math.max(
-                  0,
-                  ((taskStartMs - gStart.getTime()) / gTotal) * 100,
-                ),
+                Math.max(0, ((taskStartMs - gStart.getTime()) / gTotal) * 100),
               );
               const rightPct = taskEndMs
                 ? Math.min(
@@ -401,30 +1092,24 @@ export function ProjectKanbanTab({ projectId }: Props) {
                       className={styles.priorityDot}
                       data-priority={task.priority}
                     />
-                    <span
-                      className={styles.ganttRowTitle}
-                      title={task.title}
-                    >
+                    <span className={styles.ganttRowTitle} title={task.title}>
                       {task.title}
                     </span>
                   </div>
                   <div className={styles.ganttTrack}>
-                    {/* Week grid lines */}
                     {ganttWeeks.map((w, i) => (
                       <div
                         key={i}
                         className={styles.ganttGridLine}
-                        style={{ left: `${(i / GANTT_WEEKS) * 100}%` }}
+                        style={{ left: `${w.leftPct}%` }}
                       />
                     ))}
-                    {/* Today line */}
                     {todayPct >= 0 && todayPct <= 100 && (
                       <div
                         className={styles.ganttTodayLine}
                         style={{ left: `${todayPct}%` }}
                       />
                     )}
-                    {/* Task bar */}
                     <div
                       className={styles.ganttBar}
                       data-status={task.status}
@@ -449,7 +1134,6 @@ export function ProjectKanbanTab({ projectId }: Props) {
         </div>
       )}
 
-      {/* Drawer */}
       {drawerOpen && (
         <div
           className={styles.backdrop}
@@ -556,6 +1240,32 @@ export function ProjectKanbanTab({ projectId }: Props) {
             />
           </div>
 
+          {users.length > 0 && (
+            <div className={styles.field}>
+              <label htmlFor="taskAssignee" className={styles.label}>Asignado a</label>
+              <select
+                id="taskAssignee"
+                className={styles.input}
+                value={form.assignedTo?.uid ?? ""}
+                onChange={(e) => {
+                  const uid = e.target.value;
+                  const user = users.find((u) => u.uid === uid);
+                  setForm((prev) => ({
+                    ...prev,
+                    assignedTo: user ? { uid: user.uid, name: user.displayName ?? user.email ?? uid } : null,
+                  }));
+                }}
+              >
+                <option value="">Sin asignar</option>
+                {users.filter((u) => u.active).map((u) => (
+                  <option key={u.uid} value={u.uid}>
+                    {u.displayName ?? u.email}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div className={styles.formActions}>
             <div>
               {editingTask && (
@@ -590,6 +1300,10 @@ export function ProjectKanbanTab({ projectId }: Props) {
             </div>
           </div>
         </form>
+
+        {editingTask && (
+          <TaskCommentThread projectId={projectId} taskId={editingTask.id} />
+        )}
       </aside>
     </div>
   );

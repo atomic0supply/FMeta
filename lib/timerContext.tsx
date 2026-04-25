@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 
+import { auth } from "@/lib/firebase";
 import { saveTimeEntry } from "@/lib/timeEntries";
 
 const STORAGE_KEY = "roqueta_timer";
@@ -93,11 +94,13 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
     const snapshot = pendingTimerRef.current;
     if (!snapshot) return;
     const endedAt = Date.now();
+    const userId = auth?.currentUser?.uid;
+    const userDisplayName = auth?.currentUser?.displayName ?? auth?.currentUser?.email ?? undefined;
     setPendingStop(false);
     pendingTimerRef.current = null;
     setActiveTimer(null);
     localStorage.removeItem(STORAGE_KEY);
-    await saveTimeEntry(projectId, projectName, snapshot.startedAt, endedAt, notes);
+    await saveTimeEntry(projectId, projectName, snapshot.startedAt, endedAt, notes, userId, userDisplayName);
   }, []);
 
   const cancelStop = useCallback(() => {

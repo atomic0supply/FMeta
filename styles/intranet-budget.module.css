@@ -1,0 +1,223 @@
+.container {
+  padding-top: 8px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.statCard {
+  background: var(--sand, #f4f0e8);
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statValue {
+  font-family: var(--font-display), serif;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.statValue[data-over="true"] {
+  color: var(--terracotta, #b8896a);
+}
+
+.statHint {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.progressBar {
+  height: 4px;
+  background: var(--line-soft);
+  border-radius: 999px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--terracotta, #b8896a);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progressFill[data-over="true"] {
+  background: #c0392b;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.filterBtn {
+  padding: 5px 14px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.59rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.filterBtnActive {
+  background: var(--ink);
+  color: #fff;
+}
+
+.actionBtns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btnRate {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+
+.btnRate:hover {
+  border-color: var(--terracotta);
+}
+
+.btnExport {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+
+.btnExport:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Rate config form */
+.rateForm {
+  background: var(--sand, #f4f0e8);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.rateFields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.rateField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rateLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rateInput {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.rateActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btnCancel {
+  padding: 7px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.btnSave {
+  padding: 7px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+
+.btnSave:disabled {
+  opacity: 0.5;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 24px;
+}

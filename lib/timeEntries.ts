@@ -11,7 +11,9 @@ import {
   where,
 } from "firebase/firestore";
 
+import { auth } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
+import { logActivity } from "@/lib/activityLog";
 
 export type TimeEntry = {
   id: string;
@@ -21,6 +23,8 @@ export type TimeEntry = {
   endedAt: Timestamp;
   durationSeconds: number;
   notes?: string;
+  userId?: string;
+  userDisplayName?: string;
 };
 
 export function subscribeToTimeEntries(
@@ -73,6 +77,8 @@ export async function saveTimeEntry(
   startedAtMs: number,
   endedAtMs: number,
   notes?: string,
+  userId?: string,
+  userDisplayName?: string,
 ): Promise<void> {
   if (!db) throw new Error("Firebase no disponible");
   const durationSeconds = Math.round((endedAtMs - startedAtMs) / 1000);
@@ -84,15 +90,27 @@ export async function saveTimeEntry(
     endedAt: Timestamp.fromMillis(endedAtMs),
     durationSeconds,
     ...(notes?.trim() ? { notes: notes.trim() } : {}),
+    ...(userId ? { userId } : {}),
+    ...(userDisplayName ? { userDisplayName } : {}),
+  });
+  const actor = auth?.currentUser;
+  void logActivity({
+    type: "time_saved",
+    actorUid: actor?.uid ?? userId ?? "",
+    actorName: actor?.displayName ?? userDisplayName ?? actor?.email ?? "Usuario",
+    projectId,
+    projectName,
+    payload: { durationSeconds },
   });
 }
 
 export function exportTimeEntriesToCsv(entries: TimeEntry[]): void {
   const fmt = (ts: Timestamp) => new Date(ts.seconds * 1000);
   const rows: string[][] = [
-    ["Proyecto", "Fecha", "Inicio", "Fin", "Duración (min)", "Notas"],
+    ["Proyecto", "Usuario", "Fecha", "Inicio", "Fin", "Duración (min)", "Notas"],
     ...entries.map((e) => [
       e.projectName,
+      e.userDisplayName ?? "",
       fmt(e.startedAt).toLocaleDateString("es-ES"),
       fmt(e.startedAt).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }),
       fmt(e.endedAt).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" }),

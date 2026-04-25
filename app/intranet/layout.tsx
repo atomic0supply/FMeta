@@ -1,3 +1,4 @@
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { IntranetSidebar } from "@/components/IntranetSidebar";
 import { StopModal } from "@/components/StopModal";
 import { TimerProvider } from "@/lib/timerContext";
@@ -12,7 +13,9 @@ export default function IntranetLayout({
     <TimerProvider>
       <div className={styles.shell}>
         <IntranetSidebar />
-        <div className={styles.content}>{children}</div>
+        <div className={styles.content}>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </div>
       </div>
       <StopModal />
     </TimerProvider>

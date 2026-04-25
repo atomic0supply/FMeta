@@ -1,0 +1,72 @@
+.feed {
+  margin-top: 32px;
+}
+
+.feedTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.feedList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.feedRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  transition: background 0.12s;
+}
+
+.feedRow:last-child {
+  border-bottom: none;
+}
+
+.feedRow:hover {
+  background: rgba(184, 137, 106, 0.04);
+}
+
+.feedAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--terracotta, #b8896a);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feedText {
+  flex: 1;
+  font-size: 0.8rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feedText strong {
+  font-weight: 600;
+}
+
+.feedTime {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}

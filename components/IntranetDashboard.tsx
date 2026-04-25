@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { ActivityFeed } from "@/components/ActivityFeed";
 import { TimeHeatmap } from "@/components/TimeHeatmap";
 import { subscribeToProjects, type Project } from "@/lib/projects";
 import { subscribeToAllTimeEntries, type TimeEntry } from "@/lib/timeEntries";
@@ -167,6 +168,9 @@ export function IntranetDashboard() {
         <p className={styles.heatmapTitle}>Actividad · último año</p>
         <TimeHeatmap entries={entries} />
       </section>
+
+      {/* Activity feed */}
+      <ActivityFeed />
 
       {/* Module grid */}
       <section className={styles.grid}>

@@ -24,12 +24,13 @@ import {
   updateProject,
 } from "@/lib/projects";
 import { ProjectApisTab } from "@/components/ProjectApisTab";
+import { ProjectBudgetTab } from "@/components/ProjectBudgetTab";
 import { ProjectKanbanTab } from "@/components/ProjectKanbanTab";
 import { ProjectLinksTab } from "@/components/ProjectLinksTab";
 import { ProjectTimeTab } from "@/components/ProjectTimeTab";
 import styles from "@/styles/intranet-projects.module.css";
 
-type Tab = "info" | "links" | "apis" | "endpoints" | "tareas" | "tiempo";
+type Tab = "info" | "links" | "apis" | "endpoints" | "tareas" | "tiempo" | "budget";
 
 const STATUS_LABELS: Record<ProjectStatus, string> = {
   activo: "Activo",
@@ -208,6 +209,9 @@ export function ProjectDetailView({ id }: { id: string }) {
     );
   }
 
+  const projectClient =
+    clients.find((client) => client.id === project.clientId) ?? null;
+
   return (
     <main className={styles.page}>
       {/* Nav */}
@@ -248,7 +252,7 @@ export function ProjectDetailView({ id }: { id: string }) {
 
       {/* Tabs */}
       <div className={styles.tabs}>
-        {(["info", "links", "apis", "endpoints", "tareas", "tiempo"] as Tab[]).map((tab) => (
+        {(["info", "links", "apis", "endpoints", "tareas", "tiempo", "budget"] as Tab[]).map((tab) => (
           <button
             key={tab}
             type="button"
@@ -261,6 +265,7 @@ export function ProjectDetailView({ id }: { id: string }) {
             {tab === "endpoints" && `Endpoints${endpoints.length > 0 ? ` (${endpoints.length})` : ""}`}
             {tab === "tareas" && "Tareas"}
             {tab === "tiempo" && "Tiempo"}
+            {tab === "budget" && "Budget"}
           </button>
         ))}
       </div>
@@ -411,7 +416,18 @@ export function ProjectDetailView({ id }: { id: string }) {
       {/* Tareas tab */}
       {activeTab === "tareas" && (
         <div className={styles.tabContent}>
-          <ProjectKanbanTab projectId={project.id} />
+          <ProjectKanbanTab
+            projectId={project.id}
+            project={project}
+            client={projectClient}
+            onProjectPlanningSummaryChange={(summary) => {
+              setProject((current) =>
+                current
+                  ? { ...current, taskPlanningSummary: summary }
+                  : current,
+              );
+            }}
+          />
         </div>
       )}
 
@@ -419,6 +435,16 @@ export function ProjectDetailView({ id }: { id: string }) {
       {activeTab === "tiempo" && (
         <div className={styles.tabContent}>
           <ProjectTimeTab projectId={project.id} projectName={project.name} />
+        </div>
+      )}
+
+      {/* Budget tab */}
+      {activeTab === "budget" && (
+        <div className={styles.tabContent}>
+          <ProjectBudgetTab
+            project={project}
+            onProjectUpdate={(updated) => setProject((p) => p ? { ...p, ...updated } : p)}
+          />
         </div>
       )}
 
